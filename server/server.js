@@ -263,33 +263,36 @@ const { execSync } = require('child_process');
 app.post('/api/ai/vision', async (req, res) => {
     try {
         const { symptoms } = req.body;
-        // --- Visual Validation & Feature Extraction ---
-        let clinicalFeatures = "unknown lesion";
+        // --- Visual Validation & Clinical Signature Extraction ---
+        let clinicalSignature = "unknown";
         try {
             const vKey = normalizeApiKey(process.env.NVIDIA_VISION_API_KEY || process.env.NVIDIA_API_KEY);
             if (vKey) {
                 const check = await axios.post("https://integrate.api.nvidia.com/v1/chat/completions", {
-                    model: "google/paligemma",
+                    model: "google/paligemma", // Fast & accurate for classification
                     messages: [{
                         role: "user",
                         content: [
-                            { type: "text", text: "Analyze this dermatological photo. Describe its clinical features (e.g. border irregularity, pigmentation, asymmetry, scaling, or vascularity) in 10 keywords. Output ONLY JSON: { \"features\": \"keywords here\", \"is_skin\": true }." },
+                            { 
+                                type: "text", 
+                                text: "Perform a research-grade dermatological assessment. Identify if this is a skin lesion. If so, which clinical category (akiec, bcc, bkl, df, mel, nv, vasc) does it most likely represent? Output ONLY JSON: { \"is_skin\": true/false, \"dx\": \"category_code\", \"evidence\": \"3 clinical keywords\" }." 
+                            },
                             { type: "image_url", image_url: { url: req.body.image } }
                         ]
                     }],
-                    max_tokens: 200, temperature: 0.1
+                    max_tokens: 300, temperature: 0.1
                 }, { headers: { "Authorization": `Bearer ${vKey}` }, timeout: 15000 });
                 
                 const cJson = JSON.parse(check.data?.choices?.[0]?.message?.content.replace(/```json|```/g, '').trim());
                 if (!cJson.is_skin) return res.json({ success: true, analysis: { condition: { en: "Non-Skin Image", te: "చర్మం కాని చిత్రం" }, risk_level: "N/A", precautions: [{ en: "Please upload a clear clinical skin photo.", te: "దయచేసి స్పష్టమైన చర్మ ఫోటోను అప్‌లోడ్ చేయండి." }] } });
-                clinicalFeatures = cJson.features;
+                clinicalSignature = `${cJson.dx} ${cJson.evidence}`;
             }
-        } catch (vErr) { console.warn("Feature Extraction Bypass:", vErr.message); }
+        } catch (vErr) { console.warn("Diagnostic Signature Bypass:", vErr.message); }
 
-        // --- Stage 2: Full Kaggle Dataset Research ---
+        // --- Stage 2: Full Research-Match Search (10,015 Records) ---
         let pythonResult = null;
         try {
-            const symArr = (`${clinicalFeatures} ${symptoms || ""}`).replace(/["']/g, '');
+            const symArr = (`${clinicalSignature} ${symptoms || ""}`).replace(/["']/g, '');
             const cmd = `python ham10000_analyzer.py "${symArr}"`;
             const raw = execSync(cmd, { cwd: __dirname, encoding: 'utf-8', timeout: 45000 });
             pythonResult = JSON.parse(raw.trim());
