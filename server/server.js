@@ -264,6 +264,43 @@ app.post('/api/ai/vision', async (req, res) => {
     try {
         const { symptoms } = req.body;
         
+        // --- Visual Validation Shield (Preventing non-skin false positives) ---
+        let isActuallySkin = true;
+        try {
+            const vKey = normalizeApiKey(process.env.NVIDIA_VISION_API_KEY || process.env.NVIDIA_API_KEY);
+            if (vKey) {
+                const check = await axios.post("https://integrate.api.nvidia.com/v1/chat/completions", {
+                    model: "google/paligemma", // Fast vision model for validation
+                    messages: [{
+                        role: "user",
+                        content: [
+                            { type: "text", text: "Is this image a close-up clinical photo of skin, a lesion, or a rash? Output ONLY JSON: { \"is_skin\": true/false }." },
+                            { type: "image_url", image_url: { url: req.body.image } }
+                        ]
+                    }],
+                    max_tokens: 100, temperature: 0.1
+                }, { headers: { "Authorization": `Bearer ${vKey}` }, timeout: 15000 });
+                
+                const cText = check.data?.choices?.[0]?.message?.content || "";
+                const cJson = JSON.parse(cText.replace(/```json|```/g, '').trim());
+                isActuallySkin = cJson.is_skin;
+            }
+        } catch (vErr) { console.warn("Validation Shield Bypass:", vErr.message); }
+
+        if (!isActuallySkin) {
+            return res.json({
+                success: true,
+                analysis: {
+                    condition: { en: "Unrelated Image Detected", te: "సంబంధం లేని చిత్రం గుర్తించబడింది" },
+                    risk_level: "N/A",
+                    precautions: [
+                        { en: "The uploaded photo does not appear to be a clinical skin image.", te: "అప్‌లోడ్ చేసిన ఫోటో క్లినికల్ చర్మ చిత్రంగా అనిపించడం లేదు." },
+                        { en: "Please upload a clear close-up of the affected skin area.", te: "దయచేసి ప్రభావితమైన చర్మ ప్రాంతం యొక్క స్పష్టమైన క్లోజ్-అప్‌ని అప్‌లోడ్ చేయండి." }
+                    ]
+                }
+            });
+        }
+
         let pythonResult = null;
         try {
             // Full Dataset Bridge (Kagglehub-powered with Symptom Guidance)
