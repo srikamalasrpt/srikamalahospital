@@ -32,7 +32,11 @@ const MedicalShop = () => {
     try {
       const { chatWithAI } = await import('../utils/api');
       const stock = products.map(p => p.name).join(', ');
-      const prompt = `Medicine Inquiry: "${aiInput}". Our stock: [${stock}]. Briefly explain if we have it or a similar alternative, and its primary clinical use. Max 2 sentences.`;
+      const prompt = `Medicine Inquiry: "${aiInput}". Our stock: [${stock}]. Briefly explain if we have it or a similar alternative, and its primary clinical use. Max 2 sentences.
+CRITICAL RULE: You MUST format your response as:
+[Telugu Translation]
+|||
+[English Translation]`;
       const resp = await chatWithAI(prompt);
       setAiInsight(resp.data.response);
     } catch (err) {
@@ -78,7 +82,14 @@ const MedicalShop = () => {
               </div>
               {aiInsight && (
                 <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="mt-4 p-4 bg-white/5 rounded-2xl border border-white/10">
-                  <p className="text-[9px] font-medium leading-relaxed italic text-hospital-secondary">{aiInsight}</p>
+                  {aiInsight.includes('|||') ? (
+                    <>
+                       <p className="text-[11px] font-bold leading-relaxed text-white font-['Noto_Sans_Telugu']">{aiInsight.split('|||')[0].trim()}</p>
+                       <p className="text-[9px] font-black uppercase tracking-widest text-hospital-secondary opacity-80 mt-2">{aiInsight.split('|||')[1].trim()}</p>
+                    </>
+                  ) : (
+                    <p className="text-[11px] font-bold leading-relaxed text-white font-['Noto_Sans_Telugu']">{aiInsight}</p>
+                  )}
                 </motion.div>
               )}
             </div>

@@ -22,12 +22,12 @@ const HealthBot = () => {
         const reader = new FileReader();
         reader.onloadend = async () => {
             const base64 = reader.result;
-            const userMsg = { 
-                id: Date.now(), 
-                text: "Attached a clinical image for analysis.", 
-                sender: 'user', 
+            const userMsg = {
+                id: Date.now(),
+                text: "Attached a clinical image for analysis.",
+                sender: 'user',
                 image: base64,
-                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) 
+                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
             };
             setMessages(prev => [...prev, userMsg]);
             setIsTyping(true);
@@ -35,15 +35,15 @@ const HealthBot = () => {
             try {
                 const { analyzeVisionImage } = await import('../utils/api');
                 const resp = await analyzeVisionImage(base64, "Analyzed via Triage Bot");
-                
+
                 if (resp.data.success && resp.data.analysis) {
                     const ai = resp.data.analysis;
                     const triageText = `[AI TRIAGE REPORT]\n\nCondition: ${ai.condition.en}\n\nPrecautions: ${ai.precautions.map(p => p.en).join(', ')}\n\nAction: Please visit the ${ai.lab_tests?.[0]?.en || 'general ward'} for further evaluation.`;
-                    setMessages(prev => [...prev, { 
-                        id: Date.now() + 1, 
-                        text: triageText, 
-                        sender: 'bot', 
-                        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) 
+                    setMessages(prev => [...prev, {
+                        id: Date.now() + 1,
+                        text: triageText,
+                        sender: 'bot',
+                        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
                     }]);
                 } else {
                     throw new Error("Triage failed");
@@ -68,7 +68,29 @@ const HealthBot = () => {
 
         try {
             const { chatWithAI } = await import('../utils/api');
-            const resp = await chatWithAI(input);
+
+            const chatHistory = messages.map(m => {
+                const text = typeof m.text === 'string' && m.text.includes('|||') ? m.text.split('|||')[1].trim() : m.text;
+                return `${m.sender.toUpperCase()}: ${text}`;
+            }).join('\n');
+
+            const prompt = `You are Dr. Kamala, a highly empathetic, friendly, and conversational AI assistant at Sri Kamala Hospital.
+Behavior Rules:
+1. If the user greets you or asks casual questions, respond warmly and naturally.
+2. If the user describes symptoms, show deep care, provide preliminary guidance, and kindly suggest they visit the hospital.
+3. Your tone must be very polite, patient, and welcoming.
+
+Recent Conversation Context:
+${chatHistory}
+
+User's New Message: "${input}"
+
+CRITICAL RULE: You MUST format your final response to the new message exactly as follows:
+[Telugu Translation of your friendly response]
+|||
+[English Translation of your friendly response]`;
+
+            const resp = await chatWithAI(prompt);
             const botResponse = resp.data.success ? resp.data.response : "I am experiencing clinical network issues. Please contact +91 91544 04051.";
             setMessages(prev => [...prev, { id: Date.now() + 1, text: botResponse, sender: 'bot', time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]);
         } catch (err) {
@@ -97,7 +119,7 @@ const HealthBot = () => {
                 {isOpen && (
                     <motion.div initial={{ opacity: 0, y: 50, scale: 0.9 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 50, scale: 0.9 }}
                         className="w-[380px] h-[600px] bg-white rounded-[50px] shadow-4xl flex flex-col overflow-hidden border-2 border-white">
-                        
+
                         <div className="p-8 bg-hospital-dark text-white relative overflow-hidden flex items-center gap-4">
                             <div className="absolute top-0 right-0 w-32 h-32 bg-hospital-primary opacity-20 rounded-full blur-3xl -mr-12 -mt-12"></div>
                             <div className="w-14 h-14 p-1 bg-white rounded-2xl relative z-10">
@@ -127,16 +149,23 @@ const HealthBot = () => {
                                 <motion.div key={m.id} initial={{ x: m.sender === 'user' ? 20 : -20, opacity: 0 }} animate={{ x: 0, opacity: 1 }}
                                     className={`flex items-end gap-3 ${m.sender === 'user' ? 'flex-row-reverse' : ''}`}>
                                     <div className={`w-10 h-10 flex-shrink-0 rounded-2xl flex items-center justify-center text-white shadow-sm overflow-hidden ${m.sender === 'user' ? 'bg-hospital-secondary' : 'bg-hospital-primary p-2'}`}>
-                                        {m.sender === 'user' ? <User size={18}/> : <img src="/logo.png" className="w-full h-full object-contain brightness-0 invert" />}
+                                        {m.sender === 'user' ? <User size={18} /> : <img src="/logo.png" className="w-full h-full object-contain brightness-0 invert" />}
                                     </div>
                                     <div className={`max-w-[80%] rounded-3xl px-6 py-4 text-sm font-bold shadow-sm leading-relaxed ${m.sender === 'user' ? 'bg-hospital-secondary text-white rounded-br-none' : 'bg-white text-hospital-dark rounded-bl-none border border-gray-100'}`}>
                                         {m.image && <img src={m.image} className="w-full rounded-xl mb-3 border-2 border-white/20" alt="Clinical Upload" />}
-                                        {m.text}
+                                        {m.text && typeof m.text === 'string' && m.text.includes('|||') ? (
+                                            <>
+                                                <p className="font-['Noto_Sans_Telugu']">{m.text.split('|||')[0].trim()}</p>
+                                                <p className="block text-[10px] uppercase font-black tracking-widest opacity-50 mt-2">{m.text.split('|||')[1].trim()}</p>
+                                            </>
+                                        ) : (
+                                            <p className="font-['Noto_Sans_Telugu']">{m.text}</p>
+                                        )}
                                         <p className={`text-[9px] mt-2 font-black uppercase opacity-40 tracking-widest`}>{m.time}</p>
                                     </div>
                                 </motion.div>
                             ))}
-                            
+
                             {isTyping && (
                                 <div className="flex items-center gap-3">
                                     <div className="w-10 h-10 rounded-2xl bg-gray-100 flex items-center justify-center"><Bot size={18} className="text-gray-300" /></div>

@@ -56,7 +56,11 @@ const Diagnosis = () => {
     try {
       const { chatWithAI } = await import('../utils/api');
       const testList = currentTests.map(t => t.name).join(', ');
-      const prompt = `Based on these symptoms: "${aiInput}", which of these lab tests from our clinic are most relevant: [${testList}]? Provide a 1-sentence suggestion and pick 1-2 tests. Output ONLY text.`;
+      const prompt = `Based on these symptoms: "${aiInput}", which of these lab tests from our clinic are most relevant: [${testList}]? Provide a 1-sentence suggestion and pick 1-2 tests. Max 2 sentences.
+CRITICAL RULE: You MUST format your precise response as: 
+[Telugu Translation]
+|||
+[English Translation]`;
       const resp = await chatWithAI(prompt);
       setAiRecommendation(resp.data.response);
     } catch (err) {
@@ -124,7 +128,14 @@ const Diagnosis = () => {
               </div>
               {aiRecommendation && (
                 <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="mt-4 p-4 bg-white/5 rounded-2xl border border-white/10">
-                  <p className="text-[9px] font-medium leading-relaxed italic text-hospital-primary">{aiRecommendation}</p>
+                  {aiRecommendation.includes('|||') ? (
+                     <>
+                        <p className="text-[11px] font-bold leading-relaxed text-white font-['Noto_Sans_Telugu']">{aiRecommendation.split('|||')[0].trim()}</p>
+                        <p className="text-[9px] font-black uppercase tracking-widest text-hospital-primary opacity-80 mt-2">{aiRecommendation.split('|||')[1].trim()}</p>
+                     </>
+                  ) : (
+                     <p className="text-[11px] font-bold leading-relaxed text-white font-['Noto_Sans_Telugu']">{aiRecommendation}</p>
+                  )}
                 </motion.div>
               )}
             </div>

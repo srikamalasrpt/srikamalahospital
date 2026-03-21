@@ -35,7 +35,11 @@ const AIHealthPage = () => {
         setIsDietLoading(true);
         try {
             const { chatWithAI } = await import('../utils/api');
-            const prompt = `Generate a clinical diet plan for: ${dietInput}. Include Breakfast, Lunch, Dinner, and clinical precautions. Format as professional points.`;
+            const prompt = `Generate a clinical diet plan for: ${dietInput}. Include Breakfast, Lunch, Dinner, and clinical precautions. Format as professional points.
+CRITICAL RULE: You MUST format your precise response as: 
+[Telugu Translation of diet plan]
+|||
+[English Translation of diet plan]`;
             const resp = await chatWithAI(prompt);
             setDietPlan(resp.data.response);
         } catch (err) {
@@ -183,7 +187,16 @@ const AIHealthPage = () => {
                                 </div>
                                 <div className="flex-1 overflow-y-auto pr-6 space-y-6 relative z-10 scrollbar-hide">
                                     {dietPlan ? (
-                                        <p className="text-base font-medium leading-relaxed whitespace-pre-wrap text-white/80 italic">{dietPlan}</p>
+                                        <div className="space-y-4">
+                                            {dietPlan.includes('|||') ? (
+                                                <>
+                                                    <p className="text-sm font-medium leading-relaxed whitespace-pre-wrap text-white/90 font-['Noto_Sans_Telugu']">{dietPlan.split('|||')[0].trim()}</p>
+                                                    <p className="text-[10px] font-black uppercase tracking-widest text-hospital-secondary opacity-80 mt-4 pt-4 border-t border-white/10 whitespace-pre-wrap">{dietPlan.split('|||')[1].trim()}</p>
+                                                </>
+                                            ) : (
+                                                <p className="text-base font-medium leading-relaxed whitespace-pre-wrap text-white/80 italic">{dietPlan}</p>
+                                            )}
+                                        </div>
                                     ) : (
                                         <div className="h-full flex flex-col items-center justify-center text-center space-y-4 opacity-20">
                                             <Utensils size={60} />
