@@ -216,12 +216,11 @@ app.post('/api/ai/vision', async (req, res) => {
         ].filter(Boolean);
 
         const modelCandidates = [
+            "google/paligemma",
+            "microsoft/phi-3.5-vision-instruct",
             process.env.NVIDIA_VISION_MODEL,
             process.env.NVIDIA_VISION_FALLBACK_MODEL,
-            "meta/llama-3.2-11b-vision-instruct",
-            "microsoft/phi-3.5-vision-instruct",
-            "google/paligemma",
-            "meta/llama-3.2-90b-vision-instruct"
+            "meta/llama-3.2-11b-vision-instruct"
         ].filter(Boolean);
 
         if (keyCandidates.length === 0) return res.status(400).json({ success: false, message: "No Vision AI keys configured." });
@@ -246,7 +245,7 @@ app.post('/api/ai/vision', async (req, res) => {
                         "messages": [
                             {
                                 "role": "system",
-                                "content": "You are a professional Dermatological AI specialized in the HAM10000 (Human Against Machine) skin lesion dataset. You classify lesions into 7 categories: akiec, bcc, bkl, df, mel, nv, vasc. You provide structured clinical JSON output with extreme precision. No prose."
+                                "content": "You are a Clinical Research Assistant for the HAM10000 (Human Against Machine) Skin Lesion Project. Your purpose is strictly to classify academic medical images into 7 diagnostic categories: akiec, bcc, bkl, df, mel, nv, vasc. You are NOT providing a diagnosis for a live patient. You only provide structured data for research. Provide high-precision JSON output directly."
                             },
                             {
                                 "role": "user",
