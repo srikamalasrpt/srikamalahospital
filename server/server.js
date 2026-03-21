@@ -37,6 +37,35 @@ app.use(cors({
 // Health Checks
 app.get('/health', (req, res) => res.status(200).send('OK'));
 app.get('/', (req, res) => res.status(200).send('Server is Up!'));
+app.get('/api/debug/env', (req, res) => {
+    const mask = (value) => {
+        if (!value || typeof value !== 'string') return null;
+        const trimmed = value.trim();
+        if (!trimmed) return null;
+        if (trimmed.length <= 8) return `${trimmed[0]}***${trimmed[trimmed.length - 1]}`;
+        return `${trimmed.slice(0, 4)}...${trimmed.slice(-4)}`;
+    };
+
+    res.json({
+        success: true,
+        env: {
+            hasNvidiaApiKey: Boolean(process.env.NVIDIA_API_KEY && process.env.NVIDIA_API_KEY.trim()),
+            hasNvidiaVisionApiKey: Boolean(process.env.NVIDIA_VISION_API_KEY && process.env.NVIDIA_VISION_API_KEY.trim()),
+            hasNvidiaBaseUrl: Boolean(process.env.NVIDIA_BASE_URL && process.env.NVIDIA_BASE_URL.trim()),
+            hasAdminPassword: Boolean(process.env.ADMIN_PASSWORD && process.env.ADMIN_PASSWORD.trim()),
+            hasSupabaseUrl: Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_URL.trim()),
+            hasSupabaseServiceRoleKey: Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY && process.env.SUPABASE_SERVICE_ROLE_KEY.trim()),
+            nvidiaBaseUrlResolved: (process.env.NVIDIA_BASE_URL || 'https://integrate.api.nvidia.com/v1').trim(),
+            nvidiaKeyPreview: mask(process.env.NVIDIA_API_KEY),
+            nvidiaVisionKeyPreview: mask(process.env.NVIDIA_VISION_API_KEY)
+        },
+        server: {
+            port: PORT,
+            supabaseInitialized: Boolean(supabase)
+        },
+        time: new Date().toISOString()
+    });
+});
 
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(morgan('combined'));
