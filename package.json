@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "server/server.js",
   "scripts": {
+    "build": "npm install --prefix server",
     "start": "node server/server.js",
     "server": "cd server && npm start",
     "client": "cd client && npm run dev",
