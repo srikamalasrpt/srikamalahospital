@@ -75,24 +75,28 @@ CRITICAL RULE: You MUST format your precise response as:
     const analyzeSkin = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
-        const reader = new FileReader();
-        reader.onloadend = async () => {
-            setSkinImage(reader.result);
-            setIsSkinLoading(true);
-            try {
-                const { analyzeVisionImage } = await import('../utils/api');
-                const resp = await analyzeVisionImage(reader.result, "Analyze this clinical dermatological image. Be highly concise. Give suspected type of lesion/rash and precaution.");
-                if(resp.data.success && resp.data.analysis) {
-                    const ai = resp.data.analysis;
-                    setSkinResult(`వ్యాధి (CONDITION): ${ai.condition.te}\nప్రమాదం (RISK): ${ai.risk_level || 'Low'}\nజాగ్రత్తలు (PRECAUTIONS): ${ai.precautions.map(p=>p.te).join(', ')}\n|||\nCondition: ${ai.condition.en}\nRisk: ${ai.risk_level || 'Low'}\nPrecautions: ${ai.precautions.map(p=>p.en).join(', ')}`);
-                }
-            } catch (err) {
-                console.error(err);
-            } finally {
-                setIsSkinLoading(false);
+        
+        // Show local preview
+        const previewReader = new FileReader();
+        previewReader.onloadend = () => setSkinImage(previewReader.result);
+        previewReader.readAsDataURL(file);
+
+        setIsSkinLoading(true);
+        try {
+            const { predictSkinCancer } = await import('../utils/api');
+            const resp = await predictSkinCancer(file);
+            
+            if (resp.data.success) {
+                const pred = resp.data;
+                // Format for the UI
+                setSkinResult(`వ్యాధి (CONDITION): ${pred.condition}\nఖచ్చితత్వం (CONFIDENCE): ${(pred.confidence * 100).toFixed(1)}%\nప్రకటన: సిస్టమ్ పరిశోధన ఫలితం.\n|||\nCondition: ${pred.condition}\nConfidence: ${(pred.confidence * 100).toFixed(1)}%\nNote: Results based on CNN model training.`);
             }
-        };
-        reader.readAsDataURL(file);
+        } catch (err) {
+            console.error(err);
+            setSkinResult("Error communicating with Skin AI server. Ensure skin_api.py is running on port 5005.|||Connection Error");
+        } finally {
+            setIsSkinLoading(false);
+        }
     };
 
     const tabs = [

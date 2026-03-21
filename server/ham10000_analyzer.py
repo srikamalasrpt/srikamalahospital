@@ -1,72 +1,116 @@
-import pandas as pd
-import kagglehub
-import json
 import os
-import sys
-from kagglehub import KaggleDatasetAdapter
+import pandas as pd
+import tensorflow as tf
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from glob import glob
+from dotenv import load_dotenv
+import kaggle
 
-def analyze():
+# Load Environment Variables from current directory
+env_path = os.path.join(os.path.dirname(__file__), '.env')
+if not os.path.exists(env_path):
+    env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env')
+load_dotenv(env_path)
+
+# Set Kaggle Env Variables
+if os.getenv('KAGGLE_USERNAME') and os.getenv('KAGGLE_KEY'):
+    os.environ['KAGGLE_USERNAME'] = os.getenv('KAGGLE_USERNAME')
+    os.environ['KAGGLE_KEY'] = os.getenv('KAGGLE_KEY')
+
+def setup_and_train():
+    # 🧠 Step 1: Download/Verify Dataset
+    print("🚀 Verifying dataset (HAM10000)...")
+    data_dir = os.path.join(os.path.dirname(__file__), 'data')
+    if not os.path.exists(data_dir):
+        os.makedirs(data_dir)
+        
     try:
-        # Step 1: Download latest version of the full research dataset (10,015 images)
-        # This locates the local path for the KMader/HAM10000 archive
-        path = kagglehub.dataset_download("kmader/skin-cancer-mnist-ham10000")
-        
-        # Step 2: Resolve the metadata CSV path within the downloaded archive
-        # We handle potential filename variations (casing) in the Kaggle bundle
-        metadata_file = os.path.join(path, "HAM10000_metadata.csv")
-        if not os.path.exists(metadata_file):
-            metadata_file = os.path.join(path, "ham10000_metadata.csv")
-            
-        df = pd.read_csv(metadata_file)
-        
-        # Clinical Symptoms & Vision Signature from Stage 1
-        clinical_input = str(sys.argv[1]).lower() if len(sys.argv) > 1 else ""
-
-        # CLINICAL PRIORITY WEIGHTING
-        # We search for the 7 HAM10000 research codes in the clinical input
-        category_weights = {k: 1.0 for k in ['akiec', 'bcc', 'bkl', 'df', 'mel', 'nv', 'vasc']}
-        
-        # Massive priority boost for visually identified clinical signature
-        for code in category_weights.keys():
-            if code in clinical_input:
-                category_weights[code] += 50.0 
-
-        # Evidence-based keyword boosters
-        if "mole" in clinical_input: category_weights['nv'] += 5.0
-        if "sun" in clinical_input: category_weights['akiec'] += 4.0
-        if "bleed" in clinical_input: category_weights['bcc'] += 4.0
-        if "dark" in clinical_input or "black" in clinical_input: category_weights['mel'] += 5.0
-        if "red" in clinical_input or "vascular" in clinical_input: category_weights['vasc'] += 4.0
-
-        # Stage 2: High-Precision Search across the 10,015 Research Records
-        df['weight'] = df['dx'].map(category_weights)
-        sample = df.sample(1, weights='weight').iloc[0]
-        dx = sample['dx']
-
-        category_map = {
-            'akiec': 'Actinic Keratosis',
-            'bcc': 'Basal Cell Carcinoma',
-            'bkl': 'Benign Keratosis',
-            'df': 'Dermatofibroma',
-            'mel': 'Melanoma',
-            'nv': 'Melanocytic Nevi',
-            'vasc': 'Vascular Lesions'
-        }
-        
-        result = {
-            "success": True,
-            "condition": category_map.get(dx, dx),
-            "dx_id": dx,
-            "age": int(sample['age']) if 'age' in sample and not pd.isna(sample['age']) else "Unknown",
-            "sex": sample['sex'] if 'sex' in sample else "Unknown",
-            "localization": sample['localization'] if 'localization' in sample else "Unknown",
-            "dataset_match_id": sample['lesion_id'] if 'lesion_id' in sample else "H10k_Meta"
-        }
-        print(json.dumps(result))
-
+        if not os.path.exists(os.path.join(data_dir, 'HAM10000_metadata.csv')):
+            print("📥 Downloading dataset via Kaggle API...")
+            kaggle.api.dataset_download_files(
+                'kmader/skin-cancer-mnist-ham10000',
+                path=data_dir,
+                unzip=True
+            )
+            print("✅ Downloaded and unzipped successfully.")
     except Exception as e:
-        # Graceful error reporting to the Node.js bridge
-        print(json.dumps({"success": False, "error": str(e)}))
+        print(f"❌ Kaggle error: {e}")
+        return
+
+    # 🗺️ Step 2: Organize Data using CSV
+    print("🗺️ Mapping images to metadata...")
+    all_image_paths = {os.path.basename(x).split(".")[0]: x 
+                      for x in glob(os.path.join(data_dir, '**', '*.jpg'), recursive=True)}
+
+    metadata_path = os.path.join(data_dir, 'HAM10000_metadata.csv')
+    df = pd.read_csv(metadata_path)
+    
+    # Map filenames to actual paths
+    df['path'] = df['image_id'].map(all_image_paths.get)
+    df = df.dropna(subset=['path'])  # Ensure all metadata has an image
+    
+    # Label mapping (dx column)
+    # Target classes: akiec, bcc, bkl, df, mel, nv, vasc
+    class_map = {
+        'akiec': 'Actinic Keratosis',
+        'bcc': 'Basal Cell Carcinoma',
+        'bkl': 'Benign Keratosis',
+        'df': 'Dermatofibroma',
+        'mel': 'Melanoma',
+        'nv': 'Melanocytic Nevi',
+        'vasc': 'Vascular Lesions'
+    }
+    df['label'] = df['dx'].map(class_map.get)
+    
+    print(f"✅ Found {len(df)} images with valid metadata.")
+    print(f"📊 Classes identified: {df['label'].unique()}")
+
+    # 🧠 Step 3: Model Training
+    print("🧠 Starting CNN Model Training...")
+    
+    datagen = ImageDataGenerator(rescale=1./255, validation_split=0.2)
+
+    # Note: Target size matches Step 2 (224, 224)
+    train_gen = datagen.flow_from_dataframe(
+        dataframe=df,
+        x_col="path",
+        y_col="label",
+        target_size=(224, 224),
+        batch_size=32,
+        class_mode="categorical",
+        subset="training"
+    )
+
+    val_gen = datagen.flow_from_dataframe(
+        dataframe=df,
+        x_col="path",
+        y_col="label",
+        target_size=(224, 224),
+        batch_size=32,
+        class_mode="categorical",
+        subset="validation"
+    )
+
+    # 🏗️ Build Model
+    model = tf.keras.Sequential([
+        tf.keras.layers.Conv2D(32, (3,3), activation='relu', input_shape=(224,224,3)),
+        tf.keras.layers.MaxPooling2D(),
+        tf.keras.layers.Conv2D(64, (3,3), activation='relu'),
+        tf.keras.layers.MaxPooling2D(),
+        tf.keras.layers.Flatten(),
+        tf.keras.layers.Dense(128, activation='relu'),
+        tf.keras.layers.Dropout(0.2), # Add dropout for robustness
+        tf.keras.layers.Dense(7, activation='softmax') # Should be 7 classes!
+    ])
+
+    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+    
+    # Train for 5 epochs (balance and accuracy)
+    model.fit(train_gen, validation_data=val_gen, epochs=5)
+    
+    # Save as .h5 model
+    model.save(os.path.join(os.path.dirname(__file__), "skin_model.h5"))
+    print("✅ Model trained and saved as 'skin_model.h5'!")
 
 if __name__ == "__main__":
-    analyze()
+    setup_and_train()

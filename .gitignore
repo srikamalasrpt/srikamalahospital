@@ -7,3 +7,12 @@ server/node_modules/
 client/dist/
 
 .vercel
+
+# AI Dataset folder (Prevent 5GB Upload)
+server/data/
+server/data
+data/
+*.zip
+*.h5
+# Un-ignore the specific model if you want to push it
+!server/skin_model.h5

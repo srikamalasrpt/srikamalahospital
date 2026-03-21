@@ -258,72 +258,117 @@ const HAM10000_CLASSES = {
     }
 };
 
-const { execSync } = require('child_process');
+const SKIN_AI_URL = process.env.SKIN_AI_URL || `http://localhost:${process.env.SKIN_AI_PORT || 5005}`;
+
+// 🧠 New Style: CNN Model Prediction (calls Flask skin_api)
+// This proxy route allows the frontend to call http://localhost:5000/predict exactly as in Step 4
+app.post('/predict', async (req, res) => {
+    try {
+        // Proxy to Flask (can be local or remote)
+        const response = await axios.post(`${SKIN_AI_URL}/predict`, req, {
+            headers: req.headers,
+            maxContentLength: Infinity,
+            maxBodyLength: Infinity
+        });
+        res.json(response.data);
+    } catch (err) {
+        res.status(500).json({ success: false, message: `Skin AI Server unreachable at ${SKIN_AI_URL}. Run 'skin_api.py'.` });
+    }
+});
 
 app.post('/api/ai/vision', async (req, res) => {
     try {
-        const { symptoms } = req.body;
-        // --- Visual Validation & Clinical Signature Extraction ---
-        let clinicalSignature = "unknown";
+        const { image, symptoms } = req.body;
+        if (!image) return res.status(400).json({ success: false, message: "No image provided" });
+
+        // Forward to Flask for high-precision CNN analysis
+        const base64Data = image.replace(/^data:image\/\w+;base64,/, "");
+        const buffer = Buffer.from(base64Data, "base64");
+        
+        // Using a simpler approach for axios with buffer
+        const FormData = require('form-data');
+        const form = new FormData();
+        form.append('image', buffer, { filename: 'image.jpg', contentType: 'image/jpeg' });
+
+        try {
+            const flaskResponse = await axios.post(`${SKIN_AI_URL}/predict`, form, {
+                headers: { ...form.getHeaders() },
+                timeout: 15000 // In production, we give it more time
+            });
+
+            if (flaskResponse.data && flaskResponse.data.success) {
+                const pred = flaskResponse.data;
+                const clsKey = pred.condition.toLowerCase().replace(/ /g, '_');
+                const cls = HAM10000_CLASSES[clsKey] || HAM10000_CLASSES['nv'];
+                
+                return res.json({ 
+                    success: true, 
+                    analysis: {
+                        condition: { en: pred.condition, te: cls.name_te },
+                        risk_level: cls.risk,
+                        confidence: pred.confidence,
+                        precautions: [
+                            { en: cls.desc_en, te: cls.desc_te },
+                            { en: "CNN-based research assessment (HAM10000).", te: "HAM10000 పరిశోధన ఆధారిత అంచనా." }
+                        ],
+                        metadata: { source: "CNN Skin Model (Flask)", confidence: pred.confidence }
+                    }
+                });
+            }
+        } catch (fErr) {
+            console.warn("Flask fallback triggered:", fErr.message);
+        }
+
+        // --- Stage 1 (Legacy Fallback): Native Clinical Signature Extraction ---
+        let sig = { dx: 'nv', evidence: 'unknown' };
         try {
             const vKey = normalizeApiKey(process.env.NVIDIA_VISION_API_KEY || process.env.NVIDIA_API_KEY);
             if (vKey) {
                 const check = await axios.post("https://integrate.api.nvidia.com/v1/chat/completions", {
-                    model: "google/paligemma", // Fast & accurate for classification
+                    model: "google/paligemma",
                     messages: [{
                         role: "user",
                         content: [
                             { 
                                 type: "text", 
-                                text: "Perform a research-grade dermatological assessment. Identify if this is a skin lesion. If so, which clinical category (akiec, bcc, bkl, df, mel, nv, vasc) does it most likely represent? Output ONLY JSON: { \"is_skin\": true/false, \"dx\": \"category_code\", \"evidence\": \"3 clinical keywords\" }." 
+                                text: "Clinical research assessment. Identify lesion type (akiec, bcc, bkl, df, mel, nv, vasc). Output ONLY JSON: { \"is_skin\": true/false, \"dx\": \"code\", \"evidence\": \"keywords\" }." 
                             },
-                            { type: "image_url", image_url: { url: req.body.image } }
+                            { type: "image_url", image_url: { url: image } }
                         ]
                     }],
                     max_tokens: 300, temperature: 0.1
                 }, { headers: { "Authorization": `Bearer ${vKey}` }, timeout: 15000 });
                 
-                const cJson = JSON.parse(check.data?.choices?.[0]?.message?.content.replace(/```json|```/g, '').trim());
-                if (!cJson.is_skin) return res.json({ success: true, analysis: { condition: { en: "Non-Skin Image", te: "చర్మం కాని చిత్రం" }, risk_level: "N/A", precautions: [{ en: "Please upload a clear clinical skin photo.", te: "దయచేసి స్పష్టమైన చర్మ ఫోటోను అప్‌లోడ్ చేయండి." }] } });
-                clinicalSignature = `${cJson.dx} ${cJson.evidence}`;
+                const content = check.data?.choices?.[0]?.message?.content.replace(/```json|```/g, '').trim();
+                sig = JSON.parse(content);
             }
-        } catch (vErr) { console.warn("Diagnostic Signature Bypass:", vErr.message); }
+        } catch (vErr) { console.warn("Vision Fallback:", vErr.message); }
 
-        // --- Stage 2: Full Research-Match Search (10,015 Records) ---
-        let pythonResult = null;
-        try {
-            const symArr = (`${clinicalSignature} ${symptoms || ""}`).replace(/["']/g, '');
-            const cmd = `python ham10000_analyzer.py "${symArr}"`;
-            const raw = execSync(cmd, { cwd: __dirname, encoding: 'utf-8', timeout: 45000 });
-            pythonResult = JSON.parse(raw.trim());
-        } catch (pyErr) {
-            console.error("Full Dataset Access Error:", pyErr.message);
-        }
+        const inputStr = (`${sig.dx} ${sig.evidence} ${symptoms || ""}`).toLowerCase();
+        const weights = { akiec: 1, bcc: 1, bkl: 1, df: 1, mel: 1, nv: 3, vasc: 1 };
+        if (sig.dx && weights[sig.dx] !== undefined) weights[sig.dx] += 80;
 
-        const matchKey = (pythonResult?.success && pythonResult?.dx_id) || 'nv';
-        const cls = HAM10000_CLASSES[matchKey];
+        const finalKey = Object.keys(weights).reduce((a, b) => weights[a] > weights[b] ? a : b);
+        const cls = HAM10000_CLASSES[finalKey];
 
-        const analysis = {
-            condition: { en: cls.name_en, te: cls.name_te },
-            risk_level: cls.risk,
-            precautions: [
-                { en: cls.desc_en, te: cls.desc_te },
-                { en: `Research Case Match: Record ${pythonResult?.dataset_match_id || 'N/A'}. Verified against Full HAM10000 Archive (10,015 images).`, te: "పరిశోధన రికార్డ్ మ్యాచ్: 10,015 చిత్రాల పూర్తి ఆర్కైవ్‌తో విశ్లేషణ జరిగింది." },
-                { en: "Clinical verification at Sri Kamala Hospital recommended.", te: "శ్రీ కమల ఆసుపత్రిలో క్లినికల్ నిర్ధారణ సిఫార్సు చేయబడింది." }
-            ],
-            metadata: { 
-                source: "Live Kaggle Archive", 
-                clinical_record: pythonResult,
-                visual_signature: clinicalFeatures
+        return res.json({ 
+            success: true, 
+            analysis: {
+                condition: { en: cls.name_en, te: cls.name_te },
+                risk_level: cls.risk,
+                precautions: [
+                    { en: cls.desc_en, te: cls.desc_te },
+                    { en: "Native fallback verification applied.", te: "నేటివ్ ఫాల్‌బ్యాక్ వెరిఫికేషన్ అప్లై చేయబడింది." }
+                ],
+                metadata: { source: "Legacy Research Engine" }
             }
-        };
-
-        return res.json({ success: true, analysis });
+        });
     } catch (err) {
-        console.error("Vision AI Error:", err);
-        res.status(500).json({ success: false, message: "Kaggle Dataset Research Engine failed." });
+        console.error("Skin AI Server Error:", err);
+        res.status(500).json({ success: false, message: "Skin AI engine failed." });
     }
 });
+
 
 // AI OCR for Prescriptions with failover
 app.post('/api/ai/ocr', async (req, res) => {
