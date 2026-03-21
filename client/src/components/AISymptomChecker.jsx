@@ -13,6 +13,30 @@ const AISymptomChecker = () => {
         if (value === null || value === undefined) return [];
         return [value];
     };
+    const getBilingualText = (value) => {
+        if (value === null || value === undefined) return '-';
+        if (typeof value === 'object') return value.te || value.en || '-';
+        return String(value);
+    };
+    const joinItems = (value) => {
+        const list = toArray(value);
+        if (!list.length) return '-';
+        return list.map((item) => getBilingualText(item)).join(', ');
+    };
+    const isEmergencyCase = (analysis) => {
+        const bag = [
+            getBilingualText(analysis?.condition),
+            joinItems(analysis?.precautions),
+            joinItems(analysis?.requirements),
+            joinItems(analysis?.lab_tests),
+            joinItems(analysis?.medicine)
+        ].join(' ').toLowerCase();
+        const emergencyKeywords = [
+            'emergency', 'urgent', 'immediate', 'critical', 'severe',
+            'చాలా తీవ్రం', 'అత్యవసరం', 'తక్షణం', 'గంభీర', 'ఎమర్జెన్సీ'
+        ];
+        return emergencyKeywords.some((key) => bag.includes(key));
+    };
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -172,29 +196,44 @@ const AISymptomChecker = () => {
                                         </div>
                                         
                                         {result.condition ? (
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full mb-6">
-                                                <div className="space-y-2">
-                                                    <h5 className="text-[9px] font-black uppercase tracking-widest text-hospital-primary flex items-center gap-2"><Activity size={12}/> Condition / పరిస్థితి</h5>
-                                                    <p className="text-hospital-dark font-black text-sm font-['Noto_Sans_Telugu']">{result.condition.te}</p>
-                                                    <p className="text-gray-500 font-bold text-xs">{result.condition.en}</p>
-                                                </div>
-                                                <div className="space-y-2">
-                                                    <h5 className="text-[9px] font-black uppercase tracking-widest text-[#ff8fa3] flex items-center gap-2"><ShieldAlert size={12}/> Precautions / జాగ్రత్తలు</h5>
-                                                    <ul className="text-xs font-medium text-gray-600 space-y-1">
-                                                        {toArray(result.precautions).map((p, i) => <li key={i}>• {typeof p === 'object' ? p.te || p.en : p}</li>)}
-                                                    </ul>
-                                                </div>
-                                                <div className="space-y-2">
-                                                    <h5 className="text-[9px] font-black uppercase tracking-widest text-emerald-500 flex items-center gap-2"><Plus size={12}/> Recommended Meds / మందులు సూచన</h5>
-                                                    <ul className="text-xs font-medium text-gray-600 space-y-1">
-                                                        {toArray(result.medicine).map((m, i) => <li key={i}>• {typeof m === 'object' ? m.te || m.en : m}</li>)}
-                                                    </ul>
-                                                </div>
-                                                <div className="space-y-2">
-                                                    <h5 className="text-[9px] font-black uppercase tracking-widest text-indigo-500 flex items-center gap-2"><ImageIcon size={12}/> Diagnostics / ల్యాబ్ పరీక్షలు</h5>
-                                                    <ul className="text-xs font-medium text-gray-600 space-y-1">
-                                                        {toArray(result.lab_tests).map((m, i) => <li key={i}>• {typeof m === 'object' ? m.te || m.en : m}</li>)}
-                                                    </ul>
+                                            <div className="w-full mb-6 space-y-4">
+                                                {isEmergencyCase(result) && (
+                                                    <div className="p-4 rounded-2xl bg-red-50 border border-red-200 text-red-700">
+                                                        <p className="text-[10px] font-black uppercase tracking-widest mb-1">Emergency Alert</p>
+                                                        <p className="text-sm font-bold">Serious indicators detected. Please go to hospital emergency immediately.</p>
+                                                    </div>
+                                                )}
+                                                <div className="overflow-x-auto rounded-2xl border border-gray-200 bg-white">
+                                                    <table className="w-full text-left min-w-[640px]">
+                                                        <thead className="bg-gray-50">
+                                                            <tr>
+                                                                <th className="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-gray-500">Category</th>
+                                                                <th className="px-4 py-3 text-[10px] font-black uppercase tracking-widest text-gray-500">Clinical Summary</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr className="border-t border-gray-100 align-top">
+                                                                <td className="px-4 py-3 text-xs font-black text-hospital-dark">Cause / Condition</td>
+                                                                <td className="px-4 py-3 text-xs font-medium text-gray-700">{getBilingualText(result.condition)}</td>
+                                                            </tr>
+                                                            <tr className="border-t border-gray-100 align-top">
+                                                                <td className="px-4 py-3 text-xs font-black text-hospital-dark">Precautions</td>
+                                                                <td className="px-4 py-3 text-xs font-medium text-gray-700">{joinItems(result.precautions)}</td>
+                                                            </tr>
+                                                            <tr className="border-t border-gray-100 align-top">
+                                                                <td className="px-4 py-3 text-xs font-black text-hospital-dark">Requirements</td>
+                                                                <td className="px-4 py-3 text-xs font-medium text-gray-700">{joinItems(result.requirements)}</td>
+                                                            </tr>
+                                                            <tr className="border-t border-gray-100 align-top">
+                                                                <td className="px-4 py-3 text-xs font-black text-hospital-dark">Lab Tests</td>
+                                                                <td className="px-4 py-3 text-xs font-medium text-gray-700">{joinItems(result.lab_tests)}</td>
+                                                            </tr>
+                                                            <tr className="border-t border-gray-100 align-top">
+                                                                <td className="px-4 py-3 text-xs font-black text-hospital-dark">Small Medicines</td>
+                                                                <td className="px-4 py-3 text-xs font-medium text-gray-700">{joinItems(result.medicine)}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
                                                 </div>
                                             </div>
                                         ) : (

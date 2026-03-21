@@ -330,7 +330,26 @@ app.post('/api/ai/vision', async (req, res) => {
             note: typeof rawText === 'string' ? rawText.slice(0, 220) : ''
         });
 
+        const refusalDetected = (text) => {
+            if (!text || typeof text !== 'string') return false;
+            const t = text.toLowerCase();
+            return [
+                "i don't think this conversation is a good idea",
+                "i'm not going to engage",
+                "i cannot help with that",
+                "can't help with that",
+                "cannot assist with that request",
+                "refuse",
+                "not able to provide"
+            ].some((k) => t.includes(k));
+        };
+
         let jsonResponse;
+        if (refusalDetected(jsonContent)) {
+            jsonResponse = buildVisionFallback("Vision model refused this image/content. Please retake a clear clinical image.");
+            return res.json({ success: true, analysis: jsonResponse });
+        }
+
         try {
             // High-precision cleanup for common AI markdown artifacts
             let cleaned = jsonContent.trim();
