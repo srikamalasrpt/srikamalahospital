@@ -13,13 +13,19 @@ require("dotenv").config({ path: path.join(__dirname, '.env') });
 const app = express();
 const PORT = process.env.PORT || 10000;
 
-// Initialize Supabase
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 let supabase = null;
-if (supabaseUrl && supabaseKey && !supabaseUrl.includes('YOUR_')) {
-    supabase = createClient(supabaseUrl, supabaseKey);
+try {
+    if (supabaseUrl && supabaseKey && typeof supabaseUrl === 'string' && !supabaseUrl.includes('YOUR_')) {
+        supabase = createClient(supabaseUrl, supabaseKey);
+        console.log('✅ Supabase initialized');
+    } else {
+        console.warn('⚠️ Supabase credentials missing (deployment will continue but DB features may fail)');
+    }
+} catch (e) {
+    console.error('❌ Supabase initialization failed:', e.message);
 }
 
 // SIMPLIFIED CORS for robust deployment
