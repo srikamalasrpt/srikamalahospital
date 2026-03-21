@@ -3,9 +3,8 @@ services:
     name: hospital-backend
     runtime: node
     region: oregon
-    rootDir: server
-    buildCommand: npm install
-    startCommand: node server.js
+    buildCommand: cd server && npm install
+    startCommand: node server/server.js
     healthCheckPath: /api/config
     envVars:
       - key: NODE_ENV
