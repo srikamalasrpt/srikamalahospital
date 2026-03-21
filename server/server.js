@@ -132,6 +132,13 @@ const openai = new OpenAI({
     baseURL: process.env.NVIDIA_BASE_URL || 'https://integrate.api.nvidia.com/v1',
 });
 
+const symptomModelCandidates = [
+    process.env.NVIDIA_SYMPTOM_MODEL,
+    "nvidia/llama-3.1-nemotron-70b-instruct",
+    "meta/llama-3.1-70b-instruct",
+    "meta/llama3-70b-instruct"
+].filter(Boolean);
+
 // AI Symptom Checker using NVIDIA NeMo AI (Nemotron 70B)
 app.post('/api/ai/symptom', async (req, res) => {
     try {
@@ -150,19 +157,34 @@ app.post('/api/ai/symptom', async (req, res) => {
             });
         }
 
-        const completion = await openai.chat.completions.create({
-            model: "nvidia/llama-3.1-nemotron-70b-instruct",
-            messages: [{
-                role: "system",
-                content: "You are an AI diagnostic assistant for Sri Kamala Hospital based on the NVIDIA NeMo framework. The user will provide symptoms. Respond EXCLUSIVELY with a JSON object containing two fields: 'advice' (an object with 'en' and 'te' fields for English and Telugu bilingual advice) and 'department' (an object with 'en' and 'te' fields for the most relevant hospital department). Keep advice highly professional, concise, and medical. ALWAYS output valid JSON without any markdown formatting."
-            }, {
-                role: "user",
-                content: symptoms
-            }],
-            temperature: 0.2,
-            top_p: 0.7,
-            max_tokens: 1024,
-        });
+        let completion = null;
+        let lastModelError = null;
+        for (const modelName of symptomModelCandidates) {
+            try {
+                completion = await openai.chat.completions.create({
+                    model: modelName,
+                    messages: [{
+                        role: "system",
+                        content: "You are an AI diagnostic assistant for Sri Kamala Hospital based on the NVIDIA NeMo framework. The user will provide symptoms. Respond EXCLUSIVELY with a JSON object containing two fields: 'advice' (an object with 'en' and 'te' fields for English and Telugu bilingual advice) and 'department' (an object with 'en' and 'te' fields for the most relevant hospital department). Keep advice highly professional, concise, and medical. ALWAYS output valid JSON without any markdown formatting."
+                    }, {
+                        role: "user",
+                        content: symptoms
+                    }],
+                    temperature: 0.2,
+                    top_p: 0.7,
+                    max_tokens: 1024,
+                });
+                break;
+            } catch (modelErr) {
+                lastModelError = modelErr;
+                const status = modelErr?.status || modelErr?.response?.status;
+                // Model not available for this account -> try next model candidate.
+                if (status === 404) continue;
+                throw modelErr;
+            }
+        }
+
+        if (!completion) throw lastModelError || new Error('No available symptom model');
 
         const modelText = completion?.choices?.[0]?.message?.content || '';
         let jsonResponse = null;
