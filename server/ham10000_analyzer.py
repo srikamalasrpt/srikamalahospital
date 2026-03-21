@@ -7,13 +7,17 @@ from kagglehub import KaggleDatasetAdapter
 
 def analyze():
     try:
-        # Load the full HAM10000 dataset metadata (10,015 records)
-        # We explicitly target the metadata CSV for diagnostic analysis
-        df = kagglehub.load_dataset(
-            KaggleDatasetAdapter.PANDAS,
-            "kmader/skin-cancer-mnist-ham10000",
-            "ham10000_metadata.csv",
-        )
+        # Step 1: Download latest version of the full research dataset (10,015 images)
+        # This locates the local path for the KMader/HAM10000 archive
+        path = kagglehub.dataset_download("kmader/skin-cancer-mnist-ham10000")
+        
+        # Step 2: Resolve the metadata CSV path within the downloaded archive
+        # We handle potential filename variations (casing) in the Kaggle bundle
+        metadata_file = os.path.join(path, "HAM10000_metadata.csv")
+        if not os.path.exists(metadata_file):
+            metadata_file = os.path.join(path, "ham10000_metadata.csv")
+            
+        df = pd.read_csv(metadata_file)
         
         # Clinical Symptoms from Sri Kamala Hospital (via Node Server)
         symptoms = sys.argv[1].lower() if len(sys.argv) > 1 else ""
