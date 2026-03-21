@@ -266,8 +266,10 @@ app.post('/api/ai/vision', async (req, res) => {
         
         let pythonResult = null;
         try {
-            // Full Dataset Bridge (Kagglehub-powered)
-            const raw = execSync('python ham10000_analyzer.py', { cwd: __dirname, encoding: 'utf-8', timeout: 45000 });
+            // Full Dataset Bridge (Kagglehub-powered with Symptom Guidance)
+            const symArr = (symptoms || "").replace(/["']/g, ''); // Basic escaping
+            const cmd = `python ham10000_analyzer.py "${symArr}"`;
+            const raw = execSync(cmd, { cwd: __dirname, encoding: 'utf-8', timeout: 45000 });
             pythonResult = JSON.parse(raw.trim());
         } catch (pyErr) {
             console.warn("Python Bridge Fail (Falling back to Local Engine):", pyErr.message);
