@@ -37,7 +37,7 @@ export const predictSkinCancer = (file) => {
   formData.append("image", file);
   return axios.post(`${api.defaults.baseURL.replace(/\/api$/, '')}/predict`, formData);
 };
-export const analyzeOCR = (image) => api.post('/api/ocr', { image });
+export const analyzeOCR = (image) => api.post('/ocr', { image });
 export const chatWithAI = (query) => api.post('/ai/chat', { query });
 export const discoverMedicines = (keyword) => api.post('/ai/medicine-discovery', { keyword });
 export const savePatientClinicalNote = (data) => api.post('/admin/patient-clinical-note', data);
