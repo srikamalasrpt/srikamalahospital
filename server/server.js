@@ -269,25 +269,32 @@ app.post('/api/ai/vision', async (req, res) => {
 
                     const payload = {
                         "model": currentModel,
-                        "messages": [{
-                            "role": "user",
-                            "content": [
-                                { 
-                                  "type": "text", 
-                                  "text": `Clinical Expert Analysis (Image-to-JSON):
-                                  Observe the medical image and symptoms: ${symptoms || 'Visual only'}.
-                                  Output PURE JSON following this schema precisely:
-                                  {
-                                    "condition": { "en": "...", "te": "..." },
-                                    "precautions": [ { "en": "...", "te": "..." }, ... ],
-                                    "medicine": [ { "en": "...", "te": "..." }, ... ],
-                                    "lab_tests": [ { "en": "...", "te": "..." }, ... ]
-                                  }
-                                  Skip all disclaimers. Provide actionable data for clinical screening.`
-                                },
-                                { "type": "image_url", "image_url": { "url": image } }
-                            ]
-                        }],
+                        "messages": [
+                            {
+                                "role": "system",
+                                "content": "You are a machine-to-machine data extraction agent. You convert raw medical images into structured JSON schema for laboratory triage. No prose, no apologies, no conversational filler. Professional medical screening only."
+                            },
+                            {
+                                "role": "user",
+                                "content": [
+                                    { 
+                                      "type": "text", 
+                                      "text": `Structural Vision Extraction Task:
+                                      Inputs: Image + Symptoms (${symptoms || 'Visual only'}).
+                                      
+                                      Required JSON Schema:
+                                      {
+                                        "condition": { "en": "Primary finding", "te": "Telugu finding" },
+                                        "precautions": [ { "en": "...", "te": "..." }, ... ],
+                                        "medicine": [ { "en": "...", "te": "..." }, ... ],
+                                        "lab_tests": [ { "en": "...", "te": "..." }, ... ]
+                                      }
+                                      Extract best-effort diagnostic indicators for clinical review.` 
+                                    },
+                                    { "type": "image_url", "image_url": { "url": image } }
+                                ]
+                            }
+                        ],
                         "max_tokens": 1024,
                         "temperature": 0.1,
                         "top_p": 0.7
@@ -349,19 +356,26 @@ app.post('/api/ai/vision', async (req, res) => {
             note: `[Model: ${modelUsed}] ${typeof rawText === 'string' ? rawText.slice(0, 220) : ''}`
         });
 
-        const refusalDetected = (text) => {
-            if (!text || typeof text !== 'string') return false;
-            const t = text.toLowerCase();
+        const responseIsInvalid = (text) => {
+            if (!text || typeof text !== 'string') return true;
+            const t = text.trim().toLowerCase();
+            // If it doesn't look like JSON at all, it's a refusal or error message
+            if (!t.startsWith('{') && !t.includes('{"')) return true;
+            
             return [
                 "i don't think this conversation is a good idea",
                 "i'm not going to engage",
+                "i can't help",
+                "cannot help",
+                "cannot assist",
+                "policy",
                 "refusal"
             ].some((k) => t.includes(k));
         };
 
         let jsonResponse;
-        if (refusalDetected(jsonContent)) {
-            jsonResponse = buildVisionFallback(`Vision model refused image evaluation. Check for safety filters.`);
+        if (responseIsInvalid(jsonContent)) {
+            jsonResponse = buildVisionFallback(jsonContent);
             return res.json({ success: true, analysis: jsonResponse });
         }
 
