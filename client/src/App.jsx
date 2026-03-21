@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import HealthBot from './components/HealthBot';
 import Footer from './components/Footer';
@@ -58,6 +58,8 @@ const App = () => {
                     <Route path="/ai-health" element={<AIHealthPage />} />
                     <Route path="/6665" element={<AdminDashboard />} />
                     <Route path="/receipt" element={<Receipt />} />
+                    <Route path="/contact.html" element={<Navigate to="/" replace />} />
+                    <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
             </Layout>
         </Router>

@@ -20,10 +20,8 @@ const DiagnosticBookingModal = ({ test, isOpen, onClose }) => {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      const generatedToken = 'LAB-' + Math.random().toString(36).substr(2, 6).toUpperCase();
       const bookingData = {
         ...formData,
-        token: generatedToken,
         department: `Lab: ${test.name}`,
         appointmentDate: formData.date,
         reason: `Diagnostic Test: ${test.name} (₹${test.price})`
@@ -31,10 +29,11 @@ const DiagnosticBookingModal = ({ test, isOpen, onClose }) => {
 
       const response = await bookAppointment(bookingData);
       if (response.data.success) {
-        setToken(generatedToken);
+        const serverToken = response.data.token;
+        setToken(serverToken);
         setIsSuccess(true);
         setTimeout(() => {
-          window.location.href = `/receipt?token=${generatedToken}&status=offline`;
+          window.location.href = `/receipt?token=${serverToken}&status=offline`;
         }, 2000);
       }
     } catch (err) {
@@ -70,6 +69,9 @@ const DiagnosticBookingModal = ({ test, isOpen, onClose }) => {
              <div className="relative z-10 pt-6">
                 <p className="text-[8px] font-black uppercase tracking-widest text-white/40 mb-1">TOTAL CHARGE</p>
                 <p className="text-2xl font-black">₹{test.price}</p>
+                <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 8, ease: 'linear' }} className="mt-4 w-10 h-10 border border-white/30 rounded-full flex items-center justify-center">
+                  <Flask size={14} />
+                </motion.div>
              </div>
           </div>
 

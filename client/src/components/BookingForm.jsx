@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Calendar, User, Phone, Clipboard, Heart, Send, CheckCircle2, ChevronRight, Activity, Clock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { bookAppointment } from '../utils/api';
-import axios from 'axios';
 
 const BookingForm = () => {
   const [formData, setFormData] = useState({
@@ -30,10 +29,10 @@ const BookingForm = () => {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      const token = 'TKN-' + Math.random().toString(36).substr(2, 9).toUpperCase();
-      const response = await bookAppointment({ ...formData, token });
+      const response = await bookAppointment(formData);
       if (response.data.success) {
-         window.location.href = `/receipt?token=${token}&status=offline`;
+         const serverToken = response.data.token;
+         window.location.href = `/receipt?token=${serverToken}&status=offline`;
       }
     } catch (err) {
       console.error(err);
@@ -46,6 +45,19 @@ const BookingForm = () => {
   return (
     <section id="booking" className="py-20 px-6 flex items-center justify-center bg-white relative">
       <div className="container mx-auto max-w-7xl relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          className="mb-10 p-6 bg-gradient-to-r from-hospital-dark to-hospital-primary rounded-[30px] text-white flex items-center justify-between"
+        >
+          <div>
+            <p className="text-[10px] uppercase tracking-[0.3em] font-black opacity-70">3D Booking Animation</p>
+            <p className="text-sm font-bold">Token animation is active while confirming OP booking.</p>
+          </div>
+          <motion.div animate={{ rotateY: 360 }} transition={{ repeat: Infinity, duration: 4, ease: 'linear' }} className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
+            <Heart size={18} />
+          </motion.div>
+        </motion.div>
         <div className="flex flex-col lg:flex-row gap-16 items-center">
             
             <div className="lg:w-1/2 space-y-8">
@@ -76,35 +88,44 @@ const BookingForm = () => {
             </div>
 
             <div className="lg:w-1/2 w-full">
-                <form onSubmit={handleSubmit} className="bg-white border-2 border-gray-50 p-8 lg:p-12 rounded-[50px] shadow-2xl">
+                <motion.form 
+                    initial={{ perspective: 1000, rotateY: 5, opacity: 0 }}
+                    whileInView={{ rotateY: 0, opacity: 1 }}
+                    whileHover={{ rotateY: -1, rotateX: 1, boxShadow: "0 50px 100px -20px rgba(0,0,0,0.2)" }}
+                    transition={{ type: 'spring', stiffness: 100 }}
+                    onSubmit={handleSubmit} 
+                    className="bg-white border-2 border-gray-50 p-8 lg:p-12 rounded-[50px] shadow-2xl relative overflow-hidden group">
+                    
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-hospital-primary/5 rounded-bl-full pointer-events-none"></div>
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                         <div className="space-y-2">
                             <label className="text-[10px] font-black uppercase tracking-widest text-[#1e293b]/40 ml-1 font-['Noto_Sans_Telugu'] text-xs">పేరు (Patient Name)</label>
                             <div className="relative">
-                                <User size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300" />
+                                <User size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-hospital-primary transition-colors" />
                                 <input required type="text" placeholder="Full Name" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})}
-                                    className="w-full bg-gray-50 border border-transparent focus:border-hospital-primary focus:bg-white p-3.5 pl-11 rounded-xl transition-all outline-none text-sm font-bold" />
+                                    className="w-full bg-gray-50 border-2 border-transparent focus:border-hospital-primary/20 focus:bg-white p-3.5 pl-11 rounded-xl transition-all outline-none text-sm font-bold" />
                             </div>
                         </div>
 
                         <div className="space-y-2">
                             <label className="text-[10px] font-black uppercase tracking-widest text-[#1e293b]/40 ml-1 font-['Noto_Sans_Telugu'] text-xs">ఫోన్ నంబర్ (Phone Number)</label>
                             <div className="relative">
-                                <Phone size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300" />
+                                <Phone size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-hospital-primary transition-colors" />
                                 <input required type="tel" placeholder="+91 0000 0000" value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                                    className="w-full bg-gray-50 border border-transparent focus:border-hospital-primary focus:bg-white p-3.5 pl-11 rounded-xl transition-all outline-none text-sm font-bold" />
+                                    className="w-full bg-gray-50 border-2 border-transparent focus:border-hospital-primary/20 focus:bg-white p-3.5 pl-11 rounded-xl transition-all outline-none text-sm font-bold" />
                             </div>
                         </div>
 
                         <div className="space-y-2">
                             <label className="text-[10px] font-black uppercase tracking-widest text-[#1e293b]/40 ml-1 font-['Noto_Sans_Telugu'] text-xs">వయస్సు (Age)</label>
                             <input required type="number" placeholder="Age" value={formData.age} onChange={(e) => setFormData({...formData, age: e.target.value})}
-                                    className="w-full bg-gray-50 border border-transparent focus:border-hospital-primary focus:bg-white p-3.5 rounded-xl transition-all outline-none text-sm font-bold" />
+                                    className="w-full bg-gray-50 border-2 border-transparent focus:border-hospital-primary/20 focus:bg-white p-3.5 rounded-xl transition-all outline-none text-sm font-bold" />
                         </div>
                         <div className="space-y-2">
                             <label className="text-[10px] font-black uppercase tracking-widest text-[#1e293b]/40 ml-1 font-['Noto_Sans_Telugu'] text-xs">లింగం (Gender)</label>
                             <select value={formData.gender} onChange={(e) => setFormData({...formData, gender: e.target.value})}
-                                    className="w-full bg-gray-50 border border-transparent focus:border-hospital-primary focus:bg-white p-3.5 rounded-xl transition-all outline-none text-sm font-bold">
+                                    className="w-full bg-gray-50 border-2 border-transparent focus:border-hospital-primary/20 focus:bg-white p-3.5 rounded-xl transition-all outline-none text-sm font-bold">
                                 <option>మగ (Male)</option><option>ఆడ (Female)</option><option>ఇతర (Other)</option>
                             </select>
                         </div>
@@ -113,7 +134,7 @@ const BookingForm = () => {
                     <div className="space-y-2 mb-6">
                         <label className="text-[10px] font-black uppercase tracking-widest text-[#1e293b]/40 ml-1 font-['Noto_Sans_Telugu'] text-xs">విభాగం (Specialization)</label>
                         <select value={formData.department} onChange={(e) => setFormData({...formData, department: e.target.value})}
-                                className="w-full bg-gray-50 border border-transparent focus:border-hospital-primary focus:bg-white p-3.5 rounded-xl transition-all outline-none text-sm font-bold">
+                                className="w-full bg-gray-50 border-2 border-transparent focus:border-hospital-primary/20 focus:bg-white p-3.5 rounded-xl transition-all outline-none text-sm font-bold text-hospital-dark">
                             {departments.map(d => <option key={d.en} value={d.te}>{d.te} ({d.en})</option>)}
                         </select>
                     </div>
@@ -123,18 +144,21 @@ const BookingForm = () => {
                         <div className="grid grid-cols-2 gap-4">
                            {['Online', 'ఆసుపత్రిలో'].map(m => (
                                <button key={m} type="button" onClick={() => setFormData({...formData, paymentMethod: m})}
-                                  className={`p-3 rounded-xl font-black text-[9px] uppercase tracking-widest border transition-all ${formData.paymentMethod === m ? 'border-hospital-primary bg-hospital-primary/5 text-hospital-primary' : 'border-gray-50 text-gray-300'}`}>
+                                  className={`p-3 rounded-xl font-black text-[9px] uppercase tracking-widest border-2 transition-all ${formData.paymentMethod === m ? 'border-hospital-primary bg-hospital-primary/5 text-hospital-primary' : 'border-gray-50 text-gray-300 hover:border-gray-100'}`}>
                                   {m === 'Online' ? 'UPI / Cards' : 'At Counter'}
                                </button>
                            ))}
                         </div>
                     </div>
 
-                    <button type="submit" disabled={isSubmitting}
-                        className="w-full bg-hospital-dark text-white p-6 rounded-[32px] font-black text-xs uppercase tracking-[0.2em] shadow-xl hover:bg-hospital-primary transition-all disabled:opacity-50 flex items-center justify-center gap-3">
+                    <motion.button 
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        type="submit" disabled={isSubmitting}
+                        className="w-full bg-hospital-dark text-white p-6 rounded-[32px] font-black text-xs uppercase tracking-[0.2em] shadow-xl hover:bg-hospital-primary transition-all disabled:opacity-50 flex items-center justify-center gap-3 border-none">
                         {isSubmitting ? '...' : <><span className="font-['Noto_Sans_Telugu'] text-xl tracking-normal">బుకింగ్ ఖరారు చేయండి</span> <span className="opacity-40">/ CONFIRM</span></>} 
-                    </button>
-                </form>
+                    </motion.button>
+                </motion.form>
             </div>
         </div>
       </div>

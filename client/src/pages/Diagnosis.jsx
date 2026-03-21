@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Search, FlaskConical, Clock, CreditCard, ChevronRight, Activity, FlaskRound as Flask, ShieldCheck, Microscope, Thermometer } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { FlaskRound as Flask, Search, Heart, Plus, Microscope, Orbit } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { fetchLabTests } from '../utils/api';
 import DiagnosticBookingModal from '../components/DiagnosticBookingModal';
@@ -26,10 +26,25 @@ const Diagnosis = () => {
   }, []);
 
   const fallbackTests = [
-    { name: 'Blood Glucose', category: 'Biochemistry', price: 150, report_time: 12 },
-    { name: 'Lipid Profile', category: 'Cardiology', price: 450, report_time: 24 },
-    { name: 'Thyroid (T3/T4/TSH)', category: 'Hormonal', price: 350, report_time: 24 },
-    { name: 'CBC (Complete Blood Count)', category: 'Hematology', price: 200, report_time: 12 }
+    { name: 'Complete Blood Picture (CBP)', category: 'Hematology', price: 250, report_time: 12 },
+    { name: 'Blood Glucose (Sugar)', category: 'Biochemistry', price: 150, report_time: 6 },
+    { name: 'Differential Count (DC)', category: 'Hematology', price: 200, report_time: 12 },
+    { name: 'ESR (1st & 2nd Hour)', category: 'Hematology', price: 100, report_time: 12 },
+    { name: 'Absolute Eosinophils Count (AEC)', category: 'Hematology', price: 300, report_time: 12 },
+    { name: 'Hemoglobin (Hb)', category: 'Hematology', price: 120, report_time: 8 },
+    { name: 'Packed Cell Volume (PCV)', category: 'Hematology', price: 140, report_time: 8 },
+    { name: 'Total Leukocyte Count (TLC)', category: 'Hematology', price: 170, report_time: 12 },
+    { name: 'Platelet Count', category: 'Hematology', price: 180, report_time: 12 },
+    { name: 'Reticulocyte Count', category: 'Hematology', price: 260, report_time: 18 },
+    { name: 'PT/INR', category: 'Coagulation', price: 320, report_time: 18 },
+    { name: 'APTT', category: 'Coagulation', price: 350, report_time: 24 },
+    { name: 'Peripheral Smear', category: 'Hematology', price: 350, report_time: 24 },
+    { name: 'Thyroid Profile (T3/T4/TSH)', category: 'Hormonal', price: 450, report_time: 24 },
+    { name: 'Lipid Profile', category: 'Cardiology', price: 500, report_time: 24 },
+    { name: 'Liver Function Test', category: 'Biochemistry', price: 650, report_time: 24 },
+    { name: 'Kidney Function Test', category: 'Biochemistry', price: 750, report_time: 24 },
+    { name: 'HbA1c', category: 'Diabetes', price: 450, report_time: 24 },
+    { name: 'CRP', category: 'Immunology', price: 420, report_time: 24 }
   ];
 
   const handleBookTest = (test) => {
@@ -49,6 +64,21 @@ const Diagnosis = () => {
       <div className="absolute top-0 right-0 w-[40%] h-[40%] bg-hospital-primary/5 rounded-bl-[200px] z-0 pointer-events-none"></div>
       
       <div className="container mx-auto max-w-7xl relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-8 p-6 rounded-[28px] bg-white border border-hospital-primary/10 shadow-sm flex items-center justify-between gap-4"
+        >
+          <div>
+            <p className="text-[10px] uppercase tracking-[0.3em] font-black text-gray-400">3D Live Diagnostic Desk</p>
+            <p className="text-sm font-bold text-hospital-dark">Animated workflow for test selection, booking, and receipt generation.</p>
+          </div>
+          <div className="relative w-16 h-16">
+            <motion.div animate={{ rotate: 360 }} transition={{ duration: 10, repeat: Infinity, ease: 'linear' }} className="absolute inset-0 rounded-full border border-hospital-primary/30" />
+            <motion.div animate={{ rotate: -360 }} transition={{ duration: 6, repeat: Infinity, ease: 'linear' }} className="absolute inset-2 rounded-full border border-hospital-secondary/30" />
+            <div className="absolute inset-0 flex items-center justify-center text-hospital-primary"><Orbit size={22} /></div>
+          </div>
+        </motion.div>
         
         <div className="flex flex-col md:flex-row items-center justify-between mb-12 gap-8">
             <div className="max-w-xl text-center md:text-left">
@@ -58,87 +88,99 @@ const Diagnosis = () => {
                </div>
                <h2 className="text-4xl lg:text-5xl font-black text-hospital-dark leading-none font-['Noto_Sans_Telugu']">పరిపూర్ణ <span className="text-hospital-secondary italic">ల్యాబ్</span> <br/>పరీక్షలు.</h2>
                <p className="text-[10px] uppercase font-bold text-gray-300 tracking-[0.3em] mt-3">Precision Laboratory Insights</p>
-               <p className="text-xs font-medium text-gray-500 mt-6 font-['Noto_Sans_Telugu'] italic">WHO-ధృవీకరించబడిన డయాగ్నోస్టిక్ సెంటర్.</p>
+               <p className="text-xs font-medium text-gray-500 mt-6 font-['Noto_Sans_Telugu'] italic">WHO-ధృవీకరించబడిన డయాగ్నోస్టిక్ సెంటర్ | ఎం.జి రోడ్డు, సూర్యాపేట</p>
             </div>
 
             <div className="w-full md:w-[350px] relative group">
-                <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-300" size={16} />
-                <input type="text" placeholder="పరీక్ష కోసం వెతకండి (e.g. Sugar)" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full bg-white border border-gray-100 p-4 pl-12 rounded-[28px] shadow-lg outline-none text-sm font-black transition-all placeholder:text-gray-200" />
+                <Search size={20} className="absolute left-5 top-1/2 -translate-y-1/2 text-hospital-primary/40 group-focus-within:text-hospital-primary transition-all z-10" />
+                <input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} type="text" placeholder="Search Blood Tests..."
+                  className="w-full bg-white border-2 border-transparent focus:border-hospital-primary/20 shadow-xl p-5 pl-14 rounded-[32px] outline-none text-sm font-bold transition-all" />
+                <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[8px] font-black tracking-[0.4em] text-gray-200 uppercase whitespace-nowrap">Clinical Search Engine</div>
             </div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
-           {[
-             { te: 'ధృవీకరించబడిన ల్యాబ్స్', en: 'Certified Labs', icon: <Microscope size={14}/> },
-             { te: 'సురక్షితమైన డేటా', en: 'Encrypted Data', icon: <ShieldCheck size={14}/> },
-             { te: '24 గంటల్లో రిపోర్ట్', en: '24HR Turnaround', icon: <Clock size={14}/> },
-             { te: 'ఆన్‌లైన్ రిపోర్ట్స్', en: 'Free Reports', icon: <Thermometer size={14}/> }
-           ].map((stat, i) => (
-              <div key={i} className="p-5 rounded-[28px] bg-white border border-gray-50 flex items-center gap-3 shadow-md hover:shadow-xl transition-all">
-                 <div className="w-8 h-8 bg-hospital-mint rounded-xl flex items-center justify-center text-hospital-primary shadow-sm shrink-0">{stat.icon}</div>
-                 <div className="leading-tight">
-                    <p className="text-[10px] font-black font-['Noto_Sans_Telugu'] text-hospital-dark">{stat.te}</p>
-                    <p className="text-[7px] font-black uppercase tracking-widest text-gray-300 mt-0.5">{stat.en}</p>
-                 </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {filteredTests.map((test, index) => (
+            <motion.div key={index} 
+              initial={{ y: 30, opacity: 0 }} 
+              whileInView={{ y: 0, opacity: 1 }} 
+              transition={{ delay: index * 0.05 }}
+              whileHover={{ 
+                scale: 1.05, 
+                rotateX: 2, 
+                rotateY: -2,
+                boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.15)"
+              }}
+              style={{ perspective: "1000px" }}
+              className="bg-white p-8 rounded-[48px] border-2 border-transparent hover:border-hospital-primary/10 shadow-sm transition-all group relative overflow-hidden h-full flex flex-col cursor-pointer"
+              onClick={() => handleBookTest(test)}
+            >
+              <div className="absolute top-0 right-0 p-6 opacity-0 group-hover:opacity-100 transition-opacity">
+                 <div className="w-8 h-8 rounded-full bg-hospital-mint flex items-center justify-center text-hospital-primary"><Plus size={16}/></div>
               </div>
-           ))}
+
+              <div className="mb-8">
+                 <div className="w-16 h-16 bg-hospital-primary rounded-3xl flex items-center justify-center text-white shadow-xl mb-6 group-hover:rotate-12 transition-transform">
+                    <Microscope size={32} />
+                 </div>
+                 <div className="px-3 py-1 bg-gray-50 rounded-full border border-gray-100 text-[8px] font-black uppercase tracking-widest text-gray-400 inline-block mb-3">
+                    {test.category}
+                 </div>
+                 <h3 className="text-xl font-black text-hospital-dark leading-tight line-clamp-2 h-[3.5rem]">{test.name}</h3>
+              </div>
+
+              <div className="mt-auto space-y-6">
+                 <div className="flex justify-between items-end border-b border-gray-50 pb-4">
+                    <div>
+                        <p className="text-[10px] font-black text-gray-300 uppercase tracking-widest mb-1 leading-none">Price Est.</p>
+                        <p className="text-3xl font-black text-hospital-dark tracking-tighter">₹{test.price}</p>
+                    </div>
+                    <div className="text-right">
+                        <p className="text-[10px] font-black text-gray-300 uppercase tracking-widest mb-1 leading-none">Report</p>
+                        <p className="text-sm font-black text-hospital-secondary">{test.report_time}H</p>
+                    </div>
+                 </div>
+                 
+                 <button className="w-full bg-hospital-dark text-white py-4 rounded-[24px] text-[10px] font-black uppercase tracking-widest shadow-lg group-hover:bg-hospital-primary group-hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2 border-none">
+                    <Heart size={14} className="group-hover:fill-white transition-all" /> Book Now
+                 </button>
+              </div>
+              
+              <div className="absolute -bottom-1 left-0 w-full h-1 bg-hospital-primary transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></div>
+            </motion.div>
+          ))}
         </div>
 
-        <AnimatePresence mode="wait">
-            {loading ? (
-               <div className="flex flex-col items-center justify-center py-40">
-                  <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1 }} className="w-8 h-8 border-4 border-hospital-primary/20 border-t-hospital-primary rounded-full mb-4"></motion.div>
-                  <p className="text-[10px] font-black uppercase tracking-widest text-gray-300">Synchronizing Parameters...</p>
-               </div>
-            ) : (
-                <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} 
-                   className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                   {filteredTests.map((test, index) => (
-                      <motion.div key={index} whileHover={{ y: -4 }} 
-                           className="bg-white p-8 flex flex-col items-center text-center group relative overflow-hidden border border-gray-100 rounded-[40px] shadow-lg hover:shadow-2xl transition-all duration-500">
-                         
-                         <div className="w-14 h-14 bg-hospital-mint flex items-center justify-center rounded-[20px] mb-6 text-hospital-primary group-hover:scale-110 transition-transform">
-                            <Activity size={20} />
-                         </div>
+        {filteredTests.length === 0 && (
+           <div className="bg-white p-20 rounded-[60px] shadow-sm border border-dashed border-gray-200 text-center">
+              <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6 text-gray-300">
+                 <Search size={40} />
+              </div>
+              <h3 className="text-2xl font-black text-hospital-dark">No tests found matching "{searchQuery}"</h3>
+              <p className="text-gray-400 font-bold uppercase tracking-widest text-[10px] mt-2">Try searching with a different keyword like 'Blood' or 'Sugar'</p>
+           </div>
+        )}
 
-                         <div className="mb-6">
-                            <p className="text-[8px] font-black uppercase tracking-[0.2em] text-hospital-primary mb-1">{test.category}</p>
-                            <h3 className="text-xl font-black text-hospital-dark mb-1 leading-none font-['Noto_Sans_Telugu']">{test.name}</h3>
-                            <p className="text-[10px] font-medium text-gray-400 opacity-60 italic">Advanced Diagnostic Profiling</p>
-                         </div>
+        <div className="mt-20 p-12 bg-hospital-dark rounded-[60px] text-white flex flex-col md:flex-row items-center justify-between shadow-4xl relative overflow-hidden">
+           <div className="absolute top-0 right-0 p-12 text-white/5 pointer-events-none opacity-50"><Flask size={200}/></div>
+           <div className="relative z-10 text-center md:text-left mb-8 md:mb-0">
+              <h3 className="text-2xl font-black mb-4 font-['Noto_Sans_Telugu']">నేరుగా కాల్ చేయండి</h3>
+              <p className="text-hospital-primary font-black uppercase tracking-widest text-xs mb-2">Instant Lab Consultation line</p>
+              <h4 className="text-4xl font-black font-mono">98668 95634</h4>
+              <p className="text-[10px] mt-3 uppercase tracking-widest text-gray-300">Hospital Main: 99480 76665 | Open 24 Hours</p>
+           </div>
+           <div className="relative z-10 flex gap-4">
+              <a href="tel:9866895634" className="bg-white text-hospital-dark px-10 py-5 rounded-3xl font-black text-xs uppercase tracking-widest shadow-2xl hover:scale-110 active:scale-95 transition-all outline-none">CALL CLINIC</a>
+           </div>
+        </div>
 
-                         <div className="w-full flex items-center justify-between mb-8 pt-6 border-t border-gray-50">
-                             <div className="text-left">
-                                <p className="text-[8px] font-black uppercase text-gray-300 tracking-widest mb-1 leading-none">ఖర్చు (Cost)</p>
-                                <p className="text-xl font-black text-hospital-dark tabular-nums">₹{test.price}</p>
-                             </div>
-                             <div className="text-right">
-                                <p className="text-[8px] font-black uppercase text-gray-300 tracking-widest mb-1 leading-none">సమయం (Time)</p>
-                                <p className="text-xs font-black text-hospital-primary">{test.report_time}H</p>
-                             </div>
-                         </div>
-
-                         <button onClick={() => handleBookTest(test)} className="w-full premium-button bg-hospital-dark text-white justify-center py-3.5 shadow-xl border-none">
-                            <span className="relative z-10 font-['Noto_Sans_Telugu'] text-base mr-3 font-bold tracking-tight">పరీక్ష బుక్ చేయండి</span>
-                            <span className="text-[8px] tracking-widest opacity-30 mt-1 uppercase">/ Book</span>
-                         </button>
-                      </motion.div>
-                   ))}
-                </motion.div>
-            )}
-        </AnimatePresence>
       </div>
 
-      <AnimatePresence>
-        {isModalOpen && selectedTest && (
-          <DiagnosticBookingModal 
-            test={selectedTest} 
-            isOpen={isModalOpen} 
-            onClose={() => setIsModalOpen(false)} 
-          />
-        )}
-      </AnimatePresence>
+      <DiagnosticBookingModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        test={selectedTest} 
+      />
     </div>
   );
 };

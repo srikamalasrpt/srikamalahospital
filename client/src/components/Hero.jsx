@@ -20,7 +20,7 @@ const Hero = () => {
                         <motion.div initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2 }}
                             className="inline-flex items-center gap-2 px-3 py-1 bg-white/60 backdrop-blur-md rounded-full border border-white/40 shadow-sm mb-6">
                             <div className="p-0.5 bg-green-500 rounded-full animate-pulse-slow"><div className="w-1.5 h-1.5 bg-white rounded-full"></div></div>
-                            <span className="text-[9px] font-black uppercase tracking-widest text-hospital-dark">Available 24 Hours in Manasa Nagar, Suryapet</span>
+                            <span className="text-[9px] font-black uppercase tracking-widest text-hospital-dark">Emergency Line: 99480 76665 | 24 Hours Open</span>
                         </motion.div>
 
                         <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.4 }} className="mb-6 space-y-1">
@@ -35,7 +35,7 @@ const Hero = () => {
 
                         <motion.p initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.6 }}
                             className="text-compact text-sm md:text-base max-w-md mx-auto lg:mx-0 mb-10 text-gray-400 font-medium">
-                            Located at Manasa Nagar, we specialize in diabetes management and emergency care. Talented doctors available even at midnight for critical support.
+                            Located at MG Road, Suryapet, we specialize in diagnostics and emergency care. Special consultation for diabetes available 24/7.
                         </motion.p>
 
                         <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.8 }}
