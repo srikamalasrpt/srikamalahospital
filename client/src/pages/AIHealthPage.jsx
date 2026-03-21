@@ -11,6 +11,14 @@ const AIHealthPage = () => {
     const [dietPlan, setDietPlan] = useState(null);
     const [isDietLoading, setIsDietLoading] = useState(false);
 
+    const [drugsInput, setDrugsInput] = useState('');
+    const [drugsResult, setDrugsResult] = useState(null);
+    const [isDrugsLoading, setIsDrugsLoading] = useState(false);
+
+    const [skinImage, setSkinImage] = useState(null);
+    const [skinResult, setSkinResult] = useState(null);
+    const [isSkinLoading, setIsSkinLoading] = useState(false);
+
     const handleOCR = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -49,10 +57,54 @@ CRITICAL RULE: You MUST format your precise response as:
         }
     };
 
+    const checkDrugInteractions = async () => {
+        if (!drugsInput) return;
+        setIsDrugsLoading(true);
+        try {
+            const { chatWithAI } = await import('../utils/api');
+            const prompt = `Medical Analysis: Evaluate the drug interactions for: [${drugsInput}]. Detail major side effects, contraindications, and safety profile in 3 bullet points.
+CRITICAL RULE: You MUST format your precise response as: 
+[Telugu Translation]
+|||
+[English Translation]`;
+            const resp = await chatWithAI(prompt);
+            setDrugsResult(resp.data.response);
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setIsDrugsLoading(false);
+        }
+    };
+
+    const analyzeSkin = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onloadend = async () => {
+            setSkinImage(reader.result);
+            setIsSkinLoading(true);
+            try {
+                const { analyzeVisionImage } = await import('../utils/api');
+                const resp = await analyzeVisionImage(reader.result, "Analyze this clinical dermatological image. Be highly concise. Give suspected type of lesion/rash and precaution.");
+                if(resp.data.success && resp.data.analysis) {
+                    const ai = resp.data.analysis;
+                    setSkinResult(`Condition: ${ai.condition.te}\n${ai.precautions.map(p=>p.te).join(', ')}\n|||\nCondition: ${ai.condition.en}\n${ai.precautions.map(p=>p.en).join(', ')}`);
+                }
+            } catch (err) {
+                console.error(err);
+            } finally {
+                setIsSkinLoading(false);
+            }
+        };
+        reader.readAsDataURL(file);
+    };
+
     const tabs = [
         { id: 'clinical', icon: <Brain size={20} />, label: 'Clinical Triage', en: 'Vision & Symptoms' },
         { id: 'ocr', icon: <FileText size={20} />, label: 'Report Scanner', en: 'AI OCR Extraction' },
-        { id: 'wellness', icon: <Utensils size={20} />, label: 'Wellness AI', en: 'Diet & Nutrition' }
+        { id: 'wellness', icon: <Utensils size={20} />, label: 'Wellness AI', en: 'Diet & Nutrition' },
+        { id: 'drugs', icon: <ShieldBug size={20} />, label: 'Medicine AI', en: 'Drug Interactions' },
+        { id: 'derma', icon: <Search size={20} />, label: 'Dermatology', en: 'Skin AI Scan' }
     ];
 
     return (
@@ -207,6 +259,81 @@ CRITICAL RULE: You MUST format your precise response as:
                                 <div className="mt-8 p-6 bg-white/5 rounded-3xl border border-white/10 relative z-10">
                                     <p className="text-[9px] font-black uppercase tracking-widest text-hospital-secondary">Medical Disclaimer</p>
                                     <p className="text-[10px] text-white/40 mt-1">This plan is AI-generated. Clinical oversight is required before starting new dietary regimens.</p>
+                                </div>
+                            </div>
+                        </motion.div>
+                    )}
+
+                    {activeTab === 'drugs' && (
+                        <motion.div key="drugs" initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -20, opacity: 0 }}
+                            className="bg-white rounded-[60px] shadow-sm border border-gray-100 p-12 lg:p-20 overflow-hidden relative">
+                            <h2 className="text-4xl font-black text-hospital-dark mb-4 font-['Noto_Sans_Telugu']">మందుల <span className="text-hospital-secondary italic">సంకర్షణ</span> చెకర్</h2>
+                            <p className="text-[10px] font-black uppercase tracking-[0.4em] text-hospital-secondary mb-12">Drug-Drug Interaction AI Logic</p>
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                                <div className="space-y-6">
+                                    <textarea value={drugsInput} onChange={(e) => setDrugsInput(e.target.value)} placeholder="Enter multiple medicines separated by commas (e.g. Aspirin, Ibuprofen)..."
+                                        className="w-full bg-gray-50 border-2 border-transparent focus:border-hospital-primary/20 rounded-3xl p-6 min-h-[12rem] text-sm font-bold outline-none transition-all placeholder:text-gray-300" />
+                                    <button onClick={checkDrugInteractions} disabled={isDrugsLoading}
+                                        className="w-full bg-hospital-secondary text-white p-5 rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] shadow-xl hover:bg-hospital-primary transition-all disabled:opacity-50">
+                                        {isDrugsLoading ? 'Checking Interactions...' : 'Analyze Safety'}
+                                    </button>
+                                </div>
+                                <div className="bg-hospital-dark rounded-[40px] p-8 text-white min-h-[20rem] shadow-4xl relative">
+                                    <h4 className="text-[10px] font-black uppercase tracking-widest text-hospital-primary mb-4">AI Safety Report</h4>
+                                    {drugsResult ? (
+                                        <div className="space-y-4">
+                                            {drugsResult.includes('|||') ? (
+                                                <>
+                                                    <p className="text-sm font-medium leading-relaxed whitespace-pre-wrap text-white/90 font-['Noto_Sans_Telugu']">{drugsResult.split('|||')[0].trim()}</p>
+                                                    <p className="text-[10px] font-black uppercase tracking-widest text-hospital-secondary opacity-80 mt-4 pt-4 border-t border-white/10 whitespace-pre-wrap">{drugsResult.split('|||')[1].trim()}</p>
+                                                </>
+                                            ) : (
+                                                <p className="text-sm font-medium leading-relaxed text-white/80">{drugsResult}</p>
+                                            )}
+                                        </div>
+                                    ) : (
+                                        <div className="flex items-center justify-center h-full opacity-20 text-xs font-black uppercase tracking-widest">Waiting for Input</div>
+                                    )}
+                                </div>
+                            </div>
+                        </motion.div>
+                    )}
+
+                    {activeTab === 'derma' && (
+                        <motion.div key="derma" initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -20, opacity: 0 }}
+                            className="bg-white rounded-[60px] shadow-sm border border-gray-100 p-12 lg:p-20 overflow-hidden relative">
+                            <h2 className="text-4xl font-black text-hospital-dark mb-4 font-['Noto_Sans_Telugu']">చర్మ వ్యాధి <span className="text-hospital-secondary italic">స్కాన్</span></h2>
+                            <p className="text-[10px] font-black uppercase tracking-[0.4em] text-hospital-secondary mb-12">Upload visual of skin, rash, or lesion</p>
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                                <label className="block w-full h-80 rounded-[40px] border-4 border-dashed border-gray-100 hover:border-hospital-secondary cursor-pointer transition-all bg-gray-50 flex flex-col items-center justify-center text-center p-8 group relative overflow-hidden">
+                                     {isSkinLoading ? (
+                                        <div className="w-12 h-12 border-4 border-hospital-secondary/20 border-t-hospital-secondary rounded-full animate-spin"></div>
+                                     ) : skinImage ? (
+                                        <img src={skinImage} className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-30 transition-opacity" />
+                                     ) : (
+                                        <>
+                                            <Search size={32} className="text-hospital-secondary mb-4 group-hover:scale-110 transition-transform"/>
+                                            <h4 className="font-black text-xl text-hospital-dark">Skin Scanner</h4>
+                                        </>
+                                     )}
+                                     <input type="file" className="hidden" accept="image/*" onChange={analyzeSkin} />
+                                </label>
+                                <div className="bg-hospital-dark rounded-[40px] p-8 text-white min-h-[20rem] shadow-4xl relative">
+                                    <h4 className="text-[10px] font-black uppercase tracking-widest text-hospital-primary mb-4">Dermatology Analysis</h4>
+                                    {skinResult ? (
+                                        <div className="space-y-4">
+                                            {skinResult.includes('|||') ? (
+                                                <>
+                                                    <p className="text-sm font-medium leading-relaxed whitespace-pre-wrap text-white/90 font-['Noto_Sans_Telugu']">{skinResult.split('|||')[0].trim()}</p>
+                                                    <p className="text-[10px] font-black uppercase tracking-widest text-hospital-secondary opacity-80 mt-4 pt-4 border-t border-white/10 whitespace-pre-wrap">{skinResult.split('|||')[1].trim()}</p>
+                                                </>
+                                            ) : (
+                                                <p className="text-sm font-medium leading-relaxed text-white/80">{skinResult}</p>
+                                            )}
+                                        </div>
+                                    ) : (
+                                        <div className="flex items-center justify-center h-full opacity-20 text-xs font-black uppercase tracking-widest">Waiting for Image</div>
+                                    )}
                                 </div>
                             </div>
                         </motion.div>
