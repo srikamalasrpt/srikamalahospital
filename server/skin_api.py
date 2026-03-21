@@ -1,6 +1,5 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import tensorflow as tf
 import numpy as np
 from PIL import Image
 import os
@@ -17,16 +16,29 @@ SKIN_AI_PORT = int(os.getenv('SKIN_AI_PORT', 5005))
 app = Flask(__name__)
 CORS(app)
 
-# Load trained model
-MODEL_PATH = os.path.join(os.path.dirname(__file__), "skin_model.h5")
-if os.path.exists(MODEL_PATH):
-    model = tf.keras.models.load_model(MODEL_PATH)
-    print(f"✅ Loaded model: {MODEL_PATH}")
-else:
-    model = None
-    print(f"❌ '{MODEL_PATH}' not found. Please wait for training to finish.")
+# Load TFLite model (Ultra-lightweight - only ~50MB RAM!)
+interpreter = None
+input_details = None
+output_details = None
 
-# Alphabetical order as expected by Keras flow_from_dataframe
+MODEL_PATH = os.path.join(os.path.dirname(__file__), "skin_model.tflite")
+if os.path.exists(MODEL_PATH):
+    try:
+        import tflite_runtime.interpreter as tflite
+        interpreter = tflite.Interpreter(model_path=MODEL_PATH)
+    except ImportError:
+        # Fallback to tensorflow lite if tflite_runtime not available
+        import tensorflow as tf
+        interpreter = tf.lite.Interpreter(model_path=MODEL_PATH)
+    
+    interpreter.allocate_tensors()
+    input_details = interpreter.get_input_details()
+    output_details = interpreter.get_output_details()
+    print(f"✅ Loaded TFLite model: {MODEL_PATH}")
+else:
+    print(f"❌ Model not found at {MODEL_PATH}")
+
+# Alphabetical order as trained by Keras flow_from_dataframe
 CLASS_NAMES = [
     "Actinic Keratosis",
     "Basal Cell Carcinoma",
@@ -39,29 +51,37 @@ CLASS_NAMES = [
 
 @app.route("/", methods=["GET"])
 def health():
-    return jsonify({"status": "Skin AI Server is Up", "model_loaded": (model is not None)})
+    return jsonify({
+        "status": "Skin AI Server is Up",
+        "model_loaded": (interpreter is not None),
+        "model_type": "TFLite (Lightweight)"
+    })
 
 @app.route("/predict", methods=["POST"])
 def predict():
-    if model is None:
+    if interpreter is None:
         return jsonify({"success": False, "error": "Model not loaded"}), 503
-        
+
     if 'image' not in request.files:
         return jsonify({"success": False, "error": "No image uploaded"}), 400
-        
+
     try:
         file = request.files['image']
         img = Image.open(file).convert('RGB').resize((224, 224))
-        img = np.array(img) / 255.0
-        img = img.reshape(1, 224, 224, 3)
+        img_array = np.array(img, dtype=np.float32) / 255.0
+        img_array = img_array.reshape(1, 224, 224, 3)
 
-        pred = model.predict(img)
-        class_id = pred.argmax()
+        # Run inference with TFLite
+        interpreter.set_tensor(input_details[0]['index'], img_array)
+        interpreter.invoke()
+        pred = interpreter.get_tensor(output_details[0]['index'])[0]
+
+        class_id = int(np.argmax(pred))
         confidence = float(np.max(pred))
 
         return jsonify({
             "success": True,
-            "prediction": int(class_id),
+            "prediction": class_id,
             "condition": CLASS_NAMES[class_id],
             "confidence": confidence
         })
