@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #008080; /* Deep Teal */
+  --secondary: #ff8fa3; /* Lotus Pink */
+  --accent: #3d5a80; /* Serene Blue */
+  --glass: rgba(255, 255, 255, 0.85);
+  --glass-dark: rgba(26, 32, 44, 0.8);
+}
+
+@layer base {
+  body {
+    @apply m-0 font-['Outfit'] bg-[#f8fafc] text-[#1e293b] overflow-x-hidden selection:bg-primary/20;
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-white/70 backdrop-blur-md border border-white/40 shadow-[0_8px_32px_0_rgba(31,38,135,0.07)] rounded-[24px] transition-all duration-500;
+  }
+  
+  .premium-button {
+    @apply px-6 py-2.5 rounded-full font-bold text-sm tracking-wide transition-all duration-500 flex items-center gap-2 active:scale-95;
+  }
+
+  /* Compact interface tweaks */
+  .section-padding {
+    @apply py-16 md:py-24;
+  }
+
+  .title-lg {
+    @apply font-['Playfair_Display'] text-4xl md:text-5xl font-black leading-[1.1] tracking-tighter;
+  }
+
+  .text-compact {
+    @apply text-sm md:text-base leading-relaxed text-gray-500 font-medium;
+  }
+}
+
+/* Animations */
+@keyframes float-gentle {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(1deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+
+.animate-float-gentle {
+  animation: float-gentle 6s ease-in-out infinite;
+}
+
+/* Scroll reveal helper */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
