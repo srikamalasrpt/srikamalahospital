@@ -34,11 +34,13 @@ const AISymptomChecker = () => {
                 resp = await analyzeSymptoms(symptoms);
             }
 
-            if (resp.data.success) {
+            if (resp.data.success && resp.data.analysis) {
+                setResult(resp.data.analysis);
+            } else if (resp.data.analysis) {
                 setResult(resp.data.analysis);
             } else {
                 setResult({
-                    advice: { en: "AI system is currently overloaded. Please try again later.", te: "AI సిస్టమ్ ప్రస్తుతం ఓవర్‌లోడ్ చేయబడింది. దయచేసి తర్వాత మళ్ళీ ప్రయత్నించండి." },
+                    advice: { en: "AI system is currently overloaded. Please try again later.", te: "AI సిస్టమ్ ప్రస్తుతం అందుబాటులో లేదు. దయచేసి తర్వాత మళ్లీ ప్రయత్నించండి." },
                     department: { en: "General", te: "జనరల్" }
                 });
             }
