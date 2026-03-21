@@ -16,6 +16,8 @@ const BookingForm = () => {
     image: null
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [aiInput, setAiInput] = useState('');
+  const [isAiLoading, setIsAiLoading] = useState(false);
 
   const departments = [
     { en: 'General Medicine', te: 'జనరల్ మెడిసిన్' },
@@ -25,6 +27,30 @@ const BookingForm = () => {
     { en: 'Orthopedics', te: 'ఆర్థోపెడిక్స్' },
     { en: 'Dermatology', te: 'డెర్మటాలజీ' }
   ];
+
+  const handleAiPrefill = async () => {
+    if (!aiInput) return;
+    setIsAiLoading(true);
+    try {
+        const { chatWithAI } = await import('../utils/api');
+        const deptStr = departments.map(d => `${d.en} (${d.te})`).join(', ');
+        const prompt = `Symptoms: "${aiInput}". Which department from [${deptStr}] is best? Output JSON exactly and ONLY: {"department": "Exact format from list", "reason": "Professional 3-4 word reason for visit"}`;
+        
+        const resp = await chatWithAI(prompt);
+        let parsed;
+        try {
+            parsed = JSON.parse(resp.data.response.replace(/```json|```/g, '').trim());
+            if (parsed.department && parsed.reason) {
+                setFormData(prev => ({ ...prev, department: parsed.department, reason: parsed.reason }));
+            }
+        } catch(e) {}
+    } catch (err) {
+        console.error(err);
+    } finally {
+        setIsAiLoading(false);
+        setAiInput('');
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -86,6 +112,19 @@ const BookingForm = () => {
                       </div>
                    ))}
                 </div>
+                 
+                 <div className="mt-8 bg-hospital-secondary text-white p-8 rounded-[32px] shadow-2xl relative overflow-hidden group">
+                     <div className="absolute top-0 right-0 p-4 text-white/5 opacity-40 group-hover:rotate-12 transition-transform"><Activity size={100}/></div>
+                     <p className="text-[8px] font-black uppercase tracking-[0.3em] mb-3 text-hospital-primary">AI Auto-Pilot</p>
+                     <h4 className="text-sm font-black mb-4">Unsure which doctor to select?</h4>
+                     <div className="flex flex-col gap-3 relative z-10">
+                         <input value={aiInput} onChange={e => setAiInput(e.target.value)} type="text" placeholder="Describe symptoms (e.g. chest pain, skin rash)..." 
+                            className="bg-white/10 border-none p-4 rounded-2xl text-[10px] text-white outline-none focus:ring-2 ring-white/50 font-bold" />
+                         <button type="button" onClick={handleAiPrefill} disabled={isAiLoading} className="bg-hospital-dark w-full p-4 rounded-xl flex items-center justify-center font-black text-[9px] uppercase tracking-widest hover:scale-105 active:scale-95 transition-all disabled:opacity-50 gap-2">
+                            {isAiLoading ? "Analyzing Symptoms..." : <><Activity size={14} className="text-hospital-secondary pulse-animation"/> Auto-Select Department</>}
+                         </button>
+                     </div>
+                 </div>
             </div>
 
             <div className="lg:w-1/2 w-full">
@@ -136,9 +175,16 @@ const BookingForm = () => {
                         <label className="text-[10px] font-black uppercase tracking-widest text-[#1e293b]/40 ml-1 font-['Noto_Sans_Telugu'] text-xs">విభాగం (Specialization)</label>
                         <select value={formData.department} onChange={(e) => setFormData({...formData, department: e.target.value})}
                                 className="w-full bg-gray-50 border-2 border-transparent focus:border-hospital-primary/20 focus:bg-white p-3.5 rounded-xl transition-all outline-none text-sm font-bold text-hospital-dark">
-                            {departments.map(d => <option key={d.en} value={d.te}>{d.te} ({d.en})</option>)}
+                            {departments.map(d => <option key={d.en} value={`${d.en} (${d.te})`}>{d.te} ({d.en})</option>)}
                         </select>
                     </div>
+
+                    {formData.reason && (
+                        <div className="space-y-2 mb-6 p-4 bg-hospital-primary/5 border border-hospital-primary/20 rounded-2xl">
+                            <label className="text-[10px] font-black uppercase tracking-widest text-hospital-primary ml-1 text-xs">AI Clinical Reason</label>
+                            <p className="font-bold text-sm text-hospital-dark pl-1">{formData.reason}</p>
+                        </div>
+                    )}
 
                     <div className="space-y-2 mb-8">
                         <label className="text-[10px] font-black uppercase tracking-widest text-hospital-secondary sm:ml-1 font-['Noto_Sans_Telugu'] text-xs flex items-center gap-2">

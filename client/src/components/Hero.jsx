@@ -46,11 +46,12 @@ const Hero = () => {
                                 <span className="relative z-10 font-['Noto_Sans_Telugu'] text-lg mr-2 leading-none">డాక్టర్‌ని కలవండి</span>
                                 <span className="relative z-10 font-black tracking-widest uppercase text-[9px] opacity-40">/ Book</span>
                             </Link>
-                            <Link to="/diagnosis" className="premium-button bg-white text-hospital-dark border border-gray-100 px-6 py-4 text-xs hover:bg-gray-50 flex items-center gap-3">
-                               <div className="w-8 h-8 bg-hospital-secondary/10 rounded-xl flex items-center justify-center text-hospital-secondary"><Activity size={14} /></div>
-                               <div className="flex flex-col items-start leading-none">
-                                  <span className="font-['Noto_Sans_Telugu'] text-base font-black">రక్త పరీక్షలు</span>
-                                  <span className="font-black uppercase text-[8px] tracking-widest opacity-30 mt-1">Lab Tests</span>
+                            <Link to="/ai-health" className="premium-button bg-gradient-to-r from-hospital-secondary to-hospital-primary text-white px-6 py-4 text-xs hover:shadow-2xl hover:scale-105 flex items-center gap-3 border-none relative overflow-hidden group">
+                               <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500 z-0"></div>
+                               <div className="relative z-10 w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center text-white shadow-inner"><Activity size={14} className="animate-pulse"/></div>
+                               <div className="relative z-10 flex flex-col items-start leading-none">
+                                  <span className="font-['Noto_Sans_Telugu'] text-base font-black">AI హెల్త్ స్కాన్</span>
+                                  <span className="font-black uppercase text-[8px] tracking-widest opacity-80 mt-1">Smart Triage</span>
                                </div>
                             </Link>
                         </motion.div>

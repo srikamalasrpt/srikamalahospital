@@ -146,9 +146,7 @@ const normalizeApiKey = (key) => {
     return key.trim().replace(/^Bearer\s+/i, '');
 };
 
-// AI Symptom Checker using NVIDIA NeMo AI (Nemotron 70B)
-// --- Consolidated Clinical AI Logic ---
-const getChatAI = async (messages, modelCandidates = ['meta/llama-3.1-70b-instruct', 'meta/llama-3.2-3b-instruct'], tokens = 1024) => {
+const getChatAI = async (messages, modelCandidates = ['meta/llama-3.1-70b-instruct', 'meta/llama3-70b-instruct', 'meta/llama-3.2-3b-instruct'], tokens = 1024) => {
     const keyCandidates = [
         normalizeApiKey(process.env.NVIDIA_API_KEY),
         normalizeApiKey(process.env.NVIDIA_VISION_API_KEY),
@@ -165,40 +163,45 @@ const getChatAI = async (messages, modelCandidates = ['meta/llama-3.1-70b-instru
                     temperature: 0.2,
                     max_tokens: tokens,
                 });
-                if (completion?.choices?.[0]?.message?.content) return completion.choices[0].message.content;
-            } catch (e) { continue; }
+                if (completion?.choices?.[0]?.message?.content) {
+                    return completion.choices[0].message.content;
+                }
+            } catch (e) {
+                if (e?.status === 404) continue;
+            }
         }
     }
-    throw new Error("Clinical AI Service Exhausted");
+    throw new Error('All AI chat failovers exhausted');
 };
 
+// Enhanced AI Chat & Symptom Checker with failover
 app.post('/api/ai/symptom', async (req, res) => {
     try {
         const { symptoms } = req.body;
-        const messages = [
-            { role: "system", content: "You are a clinical triage AI. Output JSON: { 'advice': { 'en': '...', 'te': '...' }, 'department': { 'en': '...', 'te': '...' } }." },
+        const msg = [
+            { role: "system", content: "You are an AI diagnostic assistant for Sri Kamala Hospital. Respond EXCLUSIVELY with a JSON object: { 'advice': { 'en': '...', 'te': '...' }, 'department': { 'en': '...', 'te': '...' } }. Concise and medical." },
             { role: "user", content: symptoms }
         ];
-        const content = await getChatAI(messages);
-        let jsonResponse;
+        
+        const modelText = await getChatAI(msg, ['meta/llama-3.1-405b-instruct', 'meta/llama-3.1-70b-instruct', 'meta/llama-3.2-3b-instruct', 'nvidia/llama-3.1-405b-instruct']);
+        let jsonResponse = null;
         try {
-            jsonResponse = JSON.parse(content.replace(/```json|```/g, '').trim());
+            const cleaned = modelText.replace(/```json/g, '').replace(/```/g, '').trim();
+            jsonResponse = JSON.parse(cleaned);
         } catch {
-            jsonResponse = { advice: { en: content, te: "వైద్య సలహా సిద్ధంగా ఉంది." }, department: { en: "General", te: "జనరల్" } };
+            jsonResponse = {
+                advice: {
+                    en: "Analyzed your symptoms. Please visit the hospital for a professional evaluation.",
+                    te: "మీ లక్షణాలను పరిశీలించాము. దయచేసి పూర్తి పరీక్ష కోసం ఆసుపత్రిని సందర్శించండి."
+                },
+                department: { en: "General", te: "జనరల్" }
+            };
         }
+
         res.json({ success: true, analysis: jsonResponse });
     } catch (err) {
+        console.error("AI Symptom Error:", err);
         res.status(503).json({ success: false, message: "AI services busy." });
-    }
-});
-
-app.post('/api/ai/chat', async (req, res) => {
-    try {
-        const { query } = req.body;
-        const content = await getChatAI([{ role: "user", content: query }]);
-        res.json({ success: true, response: content });
-    } catch (err) {
-        res.status(503).json({ success: false, message: "Chat AI busy." });
     }
 });
 
@@ -433,32 +436,43 @@ app.post('/api/ai/ocr', async (req, res) => {
     }
 });
 
-// AI Image Quality Shield
+// AI Image Quality Shield with failover
 app.post('/api/ai/quality-check', async (req, res) => {
     try {
         const { image } = req.body;
-        const visionKey = normalizeApiKey(process.env.NVIDIA_VISION_API_KEY) || normalizeApiKey(process.env.NVIDIA_API_KEY);
-        if (!image || !visionKey) return res.status(400).json({ success: false, message: "Missing image or API key" });
+        const keyCandidates = [
+            normalizeApiKey(process.env.NVIDIA_VISION_API_KEY),
+            normalizeApiKey(process.env.NVIDIA_VISION_FALLBACK_API_KEY),
+            normalizeApiKey(process.env.NVIDIA_API_KEY)
+        ].filter(Boolean);
 
-        const payload = {
-            model: "microsoft/phi-3.5-vision-instruct",
-            messages: [{
-                role: "user",
-                content: [
-                    { type: "text", text: "Evaluate this clinical photo's quality. Output ONLY JSON: { \"pass\": true/false, \"score\": 0-10, \"tips\": \"...\" }. Lighting and focus are key." },
-                    { type: "image_url", image_url: { url: image } }
-                ]
-            }],
-            max_tokens: 512,
-            temperature: 0.1
-        };
+        const modelCandidates = [
+            "microsoft/phi-3.5-vision-instruct",
+            "meta/llama-3.2-11b-vision-instruct"
+        ];
+        
+        let response;
+        outer: for (const currentKey of keyCandidates) {
+            for (const currentModel of modelCandidates) {
+                try {
+                    const attempt = await axios.post("https://integrate.api.nvidia.com/v1/chat/completions", {
+                        model: currentModel,
+                        messages: [{
+                            role: "user",
+                            content: [
+                                { type: "text", text: "Evaluate clinical photo quality. Output ONLY JSON: { \"pass\": true/false, \"score\": 0-10, \"tips\": \"...\" }." },
+                                { type: "image_url", image_url: { url: image } }
+                            ]
+                        }],
+                        max_tokens: 512,
+                        temperature: 0.1
+                    }, { headers: { "Authorization": `Bearer ${currentKey}` }, timeout: 45000 });
+                    if (attempt.status === 200) { response = attempt; break outer; }
+                } catch(e) { continue; }
+            }
+        }
 
-        const response = await axios.post("https://integrate.api.nvidia.com/v1/chat/completions", payload, {
-            headers: { "Authorization": `Bearer ${visionKey}`, "Content-Type": "application/json" },
-            timeout: 45000
-        });
-
-        const content = response.data?.choices?.[0]?.message?.content || "";
+        const content = response?.data?.choices?.[0]?.message?.content || "";
         let json;
         try {
             json = JSON.parse(content.replace(/```json|```/g, '').trim());
@@ -471,30 +485,44 @@ app.post('/api/ai/quality-check', async (req, res) => {
     }
 });
 
-// AI Chatbot using NVIDIA Llama 3 70B
+// AI Chatbot using fallback logic
 app.post('/api/ai/chat', async (req, res) => {
     try {
         const { query } = req.body;
-        if (!process.env.NVIDIA_API_KEY) return res.status(400).json({ success: false, message: "NVIDIA API Key not configured." });
-
-        const completion = await openai.chat.completions.create({
-            model: "meta/llama3-70b-instruct",
-            messages: [{
-                role: "system",
-                content: "You are Dr. Kamala, the conversational AI for Sri Kamala Hospital in Suryapet. You output concise, empathetic, and professional responses. You specialize in guiding patients, providing info on bookings, treatments (Diabetes, Ortho, Gynecology), and general hospital FAQs. You have 24/7 emergency at +91 91544 04051. Respond in plain text, do not use markdown lists. Max 3 sentences."
-            }, {
-                role: "user",
-                content: query
-            }],
-            temperature: 0.5,
-            top_p: 1,
-            max_tokens: 1024,
-        });
-
-        res.json({ success: true, response: completion.choices[0].message.content });
+        const msg = [
+            { role: "system", content: "You are Dr. Kamala, the conversational AI for Sri Kamala Hospital in Suryapet. You output concise, empathetic, and professional responses. You specialize in guiding patients, providing info on bookings, treatments, and FAQs. You have 24/7 emergency at +91 91544 04051. Respond in plain text, max 3 sentences." },
+            { role: "user", content: query }
+        ];
+        
+        const responseText = await getChatAI(msg, ['meta/llama-3.1-70b-instruct', 'meta/llama3-70b-instruct', 'meta/llama-3.2-3b-instruct']);
+        res.json({ success: true, response: responseText || "I am currently offline. Call +91 99480 76665." });
     } catch (err) {
         console.error("AI Chat Error:", err);
-        res.status(500).json({ success: false, message: "Clinical AI is currently resting. For urgent queries call +91 99480 76665." });
+        res.status(500).json({ success: false, message: "Clinical AI is resting. Call +91 99480 76665." });
+    }
+});
+
+// Pharmacy Discovery using fallback logic
+app.post('/api/ai/discover', async (req, res) => {
+    try {
+        const { keyword } = req.body;
+        if (!keyword) return res.json({ success: true, results: [] });
+
+        const msg = [
+            { role: "system", content: "You are a clinical AI. The user will give a symptom or medicine name. Suggest 2-3 standard generic or brand medical equivalents. Output strictly a JSON array of strings, e.g. [\"Paracetamol 500mg\", \"Ibuprofen\"]." },
+            { role: "user", content: keyword }
+        ];
+        
+        const responseText = await getChatAI(msg, ['meta/llama-3.1-70b-instruct', 'meta/llama-3.2-3b-instruct']);
+        let results = [];
+        try {
+            results = JSON.parse(responseText.replace(/```json|```/g, '').trim());
+            if (!Array.isArray(results)) results = [];
+        } catch(e) {}
+
+        res.json({ success: true, results, ai_note: "Clinical suggestions gathered." });
+    } catch (err) {
+        res.json({ success: true, results: [], ai_note: "Could not fetch alternatives due to network." });
     }
 });
 

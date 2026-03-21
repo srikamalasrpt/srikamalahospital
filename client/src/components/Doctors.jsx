@@ -1,15 +1,24 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { ChevronRight, Award, HeartPulse, ShieldCheck, Activity, Star } from 'lucide-react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronRight, Award, HeartPulse, ShieldCheck, Activity, Star, MessageSquare } from 'lucide-react';
+import DoctorConsultationModal from './DoctorConsultationModal';
 
 const doctors = [
-  { name: 'Dr. Venkat Rao', specialty: 'Diabetology & General', exp: '25+ Yrs', img: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&q=80&w=400&h=400', color: 'bg-emerald-50 text-emerald-600 border-emerald-100' },
-  { name: 'Dr. S. Kamal', specialty: 'Emergency & Critical Care', exp: '15+ Yrs', img: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=400&h=400', color: 'bg-indigo-50 text-indigo-600 border-indigo-100' },
-  { name: 'Dr. Anita Reddy', specialty: 'General Physician', exp: '10+ Yrs', img: 'https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&q=80&w=400&h=400', color: 'bg-pink-50 text-pink-600 border-pink-100' },
-  { name: 'Dr. Rajesh G.', specialty: 'Internal Medicine', exp: '12+ Yrs', img: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=400&h=400', color: 'bg-blue-50 text-blue-600 border-blue-100' },
+  { id: 'dr_venkat', name: 'Dr. Venkat Rao', specialty: 'Diabetology & General', exp: '25+ Yrs', img: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&q=80&w=400&h=400', color: 'bg-emerald-50 text-emerald-600 border-emerald-100', keywords: ['diabetes', 'sugar', 'general'] },
+  { id: 'dr_kamal', name: 'Dr. S. Kamal', specialty: 'Emergency & Critical Care', exp: '15+ Yrs', img: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=400&h=400', color: 'bg-indigo-50 text-indigo-600 border-indigo-100', keywords: ['emergency', 'trauma', 'critical'] },
+  { id: 'dr_anita', name: 'Dr. Anita Reddy', specialty: 'General Physician', exp: '10+ Yrs', img: 'https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&q=80&w=400&h=400', color: 'bg-pink-50 text-pink-600 border-pink-100', keywords: ['fever', 'infection', 'general'] },
+  { id: 'dr_rajesh', name: 'Dr. Rajesh G.', specialty: 'Internal Medicine', exp: '12+ Yrs', img: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=400&h=400', color: 'bg-blue-50 text-blue-600 border-blue-100', keywords: ['internal', 'organs', 'chronic'] },
 ];
 
 const Doctors = () => {
+  const [selectedDoctor, setSelectedDoctor] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleConsult = (doctor) => {
+      setSelectedDoctor(doctor);
+      setIsModalOpen(true);
+  };
+
   return (
     <section id="doctors" className="py-20 bg-white relative overflow-hidden flex justify-center items-center">
       <div className="absolute top-0 right-0 w-[50%] h-full bg-hospital-secondary/5 rounded-bl-[300px] z-0 pointer-events-none"></div>
@@ -51,14 +60,15 @@ const Doctors = () => {
                        <div className="px-3 py-1 bg-gray-50 rounded-full text-[8px] font-black text-gray-400 uppercase tracking-widest transition-colors group-hover:bg-white/10 group-hover:text-white/60">{doctor.exp} EXPERTISE</div>
                     </div>
 
-                    <button className="w-full p-3.5 rounded-[32px] border-2 border-gray-50 group-hover:border-hospital-primary group-hover:bg-hospital-primary text-gray-300 group-hover:text-white font-black text-[10px] uppercase tracking-widest transition-all">
-                       VIEW CLINICAL STATS
+                    <button onClick={() => handleConsult(doctor)} className="w-full p-3.5 rounded-[32px] border-2 border-transparent bg-hospital-secondary text-white font-black text-[10px] uppercase tracking-widest transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-2 group-hover:scale-110">
+                       <MessageSquare size={14} className="animate-pulse" /> Ask AI Assistant
                     </button>
                 </div>
             </motion.div>
           ))}
         </div>
       </div>
+      <DoctorConsultationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} doctor={selectedDoctor} />
     </section>
   );
 };
