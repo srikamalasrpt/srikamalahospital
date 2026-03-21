@@ -91,22 +91,43 @@ def setup_and_train():
         subset="validation"
     )
 
-    # 🏗️ Build Model
+    # 🏗️ Build Model with improved complexity for 7 classes
     model = tf.keras.Sequential([
         tf.keras.layers.Conv2D(32, (3,3), activation='relu', input_shape=(224,224,3)),
         tf.keras.layers.MaxPooling2D(),
         tf.keras.layers.Conv2D(64, (3,3), activation='relu'),
         tf.keras.layers.MaxPooling2D(),
+        tf.keras.layers.Conv2D(128, (3,3), activation='relu'),
+        tf.keras.layers.MaxPooling2D(),
         tf.keras.layers.Flatten(),
-        tf.keras.layers.Dense(128, activation='relu'),
-        tf.keras.layers.Dropout(0.2), # Add dropout for robustness
-        tf.keras.layers.Dense(7, activation='softmax') # Should be 7 classes!
+        tf.keras.layers.Dense(256, activation='relu'),
+        tf.keras.layers.Dropout(0.3),
+        tf.keras.layers.Dense(7, activation='softmax')
     ])
 
     model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
     
-    # Train for 5 epochs (balance and accuracy)
-    model.fit(train_gen, validation_data=val_gen, epochs=5)
+    # ⚖️ Step 4: Calculate Class Weights to fix "Melanocytic Nevi" bias
+    from sklearn.utils import class_weight
+    import numpy as np
+    
+    # Get class indices
+    class_indices = train_gen.class_indices
+    # Get the count of each class in the training data
+    class_counts = df[df['path'].isin(train_gen.filepaths)]['label'].value_counts().to_dict()
+    
+    # Calculate weights: Rare classes get higher weight
+    total_samples = len(df)
+    n_classes = len(class_indices)
+    weights_dict = {}
+    for cls_name, cls_idx in class_indices.items():
+        count = class_counts.get(cls_name, 1)
+        weights_dict[cls_idx] = total_samples / (n_classes * count)
+        
+    print(f"⚖️ Calculated Class Weights: {weights_dict}")
+
+    # Train for 8 epochs with weights (Better convergence)
+    model.fit(train_gen, validation_data=val_gen, epochs=8, class_weight=weights_dict)
     
     # Save as .h5 model
     model.save(os.path.join(os.path.dirname(__file__), "skin_model.h5"))

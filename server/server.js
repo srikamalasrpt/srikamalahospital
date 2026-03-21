@@ -92,7 +92,9 @@ app.use((req, res, next) => {
         '/ai/medicine-discovery': '/api/ai/medicine-discovery',
         '/medicines/catalog': '/api/medicines/catalog',
         '/admin/patient-clinical-note': '/api/admin/patient-clinical-note',
-        '/admin/patient-clinical-history': '/api/admin/patient-clinical-history'
+        '/admin/patient-clinical-history': '/api/admin/patient-clinical-history',
+        '/ocr': '/api/ai/ocr',
+        '/predict': '/predict'
     };
 
     if (!req.path.startsWith('/api')) {
