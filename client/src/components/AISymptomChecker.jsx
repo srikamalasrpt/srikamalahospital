@@ -8,6 +8,11 @@ const AISymptomChecker = () => {
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [result, setResult] = useState(null);
     const fileInputRef = useRef(null);
+    const toArray = (value) => {
+        if (Array.isArray(value)) return value;
+        if (value === null || value === undefined) return [];
+        return [value];
+    };
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -176,19 +181,19 @@ const AISymptomChecker = () => {
                                                 <div className="space-y-2">
                                                     <h5 className="text-[9px] font-black uppercase tracking-widest text-[#ff8fa3] flex items-center gap-2"><ShieldAlert size={12}/> Precautions / జాగ్రత్తలు</h5>
                                                     <ul className="text-xs font-medium text-gray-600 space-y-1">
-                                                        {result.precautions && result.precautions.map((p, i) => <li key={i}>• {typeof p === 'object' ? p.te || p.en : p}</li>)}
+                                                        {toArray(result.precautions).map((p, i) => <li key={i}>• {typeof p === 'object' ? p.te || p.en : p}</li>)}
                                                     </ul>
                                                 </div>
                                                 <div className="space-y-2">
                                                     <h5 className="text-[9px] font-black uppercase tracking-widest text-emerald-500 flex items-center gap-2"><Plus size={12}/> Recommended Meds / మందులు సూచన</h5>
                                                     <ul className="text-xs font-medium text-gray-600 space-y-1">
-                                                        {result.medicine && result.medicine.map((m, i) => <li key={i}>• {typeof m === 'object' ? m.te || m.en : m}</li>)}
+                                                        {toArray(result.medicine).map((m, i) => <li key={i}>• {typeof m === 'object' ? m.te || m.en : m}</li>)}
                                                     </ul>
                                                 </div>
                                                 <div className="space-y-2">
                                                     <h5 className="text-[9px] font-black uppercase tracking-widest text-indigo-500 flex items-center gap-2"><ImageIcon size={12}/> Diagnostics / ల్యాబ్ పరీక్షలు</h5>
                                                     <ul className="text-xs font-medium text-gray-600 space-y-1">
-                                                        {result.lab_tests && result.lab_tests.map((m, i) => <li key={i}>• {typeof m === 'object' ? m.te || m.en : m}</li>)}
+                                                        {toArray(result.lab_tests).map((m, i) => <li key={i}>• {typeof m === 'object' ? m.te || m.en : m}</li>)}
                                                     </ul>
                                                 </div>
                                             </div>
