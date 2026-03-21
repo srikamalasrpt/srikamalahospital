@@ -51,13 +51,15 @@ app.get('/api/debug/env', (req, res) => {
         env: {
             hasNvidiaApiKey: Boolean(process.env.NVIDIA_API_KEY && process.env.NVIDIA_API_KEY.trim()),
             hasNvidiaVisionApiKey: Boolean(process.env.NVIDIA_VISION_API_KEY && process.env.NVIDIA_VISION_API_KEY.trim()),
+            hasNvidiaVisionFallbackApiKey: Boolean(process.env.NVIDIA_VISION_FALLBACK_API_KEY && process.env.NVIDIA_VISION_FALLBACK_API_KEY.trim()),
             hasNvidiaBaseUrl: Boolean(process.env.NVIDIA_BASE_URL && process.env.NVIDIA_BASE_URL.trim()),
             hasAdminPassword: Boolean(process.env.ADMIN_PASSWORD && process.env.ADMIN_PASSWORD.trim()),
             hasSupabaseUrl: Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_URL.trim()),
             hasSupabaseServiceRoleKey: Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY && process.env.SUPABASE_SERVICE_ROLE_KEY.trim()),
             nvidiaBaseUrlResolved: (process.env.NVIDIA_BASE_URL || 'https://integrate.api.nvidia.com/v1').trim(),
             nvidiaKeyPreview: mask(process.env.NVIDIA_API_KEY),
-            nvidiaVisionKeyPreview: mask(process.env.NVIDIA_VISION_API_KEY)
+            nvidiaVisionKeyPreview: mask(process.env.NVIDIA_VISION_API_KEY),
+            nvidiaVisionFallbackKeyPreview: mask(process.env.NVIDIA_VISION_FALLBACK_API_KEY)
         },
         server: {
             port: PORT,
@@ -233,67 +235,72 @@ app.post('/api/ai/symptom', async (req, res) => {
 app.post('/api/ai/vision', async (req, res) => {
     try {
         const { image, symptoms } = req.body;
-        const visionKey = normalizeApiKey(process.env.NVIDIA_VISION_API_KEY) || normalizeApiKey(process.env.NVIDIA_API_KEY);
-        if (!visionKey) return res.status(400).json({ success: false, message: "NVIDIA Vision API Key not configured." });
-        if (!image) return res.status(400).json({ success: false, message: "No image provided." });
-
-        const invokeUrl = "https://integrate.api.nvidia.com/v1/chat/completions";
-        const headers = {
-            "Authorization": `Bearer ${visionKey}`,
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-        };
-
-        const visionModelCandidates = [
-            process.env.NVIDIA_VISION_MODEL,
-            "meta/llama-3.2-90b-vision-instruct",
-            "nvidia/llama-3.1-405b-instruct"
+        const keyCandidates = [
+            normalizeApiKey(process.env.NVIDIA_VISION_API_KEY),
+            normalizeApiKey(process.env.NVIDIA_VISION_FALLBACK_API_KEY),
+            normalizeApiKey(process.env.NVIDIA_API_KEY)
         ].filter(Boolean);
+
+        const modelCandidates = [
+            process.env.NVIDIA_VISION_MODEL,
+            process.env.NVIDIA_VISION_FALLBACK_MODEL,
+            "meta/llama-3.2-11b-vision-instruct",
+            "microsoft/phi-3.5-vision-instruct",
+            "google/paligemma",
+            "meta/llama-3.2-90b-vision-instruct"
+        ].filter(Boolean);
+
+        if (keyCandidates.length === 0) return res.status(400).json({ success: false, message: "No Vision AI keys configured." });
+        if (!image) return res.status(400).json({ success: false, message: "No image provided." });
 
         let response = null;
         let lastError = null;
+        const invokeUrl = "https://integrate.api.nvidia.com/v1/chat/completions";
 
-        for (const modelName of visionModelCandidates) {
-            try {
-                const payload = {
-                    "model": modelName,
-                    "messages": [{
-                        "role": "user",
-                        "content": [
-                            { 
-                              "type": "text", 
-                              "text": `You are a clinical diagnostic expert. Analyze this medical image. 
-                              Patient context: ${symptoms || 'Visual only analysis'}. 
-                              Output ONLY a JSON object (strictly no markdown) with these keys: 
-                              'condition' (Primary diagnosis/issue detected), 
-                              'precautions' (At least 3 specific safety precautions), 
-                              'medicine' (Suggested OTC first-aid/small medicines, but add a medical warning), 
-                              'lab_tests' (Recommended blood or diagnostic tests). 
-                              CRITICAL: Every value MUST be an object { "en": "English text", "te": "Telugu text" }. 
-                              The 'precautions', 'medicine', and 'lab_tests' values should be ARRAYS of these objects.` 
-                            },
-                            { 
-                              "type": "image_url", 
-                              "image_url": { "url": image } 
-                            }
-                        ]
-                    }],
-                    "max_tokens": 1024,
-                    "temperature": 0.1, // Near-zero for strict structure adherence
-                    "top_p": 0.7
-                };
+        // Industrial-grade failover across ALL keys for ALL models
+        outerLoop: for (const currentKey of keyCandidates) {
+            for (const currentModel of modelCandidates) {
+                try {
+                    const headers = {
+                        "Authorization": `Bearer ${currentKey}`,
+                        "Accept": "application/json",
+                        "Content-Type": "application/json"
+                    };
 
-                response = await axios.post(invokeUrl, payload, { headers, timeout: 90000 });
-                if (response.status === 200) break;
-            } catch (err) {
-                lastError = err;
-                console.warn(`Vision model ${modelName} failed:`, err.message);
-                if (err.response?.status === 404 || err.response?.status === 429) continue;
-                throw err;
+                    const payload = {
+                        "model": currentModel,
+                        "messages": [{
+                            "role": "user",
+                            "content": [
+                                { "type": "text", "text": `You are a clinical diagnostic expert. Analyze this medical image. Context: ${symptoms || 'Visual only'}. Output ONLY a JSON object with keys: 'condition', 'precautions', 'medicine' (OTC recommendations with medical warning), 'lab_tests'. Each value must be { "en": "...", "te": "..." } and arrays where appropriate.` },
+                                { "type": "image_url", "image_url": { "url": image } }
+                            ]
+                        }],
+                        "max_tokens": 1024,
+                        "temperature": 0.1,
+                        "top_p": 0.7
+                    };
+
+                    const attempt = await axios.post(invokeUrl, payload, { headers, timeout: 90000 });
+                    if (attempt.status === 200) {
+                        response = attempt;
+                        break outerLoop;
+                    }
+                } catch (err) {
+                    lastError = err;
+                    const status = err.response?.status;
+                    const msg = err.response?.data?.message || err.message;
+                    console.warn(`Vision fail: Key ending in ${currentKey.slice(-4)} | Model: ${currentModel} | Reason: ${msg}`);
+                    
+                    // If it's 401 (Auth) or 403 (Perms), this key is definitely no good for this model.
+                    // If it's 429 (Quota), it's no good for ANY model for now.
+                    if (status === 429) break; // Break inner loop to try next key
+                    continue; // Try next model with same key
+                }
             }
         }
 
-        if (!response) throw lastError || new Error("No available Vision AI models responded.");
+        if (!response) throw lastError || new Error("All vision keys and models exhausted.");
         const jsonContent = response.data?.choices?.[0]?.message?.content;
         
         if (!jsonContent) throw new Error("Empty response from Vision AI.");

@@ -16,7 +16,7 @@ const api = axios.create({
     ? normalizeBaseUrl(envUrl)
     : isLocalhost
       ? 'http://localhost:5000/api'
-      : 'https://hospital-backend-78ur.onrender.com/api',
+      : 'https://sri-kamala-backend.onrender.com/api',
 });
 
 export const bookAppointment = (data) => api.post('/create-appointment', data);
