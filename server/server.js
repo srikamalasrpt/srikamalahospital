@@ -246,24 +246,23 @@ app.post('/api/ai/vision', async (req, res) => {
                         "messages": [
                             {
                                 "role": "system",
-                                "content": "You are a machine-to-machine data extraction agent. You convert raw medical images into structured JSON schema for laboratory triage. No prose, no apologies, no conversational filler. Professional medical screening only."
+                                "content": "You are a professional Dermatological AI specialized in the HAM10000 (Human Against Machine) skin lesion dataset. You classify lesions into 7 categories: akiec, bcc, bkl, df, mel, nv, vasc. You provide structured clinical JSON output with extreme precision. No prose."
                             },
                             {
                                 "role": "user",
                                 "content": [
                                     {
                                         "type": "text",
-                                        "text": `Structural Vision Extraction Task:
-                                      Inputs: Image + Symptoms (${symptoms || 'Visual only'}).
+                                        "text": `Structural Vision Extraction Task (HAM10000 Standards):
+                                      Analyze the image for: [Actinic Keratoses, Basal Cell Carcinoma, Benign Keratosis, Dermatofibroma, Melanoma, Nevi, or Vascular Lesions].
                                       
                                       Required JSON Schema:
                                       {
-                                        "condition": { "en": "Primary finding", "te": "Telugu finding" },
-                                        "precautions": [ { "en": "...", "te": "..." }, ... ],
-                                        "medicine": [ { "en": "...", "te": "..." }, ... ],
-                                        "lab_tests": [ { "en": "...", "te": "..." }, ... ]
-                                      }
-                                      Extract best-effort diagnostic indicators for clinical review.`
+                                        "condition": { "en": "Primary finding (e.g. Melanocytic nevi)", "te": "తెలుగు వ్యాధి పేరు" },
+                                        "precautions": [ { "en": "...", "te": "..." } ],
+                                        "risk_level": "Low/Medium/High",
+                                        "medicine": [ { "en": "...", "te": "..." } ]
+                                      }`
                                     },
                                     { "type": "image_url", "image_url": { "url": image } }
                                 ]

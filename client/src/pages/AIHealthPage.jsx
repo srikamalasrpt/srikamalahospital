@@ -84,7 +84,7 @@ CRITICAL RULE: You MUST format your precise response as:
                 const resp = await analyzeVisionImage(reader.result, "Analyze this clinical dermatological image. Be highly concise. Give suspected type of lesion/rash and precaution.");
                 if(resp.data.success && resp.data.analysis) {
                     const ai = resp.data.analysis;
-                    setSkinResult(`Condition: ${ai.condition.te}\n${ai.precautions.map(p=>p.te).join(', ')}\n|||\nCondition: ${ai.condition.en}\n${ai.precautions.map(p=>p.en).join(', ')}`);
+                    setSkinResult(`వ్యాధి (CONDITION): ${ai.condition.te}\nప్రమాదం (RISK): ${ai.risk_level || 'Low'}\nజాగ్రత్తలు (PRECAUTIONS): ${ai.precautions.map(p=>p.te).join(', ')}\n|||\nCondition: ${ai.condition.en}\nRisk: ${ai.risk_level || 'Low'}\nPrecautions: ${ai.precautions.map(p=>p.en).join(', ')}`);
                 }
             } catch (err) {
                 console.error(err);
