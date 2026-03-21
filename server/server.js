@@ -272,7 +272,19 @@ app.post('/api/ai/vision', async (req, res) => {
                         "messages": [{
                             "role": "user",
                             "content": [
-                                { "type": "text", "text": `You are a clinical diagnostic expert. Analyze this medical image. Context: ${symptoms || 'Visual only'}. Output ONLY a JSON object with keys: 'condition', 'precautions', 'medicine' (OTC recommendations with medical warning), 'lab_tests'. Each value must be { "en": "...", "te": "..." } and arrays where appropriate.` },
+                                { 
+                                  "type": "text", 
+                                  "text": `Clinical Expert Analysis (Image-to-JSON):
+                                  Observe the medical image and symptoms: ${symptoms || 'Visual only'}.
+                                  Output PURE JSON following this schema precisely:
+                                  {
+                                    "condition": { "en": "...", "te": "..." },
+                                    "precautions": [ { "en": "...", "te": "..." }, ... ],
+                                    "medicine": [ { "en": "...", "te": "..." }, ... ],
+                                    "lab_tests": [ { "en": "...", "te": "..." }, ... ]
+                                  }
+                                  Skip all disclaimers. Provide actionable data for clinical screening.`
+                                },
                                 { "type": "image_url", "image_url": { "url": image } }
                             ]
                         }],
@@ -284,6 +296,7 @@ app.post('/api/ai/vision', async (req, res) => {
                     const attempt = await axios.post(invokeUrl, payload, { headers, timeout: 90000 });
                     if (attempt.status === 200) {
                         response = attempt;
+                        response.modelUsed = currentModel;
                         break outerLoop;
                     }
                 } catch (err) {
@@ -292,16 +305,15 @@ app.post('/api/ai/vision', async (req, res) => {
                     const msg = err.response?.data?.message || err.message;
                     console.warn(`Vision fail: Key ending in ${currentKey.slice(-4)} | Model: ${currentModel} | Reason: ${msg}`);
                     
-                    // If it's 401 (Auth) or 403 (Perms), this key is definitely no good for this model.
-                    // If it's 429 (Quota), it's no good for ANY model for now.
-                    if (status === 429) break; // Break inner loop to try next key
-                    continue; // Try next model with same key
+                    if (status === 429) break; 
+                    continue; 
                 }
             }
         }
 
         if (!response) throw lastError || new Error("All vision keys and models exhausted.");
         const jsonContent = response.data?.choices?.[0]?.message?.content;
+        const modelUsed = response.modelUsed || "Unknown";
         
         if (!jsonContent) throw new Error("Empty response from Vision AI.");
 
@@ -334,7 +346,7 @@ app.post('/api/ai/vision', async (req, res) => {
                     te: "భౌతిక పరీక్ష మరియు ల్యాబ్ నిర్ధారణ సిఫార్సు చేయబడింది."
                 }
             ],
-            note: typeof rawText === 'string' ? rawText.slice(0, 220) : ''
+            note: `[Model: ${modelUsed}] ${typeof rawText === 'string' ? rawText.slice(0, 220) : ''}`
         });
 
         const refusalDetected = (text) => {
@@ -343,17 +355,13 @@ app.post('/api/ai/vision', async (req, res) => {
             return [
                 "i don't think this conversation is a good idea",
                 "i'm not going to engage",
-                "i cannot help with that",
-                "can't help with that",
-                "cannot assist with that request",
-                "refuse",
-                "not able to provide"
+                "refusal"
             ].some((k) => t.includes(k));
         };
 
         let jsonResponse;
         if (refusalDetected(jsonContent)) {
-            jsonResponse = buildVisionFallback("Vision model refused this image/content. Please retake a clear clinical image.");
+            jsonResponse = buildVisionFallback(`Vision model refused image evaluation. Check for safety filters.`);
             return res.json({ success: true, analysis: jsonResponse });
         }
 

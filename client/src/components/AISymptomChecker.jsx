@@ -232,6 +232,12 @@ const AISymptomChecker = () => {
                                                                 <td className="px-4 py-3 text-xs font-black text-hospital-dark">Small Medicines</td>
                                                                 <td className="px-4 py-3 text-xs font-medium text-gray-700">{joinItems(result.medicine)}</td>
                                                             </tr>
+                                                            {result.note && (
+                                                                <tr className="border-t border-gray-100 align-top bg-yellow-50/30">
+                                                                    <td className="px-4 py-3 text-xs font-black text-hospital-secondary">Clinical Note</td>
+                                                                    <td className="px-4 py-3 text-[10px] font-medium text-gray-600 italic leading-relaxed">{result.note}</td>
+                                                                </tr>
+                                                            )}
                                                         </tbody>
                                                     </table>
                                                 </div>
