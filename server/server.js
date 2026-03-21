@@ -260,26 +260,11 @@ const HAM10000_CLASSES = {
 
 const SKIN_AI_URL = process.env.SKIN_AI_URL || `http://localhost:${process.env.SKIN_AI_PORT || 5005}`;
 
-// 🧠 CNN Model Prediction - properly proxy multipart form data to Flask
-const multer = require('multer');
-const upload = multer({ storage: multer.memoryStorage() });
-
-app.post('/predict', upload.single('image'), async (req, res) => {
+// 🧠 /predict proxy kept as fallback (frontend calls Flask directly now)
+app.post('/predict', express.raw({ type: '*/*', limit: '20mb' }), async (req, res) => {
     try {
-        if (!req.file) {
-            return res.status(400).json({ success: false, error: 'No image file provided' });
-        }
-
-        // Re-send the image file as multipart to Flask
-        const FormData = require('form-data');
-        const form = new FormData();
-        form.append('image', req.file.buffer, {
-            filename: req.file.originalname || 'image.jpg',
-            contentType: req.file.mimetype || 'image/jpeg'
-        });
-
-        const response = await axios.post(`${SKIN_AI_URL}/predict`, form, {
-            headers: form.getHeaders(),
+        const response = await axios.post(`${SKIN_AI_URL}/predict`, req.body, {
+            headers: { 'Content-Type': req.headers['content-type'] },
             maxContentLength: Infinity,
             maxBodyLength: Infinity,
             timeout: 30000

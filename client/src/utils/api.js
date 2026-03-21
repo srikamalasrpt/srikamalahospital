@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const envUrl = import.meta.env.VITE_API_URL;
+const SKIN_AI_URL = import.meta.env.VITE_SKIN_AI_URL || 'https://srikamala-skin-ai.onrender.com';
 const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 const normalizeBaseUrl = (rawUrl) => {
   if (!rawUrl || !rawUrl.trim()) return null;
@@ -35,7 +36,8 @@ export const analyzeVisionImage = (image, symptoms) => api.post('/ai/vision', { 
 export const predictSkinCancer = (file) => {
   const formData = new FormData();
   formData.append("image", file);
-  return axios.post(`${api.defaults.baseURL.replace(/\/api$/, '')}/predict`, formData);
+  // Call Flask AI directly (CORS is enabled on Flask server)
+  return axios.post(`${SKIN_AI_URL}/predict`, formData);
 };
 export const analyzeOCR = (image) => api.post('/ocr', { image });
 export const chatWithAI = (query) => api.post('/ai/chat', { query });
