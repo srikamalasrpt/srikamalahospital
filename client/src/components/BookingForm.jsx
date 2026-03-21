@@ -13,6 +13,7 @@ const BookingForm = () => {
     date: '',
     reason: '',
     paymentMethod: 'ఆసుపత్రిలో చెల్లించండి',
+    image: null
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -137,6 +138,32 @@ const BookingForm = () => {
                                 className="w-full bg-gray-50 border-2 border-transparent focus:border-hospital-primary/20 focus:bg-white p-3.5 rounded-xl transition-all outline-none text-sm font-bold text-hospital-dark">
                             {departments.map(d => <option key={d.en} value={d.te}>{d.te} ({d.en})</option>)}
                         </select>
+                    </div>
+
+                    <div className="space-y-2 mb-8">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-hospital-secondary sm:ml-1 font-['Noto_Sans_Telugu'] text-xs flex items-center gap-2">
+                           <Activity size={14}/> <span>వైద్య చిత్రం (Clinical Image - Optional)</span>
+                        </label>
+                        <div className="relative group">
+                           <div className={`w-full h-32 rounded-[32px] border-2 border-dashed transition-all flex flex-col items-center justify-center gap-3 bg-gray-50/50 cursor-pointer overflow-hidden ${formData.image ? 'border-green-400 bg-green-50/10' : 'border-gray-100 hover:border-hospital-primary/30'}`}>
+                              {formData.image ? (
+                                 <img src={formData.image} className="w-full h-full object-cover opacity-80" alt="Clinical Preview" />
+                              ) : (
+                                 <>
+                                    <div className="w-10 h-10 bg-white rounded-2xl flex items-center justify-center text-gray-300 shadow-sm"><Activity size={20}/></div>
+                                    <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Tap to Upload Case Photo</p>
+                                 </>
+                              )}
+                              <input type="file" accept="image/*" onChange={(e) => {
+                                 const file = e.target.files[0];
+                                 if (file) {
+                                    const reader = new FileReader();
+                                    reader.onloadend = () => setFormData({...formData, image: reader.result});
+                                    reader.readAsDataURL(file);
+                                 }
+                              }} className="absolute inset-0 opacity-0 cursor-pointer" />
+                           </div>
+                        </div>
                     </div>
 
                     <div className="space-y-2 mb-8">

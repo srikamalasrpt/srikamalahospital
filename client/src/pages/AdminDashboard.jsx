@@ -28,6 +28,8 @@ const AdminDashboard = () => {
     const [clinicalNotes, setClinicalNotes] = useState('');
     const [clinicalType, setClinicalType] = useState('General OP');
     const [patientClinicalHistory, setPatientClinicalHistory] = useState([]);
+    const [isAnalyzing, setIsAnalyzing] = useState(false);
+    const [auditResult, setAuditResult] = useState(null);
 
     useEffect(() => {
         if (isAuthenticated) {
@@ -153,6 +155,23 @@ const AdminDashboard = () => {
             }
         } catch (err) {
             console.error(err);
+        }
+    };
+
+    const runClinicalAudit = async (imageUrl) => {
+        if (!imageUrl) return;
+        setIsAnalyzing(true);
+        setAuditResult(null);
+        try {
+            const { analyzeVisionImage } = await import('../utils/api');
+            const resp = await analyzeVisionImage(imageUrl, "Administrative Clinical Audit");
+            if (resp.data.success) {
+                setAuditResult(resp.data.analysis);
+            }
+        } catch (err) {
+            console.error("Audit Error:", err);
+        } finally {
+            setIsAnalyzing(false);
         }
     };
 
@@ -368,17 +387,38 @@ const AdminDashboard = () => {
                                                     </div>
                                                     
                                                     <div className="space-y-6">
-                                                        <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-hospital-primary pb-2 border-b border-white/10">Clinical History Matrix</h4>
+                                                        <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-hospital-primary pb-2 border-b border-white/10 flex justify-between">
+                                                            <span>Clinical History Matrix</span>
+                                                            {auditResult && <span className="text-hospital-mint flex items-center gap-1 animate-pulse"><Sparkles size={10}/> AI INSIGHT ATTACHED</span>}
+                                                        </h4>
+                                                        {auditResult && (
+                                                            <div className="p-4 bg-hospital-secondary/5 rounded-2xl border border-hospital-secondary/20 space-y-3">
+                                                                <p className="text-[9px] font-black text-hospital-secondary uppercase tracking-widest">AI Pre-Screening Result</p>
+                                                                <p className="text-xs font-bold text-white/80">{auditResult.condition?.en}</p>
+                                                                <div className="flex flex-wrap gap-2">
+                                                                    {auditResult.precautions?.map((p, i) => <span key={i} className="text-[8px] bg-white/5 px-2 py-1 rounded-md text-white/50">{p.en}</span>)}
+                                                                </div>
+                                                                <button onClick={() => setAuditResult(null)} className="text-[8px] text-white/20 hover:text-white transition-colors">Clear Result</button>
+                                                            </div>
+                                                        )}
                                                         <div className="space-y-4 h-64 overflow-y-auto pr-4 scrollbar-hide">
                                                             {activePatient.visits.map((v, i) => (
                                                                 <div key={i} className="p-6 bg-white/5 rounded-3xl border border-white/10 flex items-center justify-between group hover:bg-white/10 transition-all">
-                                                                    <div className="flex items-center gap-4">
-                                                                        <div className="w-10 h-10 bg-hospital-primary/20 rounded-xl flex items-center justify-center text-hospital-primary"><Activity size={18}/></div>
+                                                                    <div className="flex items-center gap-4 flex-1">
+                                                                        <div className="w-10 h-10 bg-hospital-primary/20 rounded-xl flex items-center justify-center text-hospital-primary overflow-hidden">
+                                                                            {v.image ? <img src={v.image} className="w-full h-full object-cover" /> : <Activity size={18}/>}
+                                                                        </div>
                                                                         <div>
                                                                             <p className="font-black text-sm">{v.department}</p>
                                                                             <p className="text-[9px] font-bold text-white/30 uppercase tracking-widest">{v.appointmentDate}</p>
                                                                         </div>
                                                                     </div>
+                                                                    {v.image && (
+                                                                        <button onClick={() => runClinicalAudit(v.image)} disabled={isAnalyzing}
+                                                                            className="px-3 py-1 bg-hospital-secondary text-white text-[9px] font-black uppercase tracking-widest rounded-lg flex items-center gap-2 hover:scale-105 transition-all disabled:opacity-50">
+                                                                            {isAnalyzing ? <div className="w-2 h-2 rounded-full bg-white animate-ping"></div> : <Sparkles size={12}/>}  Audit
+                                                                        </button>
+                                                                    )}
                                                                     <button className="p-2 opacity-0 group-hover:opacity-100 transition-opacity text-hospital-secondary"><Download size={16}/></button>
                                                                 </div>
                                                             ))}

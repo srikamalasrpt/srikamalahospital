@@ -8,8 +8,10 @@ const Diagnosis = () => {
   const [tests, setTests] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
-  const [selectedTest, setSelectedTest] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [aiInput, setAiInput] = useState('');
+  const [isAiLoading, setIsAiLoading] = useState(false);
+  const [aiRecommendation, setAiRecommendation] = useState(null);
 
   useEffect(() => {
     const loadTests = async () => {
@@ -47,6 +49,23 @@ const Diagnosis = () => {
     { name: 'CRP', category: 'Immunology', price: 420, report_time: 24 }
   ];
 
+  const handleAiRecommend = async () => {
+    if (!aiInput) return;
+    setIsAiLoading(true);
+    setAiRecommendation(null);
+    try {
+      const { chatWithAI } = await import('../utils/api');
+      const testList = currentTests.map(t => t.name).join(', ');
+      const prompt = `Based on these symptoms: "${aiInput}", which of these lab tests from our clinic are most relevant: [${testList}]? Provide a 1-sentence suggestion and pick 1-2 tests. Output ONLY text.`;
+      const resp = await chatWithAI(prompt);
+      setAiRecommendation(resp.data.response);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsAiLoading(false);
+    }
+  };
+
   const handleBookTest = (test) => {
     setSelectedTest(test);
     setIsModalOpen(true);
@@ -54,7 +73,7 @@ const Diagnosis = () => {
 
   const currentTests = (tests && tests.length > 0) ? tests : fallbackTests;
 
-  const filteredTests = currentTests.filter(test => 
+  const filteredTests = currentTests.filter(test =>
     test.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     test.category.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -62,7 +81,7 @@ const Diagnosis = () => {
   return (
     <div className="min-h-screen bg-[#f8fafc] pt-32 pb-20 px-6 relative overflow-hidden">
       <div className="absolute top-0 right-0 w-[40%] h-[40%] bg-hospital-primary/5 rounded-bl-[200px] z-0 pointer-events-none"></div>
-      
+
       <div className="container mx-auto max-w-7xl relative z-10">
         <motion.div
           initial={{ opacity: 0, y: -10 }}
@@ -79,35 +98,53 @@ const Diagnosis = () => {
             <div className="absolute inset-0 flex items-center justify-center text-hospital-primary"><Orbit size={22} /></div>
           </div>
         </motion.div>
-        
-        <div className="flex flex-col md:flex-row items-center justify-between mb-12 gap-8">
-            <div className="max-w-xl text-center md:text-left">
-               <div className="flex items-center gap-3 mb-6 justify-center md:justify-start">
-                  <div className="w-8 h-8 rounded-xl bg-hospital-primary flex items-center justify-center text-white shadow-lg"><Flask size={18} /></div>
-                  <h4 className="text-[9px] font-black uppercase tracking-[0.4em] text-hospital-secondary">Advanced Diagnostics</h4>
-               </div>
-               <h2 className="text-4xl lg:text-5xl font-black text-hospital-dark leading-none font-['Noto_Sans_Telugu']">పరిపూర్ణ <span className="text-hospital-secondary italic">ల్యాబ్</span> <br/>పరీక్షలు.</h2>
-               <p className="text-[10px] uppercase font-bold text-gray-300 tracking-[0.3em] mt-3">Precision Laboratory Insights</p>
-               <p className="text-xs font-medium text-gray-500 mt-6 font-['Noto_Sans_Telugu'] italic">WHO-ధృవీకరించబడిన డయాగ్నోస్టిక్ సెంటర్ | ఎం.జి రోడ్డు, సూర్యాపేట</p>
-            </div>
 
-            <div className="w-full md:w-[350px] relative group">
-                <Search size={20} className="absolute left-5 top-1/2 -translate-y-1/2 text-hospital-primary/40 group-focus-within:text-hospital-primary transition-all z-10" />
-                <input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} type="text" placeholder="Search Blood Tests..."
-                  className="w-full bg-white border-2 border-transparent focus:border-hospital-primary/20 shadow-xl p-5 pl-14 rounded-[32px] outline-none text-sm font-bold transition-all" />
-                <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[8px] font-black tracking-[0.4em] text-gray-200 uppercase whitespace-nowrap">Clinical Search Engine</div>
+        <div className="flex flex-col lg:flex-row items-center justify-between mb-12 gap-8">
+          <div className="max-w-xl text-center md:text-left">
+            <div className="flex items-center gap-3 mb-6 justify-center md:justify-start">
+              <div className="w-8 h-8 rounded-xl bg-hospital-primary flex items-center justify-center text-white shadow-lg"><Flask size={18} /></div>
+              <h4 className="text-[9px] font-black uppercase tracking-[0.4em] text-hospital-secondary">Advanced Diagnostics</h4>
             </div>
+            <h2 className="text-4xl lg:text-5xl font-black text-hospital-dark leading-none font-['Noto_Sans_Telugu']">పరిపూర్ణ <span className="text-hospital-secondary italic">ల్యాబ్</span> <br />పరీక్షలు.</h2>
+            <p className="text-[10px] uppercase font-bold text-gray-300 tracking-[0.3em] mt-3">Precision Laboratory Insights</p>
+            <p className="text-xs font-medium text-gray-500 mt-6 font-['Noto_Sans_Telugu'] italic">WHO-ధృవీకరించబడిన డయాగ్నోస్టిక్ సెంటర్ | ఎం.జి రోడ్డు, సూర్యాపేట</p>
+          </div>
+
+          <div className="flex flex-col gap-4 w-full md:w-[450px]">
+            <div className="bg-hospital-dark p-6 rounded-[32px] text-white shadow-2xl relative overflow-hidden group">
+              <div className="absolute top-0 right-0 p-4 text-white/5 group-hover:rotate-12 transition-transform"><Sparkles size={100} /></div>
+              <p className="text-[8px] font-black uppercase tracking-[0.3em] text-hospital-primary mb-3">AI Test Scout v1.2</p>
+              <h4 className="text-xs font-black mb-4">Not sure which test to take? Ask AI.</h4>
+              <div className="relative">
+                <input value={aiInput} onChange={(e) => setAiInput(e.target.value)} type="text" placeholder="Describe symptoms (e.g. fever, fatigue)..."
+                  className="w-full bg-white/10 border-none p-4 rounded-2xl text-[10px] text-white outline-none focus:ring-2 ring-hospital-primary/50 transition-all font-bold" />
+                <button onClick={handleAiRecommend} disabled={isAiLoading} className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-hospital-primary rounded-xl flex items-center justify-center hover:scale-110 active:scale-90 transition-all">
+                  {isAiLoading ? <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin"></div> : <ArrowRight size={16} />}
+                </button>
+              </div>
+              {aiRecommendation && (
+                <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="mt-4 p-4 bg-white/5 rounded-2xl border border-white/10">
+                  <p className="text-[9px] font-medium leading-relaxed italic text-hospital-primary">{aiRecommendation}</p>
+                </motion.div>
+              )}
+            </div>
+            <div className="relative group w-full">
+              <Search size={20} className="absolute left-5 top-1/2 -translate-y-1/2 text-hospital-primary/40 group-focus-within:text-hospital-primary transition-all z-10" />
+              <input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} type="text" placeholder="Manual catalog search..."
+                className="w-full bg-white border-2 border-transparent focus:border-hospital-primary/20 shadow-xl p-5 pl-14 rounded-[32px] outline-none text-sm font-bold transition-all" />
+            </div>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {filteredTests.map((test, index) => (
-            <motion.div key={index} 
-              initial={{ y: 30, opacity: 0 }} 
-              whileInView={{ y: 0, opacity: 1 }} 
+            <motion.div key={index}
+              initial={{ y: 30, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
               transition={{ delay: index * 0.05 }}
-              whileHover={{ 
-                scale: 1.05, 
-                rotateX: 2, 
+              whileHover={{
+                scale: 1.05,
+                rotateX: 2,
                 rotateY: -2,
                 boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.15)"
               }}
@@ -116,70 +153,70 @@ const Diagnosis = () => {
               onClick={() => handleBookTest(test)}
             >
               <div className="absolute top-0 right-0 p-6 opacity-0 group-hover:opacity-100 transition-opacity">
-                 <div className="w-8 h-8 rounded-full bg-hospital-mint flex items-center justify-center text-hospital-primary"><Plus size={16}/></div>
+                <div className="w-8 h-8 rounded-full bg-hospital-mint flex items-center justify-center text-hospital-primary"><Plus size={16} /></div>
               </div>
 
               <div className="mb-8">
-                 <div className="w-16 h-16 bg-hospital-primary rounded-3xl flex items-center justify-center text-white shadow-xl mb-6 group-hover:rotate-12 transition-transform">
-                    <Microscope size={32} />
-                 </div>
-                 <div className="px-3 py-1 bg-gray-50 rounded-full border border-gray-100 text-[8px] font-black uppercase tracking-widest text-gray-400 inline-block mb-3">
-                    {test.category}
-                 </div>
-                 <h3 className="text-xl font-black text-hospital-dark leading-tight line-clamp-2 h-[3.5rem]">{test.name}</h3>
+                <div className="w-16 h-16 bg-hospital-primary rounded-3xl flex items-center justify-center text-white shadow-xl mb-6 group-hover:rotate-12 transition-transform">
+                  <Microscope size={32} />
+                </div>
+                <div className="px-3 py-1 bg-gray-50 rounded-full border border-gray-100 text-[8px] font-black uppercase tracking-widest text-gray-400 inline-block mb-3">
+                  {test.category}
+                </div>
+                <h3 className="text-xl font-black text-hospital-dark leading-tight line-clamp-2 h-[3.5rem]">{test.name}</h3>
               </div>
 
               <div className="mt-auto space-y-6">
-                 <div className="flex justify-between items-end border-b border-gray-50 pb-4">
-                    <div>
-                        <p className="text-[10px] font-black text-gray-300 uppercase tracking-widest mb-1 leading-none">Price Est.</p>
-                        <p className="text-3xl font-black text-hospital-dark tracking-tighter">₹{test.price}</p>
-                    </div>
-                    <div className="text-right">
-                        <p className="text-[10px] font-black text-gray-300 uppercase tracking-widest mb-1 leading-none">Report</p>
-                        <p className="text-sm font-black text-hospital-secondary">{test.report_time}H</p>
-                    </div>
-                 </div>
-                 
-                 <button className="w-full bg-hospital-dark text-white py-4 rounded-[24px] text-[10px] font-black uppercase tracking-widest shadow-lg group-hover:bg-hospital-primary group-hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2 border-none">
-                    <Heart size={14} className="group-hover:fill-white transition-all" /> Book Now
-                 </button>
+                <div className="flex justify-between items-end border-b border-gray-50 pb-4">
+                  <div>
+                    <p className="text-[10px] font-black text-gray-300 uppercase tracking-widest mb-1 leading-none">Price Est.</p>
+                    <p className="text-3xl font-black text-hospital-dark tracking-tighter">₹{test.price}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-[10px] font-black text-gray-300 uppercase tracking-widest mb-1 leading-none">Report</p>
+                    <p className="text-sm font-black text-hospital-secondary">{test.report_time}H</p>
+                  </div>
+                </div>
+
+                <button className="w-full bg-hospital-dark text-white py-4 rounded-[24px] text-[10px] font-black uppercase tracking-widest shadow-lg group-hover:bg-hospital-primary group-hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2 border-none">
+                  <Heart size={14} className="group-hover:fill-white transition-all" /> Book Now
+                </button>
               </div>
-              
+
               <div className="absolute -bottom-1 left-0 w-full h-1 bg-hospital-primary transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></div>
             </motion.div>
           ))}
         </div>
 
         {filteredTests.length === 0 && (
-           <div className="bg-white p-20 rounded-[60px] shadow-sm border border-dashed border-gray-200 text-center">
-              <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6 text-gray-300">
-                 <Search size={40} />
-              </div>
-              <h3 className="text-2xl font-black text-hospital-dark">No tests found matching "{searchQuery}"</h3>
-              <p className="text-gray-400 font-bold uppercase tracking-widest text-[10px] mt-2">Try searching with a different keyword like 'Blood' or 'Sugar'</p>
-           </div>
+          <div className="bg-white p-20 rounded-[60px] shadow-sm border border-dashed border-gray-200 text-center">
+            <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6 text-gray-300">
+              <Search size={40} />
+            </div>
+            <h3 className="text-2xl font-black text-hospital-dark">No tests found matching "{searchQuery}"</h3>
+            <p className="text-gray-400 font-bold uppercase tracking-widest text-[10px] mt-2">Try searching with a different keyword like 'Blood' or 'Sugar'</p>
+          </div>
         )}
 
         <div className="mt-20 p-12 bg-hospital-dark rounded-[60px] text-white flex flex-col md:flex-row items-center justify-between shadow-4xl relative overflow-hidden">
-           <div className="absolute top-0 right-0 p-12 text-white/5 pointer-events-none opacity-50"><Flask size={200}/></div>
-           <div className="relative z-10 text-center md:text-left mb-8 md:mb-0">
-              <h3 className="text-2xl font-black mb-4 font-['Noto_Sans_Telugu']">నేరుగా కాల్ చేయండి</h3>
-              <p className="text-hospital-primary font-black uppercase tracking-widest text-xs mb-2">Instant Lab Consultation line</p>
-              <h4 className="text-4xl font-black font-mono">98668 95634</h4>
-              <p className="text-[10px] mt-3 uppercase tracking-widest text-gray-300">Hospital Main: 99480 76665 | Open 24 Hours</p>
-           </div>
-           <div className="relative z-10 flex gap-4">
-              <a href="tel:9866895634" className="bg-white text-hospital-dark px-10 py-5 rounded-3xl font-black text-xs uppercase tracking-widest shadow-2xl hover:scale-110 active:scale-95 transition-all outline-none">CALL CLINIC</a>
-           </div>
+          <div className="absolute top-0 right-0 p-12 text-white/5 pointer-events-none opacity-50"><Flask size={200} /></div>
+          <div className="relative z-10 text-center md:text-left mb-8 md:mb-0">
+            <h3 className="text-2xl font-black mb-4 font-['Noto_Sans_Telugu']">నేరుగా కాల్ చేయండి</h3>
+            <p className="text-hospital-primary font-black uppercase tracking-widest text-xs mb-2">Instant Lab Consultation line</p>
+            <h4 className="text-4xl font-black font-mono">98668 95634</h4>
+            <p className="text-[10px] mt-3 uppercase tracking-widest text-gray-300">Hospital Main: 99480 76665 | Open 24 Hours</p>
+          </div>
+          <div className="relative z-10 flex gap-4">
+            <a href="tel:9866895634" className="bg-white text-hospital-dark px-10 py-5 rounded-3xl font-black text-xs uppercase tracking-widest shadow-2xl hover:scale-110 active:scale-95 transition-all outline-none">CALL CLINIC</a>
+          </div>
         </div>
 
       </div>
 
-      <DiagnosticBookingModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-        test={selectedTest} 
+      <DiagnosticBookingModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        test={selectedTest}
       />
     </div>
   );

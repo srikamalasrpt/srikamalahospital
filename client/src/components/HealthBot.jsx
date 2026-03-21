@@ -15,6 +15,48 @@ const HealthBot = () => {
         if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }, [messages, isTyping]);
 
+    const handleVisionUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onloadend = async () => {
+            const base64 = reader.result;
+            const userMsg = { 
+                id: Date.now(), 
+                text: "Attached a clinical image for analysis.", 
+                sender: 'user', 
+                image: base64,
+                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) 
+            };
+            setMessages(prev => [...prev, userMsg]);
+            setIsTyping(true);
+
+            try {
+                const { analyzeVisionImage } = await import('../utils/api');
+                const resp = await analyzeVisionImage(base64, "Analyzed via Triage Bot");
+                
+                if (resp.data.success && resp.data.analysis) {
+                    const ai = resp.data.analysis;
+                    const triageText = `[AI TRIAGE REPORT]\n\nCondition: ${ai.condition.en}\n\nPrecautions: ${ai.precautions.map(p => p.en).join(', ')}\n\nAction: Please visit the ${ai.lab_tests?.[0]?.en || 'general ward'} for further evaluation.`;
+                    setMessages(prev => [...prev, { 
+                        id: Date.now() + 1, 
+                        text: triageText, 
+                        sender: 'bot', 
+                        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) 
+                    }]);
+                } else {
+                    throw new Error("Triage failed");
+                }
+            } catch (err) {
+                setMessages(prev => [...prev, { id: Date.now() + 1, text: "Clinical Image Error: I am unable to analyze this image right now. Please call +91 99480 76665.", sender: 'bot', time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]);
+            } finally {
+                setIsTyping(false);
+            }
+        };
+        reader.readAsDataURL(file);
+    };
+
     const handleSend = async (e) => {
         e.preventDefault();
         if (!input.trim()) return;
@@ -88,6 +130,7 @@ const HealthBot = () => {
                                         {m.sender === 'user' ? <User size={18}/> : <img src="/logo.png" className="w-full h-full object-contain brightness-0 invert" />}
                                     </div>
                                     <div className={`max-w-[80%] rounded-3xl px-6 py-4 text-sm font-bold shadow-sm leading-relaxed ${m.sender === 'user' ? 'bg-hospital-secondary text-white rounded-br-none' : 'bg-white text-hospital-dark rounded-bl-none border border-gray-100'}`}>
+                                        {m.image && <img src={m.image} className="w-full rounded-xl mb-3 border-2 border-white/20" alt="Clinical Upload" />}
                                         {m.text}
                                         <p className={`text-[9px] mt-2 font-black uppercase opacity-40 tracking-widest`}>{m.time}</p>
                                     </div>
@@ -105,6 +148,10 @@ const HealthBot = () => {
                         </div>
 
                         <form onSubmit={handleSend} className="p-6 bg-white border-t border-gray-100 flex items-center gap-4">
+                            <label className="w-12 h-12 flex-shrink-0 bg-gray-50 hover:bg-hospital-primary/10 text-gray-400 hover:text-hospital-primary rounded-2xl flex items-center justify-center cursor-pointer transition-all border-2 border-transparent hover:border-hospital-primary/20">
+                                <Plus size={20} />
+                                <input type="file" accept="image/*" onChange={handleVisionUpload} className="hidden" />
+                            </label>
                             <div className="flex-1 relative group">
                                 <input type="text" placeholder="Type clinical query..." value={input} onChange={(e) => setInput(e.target.value)}
                                     className="w-full bg-gray-50 border-2 border-transparent focus:border-hospital-primary p-5 pr-14 rounded-[24px] outline-none text-xs font-black transition-all placeholder:text-gray-300" />

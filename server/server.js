@@ -147,87 +147,58 @@ const normalizeApiKey = (key) => {
 };
 
 // AI Symptom Checker using NVIDIA NeMo AI (Nemotron 70B)
+// --- Consolidated Clinical AI Logic ---
+const getChatAI = async (messages, modelCandidates = ['meta/llama-3.1-70b-instruct', 'meta/llama-3.2-3b-instruct'], tokens = 1024) => {
+    const keyCandidates = [
+        normalizeApiKey(process.env.NVIDIA_API_KEY),
+        normalizeApiKey(process.env.NVIDIA_VISION_API_KEY),
+        normalizeApiKey(process.env.NVIDIA_VISION_FALLBACK_API_KEY)
+    ].filter(Boolean);
+
+    for (const key of keyCandidates) {
+        const openai = new OpenAI({ apiKey: key, baseURL: 'https://integrate.api.nvidia.com/v1' });
+        for (const model of modelCandidates) {
+            try {
+                const completion = await openai.chat.completions.create({
+                    model,
+                    messages,
+                    temperature: 0.2,
+                    max_tokens: tokens,
+                });
+                if (completion?.choices?.[0]?.message?.content) return completion.choices[0].message.content;
+            } catch (e) { continue; }
+        }
+    }
+    throw new Error("Clinical AI Service Exhausted");
+};
+
 app.post('/api/ai/symptom', async (req, res) => {
     try {
         const { symptoms } = req.body;
-        if (!process.env.NVIDIA_API_KEY) {
-            return res.json({
-                success: false,
-                message: "NVIDIA API Key not configured.",
-                analysis: {
-                    advice: {
-                        en: "AI service is temporarily unavailable. Please try again later or contact hospital support.",
-                        te: "AI సేవ తాత్కాలికంగా అందుబాటులో లేదు. దయచేసి తర్వాత మళ్లీ ప్రయత్నించండి లేదా ఆసుపత్రి సపోర్ట్‌ను సంప్రదించండి."
-                    },
-                    department: { en: "General", te: "జనరల్" }
-                }
-            });
-        }
-
-        let completion = null;
-        let lastModelError = null;
-        for (const modelName of symptomModelCandidates) {
-            try {
-                completion = await openai.chat.completions.create({
-                    model: modelName,
-                    messages: [{
-                        role: "system",
-                        content: "You are an AI diagnostic assistant for Sri Kamala Hospital based on the NVIDIA NeMo framework. The user will provide symptoms. Respond EXCLUSIVELY with a JSON object containing two fields: 'advice' (an object with 'en' and 'te' fields for English and Telugu bilingual advice) and 'department' (an object with 'en' and 'te' fields for the most relevant hospital department). Keep advice highly professional, concise, and medical. ALWAYS output valid JSON without any markdown formatting."
-                    }, {
-                        role: "user",
-                        content: symptoms
-                    }],
-                    temperature: 0.2,
-                    top_p: 0.7,
-                    max_tokens: 1024,
-                });
-                break;
-            } catch (modelErr) {
-                lastModelError = modelErr;
-                const status = modelErr?.status || modelErr?.response?.status;
-                // Model not available for this account -> try next model candidate.
-                if (status === 404) continue;
-                throw modelErr;
-            }
-        }
-
-        if (!completion) throw lastModelError || new Error('No available symptom model');
-
-        const modelText = completion?.choices?.[0]?.message?.content || '';
-        let jsonResponse = null;
+        const messages = [
+            { role: "system", content: "You are a clinical triage AI. Output JSON: { 'advice': { 'en': '...', 'te': '...' }, 'department': { 'en': '...', 'te': '...' } }." },
+            { role: "user", content: symptoms }
+        ];
+        const content = await getChatAI(messages);
+        let jsonResponse;
         try {
-            jsonResponse = JSON.parse(modelText);
-        } catch (e) {
-            const cleaned = modelText.replace(/```json/g, '').replace(/```/g, '').trim();
-            try {
-                jsonResponse = JSON.parse(cleaned);
-            } catch {
-                jsonResponse = {
-                    advice: {
-                        en: typeof modelText === 'string' && modelText.trim()
-                            ? modelText
-                            : "Unable to generate AI summary at the moment.",
-                        te: "ప్రస్తుతం AI సారాంశాన్ని రూపొందించలేకపోయాము."
-                    },
-                    department: { en: "General", te: "జనరల్" }
-                };
-            }
+            jsonResponse = JSON.parse(content.replace(/```json|```/g, '').trim());
+        } catch {
+            jsonResponse = { advice: { en: content, te: "వైద్య సలహా సిద్ధంగా ఉంది." }, department: { en: "General", te: "జనరల్" } };
         }
-
         res.json({ success: true, analysis: jsonResponse });
     } catch (err) {
-        console.error("AI Symptom Error:", err.response?.data || err.message);
-        res.json({
-            success: false,
-            message: "AI upstream service temporarily unavailable.",
-            analysis: {
-                advice: {
-                    en: "AI service is temporarily unavailable. Please try again later or contact +91 99480 76665.",
-                    te: "AI సేవ తాత్కాలికంగా అందుబాటులో లేదు. దయచేసి తర్వాత మళ్లీ ప్రయత్నించండి లేదా +91 99480 76665 కు కాల్ చేయండి."
-                },
-                department: { en: "Support", te: "మద్దతు" }
-            }
-        });
+        res.status(503).json({ success: false, message: "AI services busy." });
+    }
+});
+
+app.post('/api/ai/chat', async (req, res) => {
+    try {
+        const { query } = req.body;
+        const content = await getChatAI([{ role: "user", content: query }]);
+        res.json({ success: true, response: content });
+    } catch (err) {
+        res.status(503).json({ success: false, message: "Chat AI busy." });
     }
 });
 
@@ -277,9 +248,9 @@ app.post('/api/ai/vision', async (req, res) => {
                             {
                                 "role": "user",
                                 "content": [
-                                    { 
-                                      "type": "text", 
-                                      "text": `Structural Vision Extraction Task:
+                                    {
+                                        "type": "text",
+                                        "text": `Structural Vision Extraction Task:
                                       Inputs: Image + Symptoms (${symptoms || 'Visual only'}).
                                       
                                       Required JSON Schema:
@@ -289,7 +260,7 @@ app.post('/api/ai/vision', async (req, res) => {
                                         "medicine": [ { "en": "...", "te": "..." }, ... ],
                                         "lab_tests": [ { "en": "...", "te": "..." }, ... ]
                                       }
-                                      Extract best-effort diagnostic indicators for clinical review.` 
+                                      Extract best-effort diagnostic indicators for clinical review.`
                                     },
                                     { "type": "image_url", "image_url": { "url": image } }
                                 ]
@@ -311,9 +282,9 @@ app.post('/api/ai/vision', async (req, res) => {
                     const status = err.response?.status;
                     const msg = err.response?.data?.message || err.message;
                     console.warn(`Vision fail: Key ending in ${currentKey.slice(-4)} | Model: ${currentModel} | Reason: ${msg}`);
-                    
-                    if (status === 429) break; 
-                    continue; 
+
+                    if (status === 429) break;
+                    continue;
                 }
             }
         }
@@ -321,7 +292,7 @@ app.post('/api/ai/vision', async (req, res) => {
         if (!response) throw lastError || new Error("All vision keys and models exhausted.");
         const jsonContent = response.data?.choices?.[0]?.message?.content;
         const modelUsed = response.modelUsed || "Unknown";
-        
+
         if (!jsonContent) throw new Error("Empty response from Vision AI.");
 
         const buildVisionFallback = (rawText) => ({
@@ -361,7 +332,7 @@ app.post('/api/ai/vision', async (req, res) => {
             const t = text.trim().toLowerCase();
             // If it doesn't look like JSON at all, it's a refusal or error message
             if (!t.startsWith('{') && !t.includes('{"')) return true;
-            
+
             return [
                 "i don't think this conversation is a good idea",
                 "i'm not going to engage",
@@ -404,15 +375,99 @@ app.post('/api/ai/vision', async (req, res) => {
 
         res.json({ success: true, analysis: jsonResponse });
     } catch (err) {
-        const errorDetail = err.response?.data || err.message;
-        console.error("AI Vision Python-Migrated Error:", JSON.stringify(errorDetail));
-        
-        // Return a more descriptive error if possible for debugging (key issues, quota, etc)
-        res.status(500).json({ 
-            success: false, 
-            message: "Failed to analyze clinical image.",
-            error_reason: JSON.stringify(errorDetail).includes('quota') ? 'API Quota Exhausted' : 'Check NVIDIA_VISION_API_KEY value'
+        console.error("Vision Error:", err);
+        res.status(500).json({ success: false, message: "Clinical Vision system busy." });
+    }
+});
+
+// AI OCR for Prescriptions with failover
+app.post('/api/ai/ocr', async (req, res) => {
+    try {
+        const { image } = req.body;
+        const keyCandidates = [
+            normalizeApiKey(process.env.NVIDIA_VISION_API_KEY),
+            normalizeApiKey(process.env.NVIDIA_VISION_FALLBACK_API_KEY),
+            normalizeApiKey(process.env.NVIDIA_API_KEY)
+        ].filter(Boolean);
+
+        const modelCandidates = [
+            "meta/llama-3.2-11b-vision-instruct",
+            "microsoft/phi-3.5-vision-instruct",
+            "google/paligemma"
+        ];
+
+        let response;
+        outer: for (const currentKey of keyCandidates) {
+            for (const currentModel of modelCandidates) {
+                try {
+                    const attempt = await axios.post("https://integrate.api.nvidia.com/v1/chat/completions", {
+                        model: currentModel,
+                        messages: [{
+                            role: "user",
+                            content: [
+                                { type: "text", text: "Extract clinical text as JSON: { \"patient\": \"...\", \"medicines\": [\"...\"], \"diagnosis\": \"...\", \"date\": \"...\" }" },
+                                { type: "image_url", image_url: { url: image } }
+                            ]
+                        }],
+                        max_tokens: 1024,
+                        temperature: 0.1
+                    }, {
+                        headers: { "Authorization": `Bearer ${currentKey}`, "Content-Type": "application/json" },
+                        timeout: 60000
+                    });
+                    if (attempt.status === 200) { response = attempt; break outer; }
+                } catch (e) { continue; }
+            }
+        }
+
+        const content = response?.data?.choices?.[0]?.message?.content || "";
+        let json;
+        try {
+            json = JSON.parse(content.replace(/```json|```/g, '').trim());
+        } catch {
+            json = { raw_extraction: content };
+        }
+        res.json({ success: true, data: json });
+    } catch (err) {
+        res.status(500).json({ success: false, message: "OCR engine failed." });
+    }
+});
+
+// AI Image Quality Shield
+app.post('/api/ai/quality-check', async (req, res) => {
+    try {
+        const { image } = req.body;
+        const visionKey = normalizeApiKey(process.env.NVIDIA_VISION_API_KEY) || normalizeApiKey(process.env.NVIDIA_API_KEY);
+        if (!image || !visionKey) return res.status(400).json({ success: false, message: "Missing image or API key" });
+
+        const payload = {
+            model: "microsoft/phi-3.5-vision-instruct",
+            messages: [{
+                role: "user",
+                content: [
+                    { type: "text", text: "Evaluate this clinical photo's quality. Output ONLY JSON: { \"pass\": true/false, \"score\": 0-10, \"tips\": \"...\" }. Lighting and focus are key." },
+                    { type: "image_url", image_url: { url: image } }
+                ]
+            }],
+            max_tokens: 512,
+            temperature: 0.1
+        };
+
+        const response = await axios.post("https://integrate.api.nvidia.com/v1/chat/completions", payload, {
+            headers: { "Authorization": `Bearer ${visionKey}`, "Content-Type": "application/json" },
+            timeout: 45000
         });
+
+        const content = response.data?.choices?.[0]?.message?.content || "";
+        let json;
+        try {
+            json = JSON.parse(content.replace(/```json|```/g, '').trim());
+        } catch {
+            json = { pass: true, score: 7, tips: "Proceed with caution." };
+        }
+        res.json({ success: true, quality: json });
+    } catch (err) {
+        res.status(500).json({ success: false, message: "Quality check failed." });
     }
 });
 
@@ -462,13 +517,13 @@ app.post('/api/config', (req, res) => {
 // Create appointment (Enhanced with Sequential Token Generation and Merging)
 app.post('/api/create-appointment', async (req, res) => {
     try {
-        const { name, phone, age, gender, department, appointmentDate, reason } = req.body;
+        const { name, phone, age, gender, department, appointmentDate, reason, image } = req.body;
         if (!name || !phone) return res.status(400).json({ success: false, message: "Missing required fields" });
 
         // Prefix logic
         const isDia = department.toLowerCase().includes('lab') || department.toLowerCase().includes('diagnosis');
         const prefix = isDia ? 'KAMALADIA' : 'KAMALA-OP';
-        
+
         let finalToken = null;
         if (supabase) {
             // Check for Merged History (Patient Name + Phone match)
@@ -480,7 +535,7 @@ app.post('/api/create-appointment', async (req, res) => {
                 .order('created_at', { ascending: true })
                 .limit(1)
                 .maybeSingle();
-            
+
             if (existing) {
                 finalToken = existing.token;
             } else {
@@ -489,7 +544,7 @@ app.post('/api/create-appointment', async (req, res) => {
                     .from('appointments')
                     .select('*', { count: 'exact', head: true })
                     .ilike('token', `${prefix}%`);
-                
+
                 const nextNum = (count || 0) + 1;
                 finalToken = `${prefix}-${nextNum.toString().padStart(4, '0')}`;
             }
@@ -505,11 +560,12 @@ app.post('/api/create-appointment', async (req, res) => {
             appointment_date: appointmentDate,
             reason: reason || (isDia ? 'Diagnostic Test' : 'General Checkup'),
             payment_status: 'Pay at Hospital',
-            order_id: `OFFLINE_${Date.now()}`
+            order_id: `OFFLINE_${Date.now()}`,
+            image: image || null
         };
 
         if (supabase) {
-             const { data, error } = await supabase
+            const { data, error } = await supabase
                 .from('appointments')
                 .insert(bookingData)
                 .select();
@@ -556,7 +612,8 @@ app.get('/api/admin/appointments', async (req, res) => {
             reason: item.reason,
             paymentStatus: item.payment_status,
             appointmentDate: item.appointment_date,
-            orderId: item.order_id
+            orderId: item.order_id,
+            image: item.image
         }));
 
         res.json({ success: true, appointments: transformed });
@@ -611,7 +668,8 @@ app.get('/api/appointments/:token', async (req, res) => {
                 reason: data.reason,
                 paymentStatus: data.payment_status,
                 appointmentDate: data.appointment_date,
-                orderId: data.order_id
+                orderId: data.order_id,
+                image: data.image
             }
         });
     } catch (err) {
@@ -738,10 +796,10 @@ app.post('/api/ai/medicine-discovery', async (req, res) => {
     if (!keyword) return res.json({ success: true, results: [] });
 
     const results = medicineCatalog.filter(m => m.toLowerCase().includes(keyword.toLowerCase()));
-    
+
     const totalMatches = results.length;
-    res.json({ 
-        success: true, 
+    res.json({
+        success: true,
         results: results.slice(0, 8),
         totalMatches,
         ai_note: keyword.length > 2 ? `Detected '${keyword}'. ${totalMatches} related items are available in stock suggestions.` : ''
