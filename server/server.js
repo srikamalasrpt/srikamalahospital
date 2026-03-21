@@ -260,19 +260,34 @@ const HAM10000_CLASSES = {
 
 const SKIN_AI_URL = process.env.SKIN_AI_URL || `http://localhost:${process.env.SKIN_AI_PORT || 5005}`;
 
-// 🧠 New Style: CNN Model Prediction (calls Flask skin_api)
-// This proxy route allows the frontend to call http://localhost:5000/predict exactly as in Step 4
-app.post('/predict', async (req, res) => {
+// 🧠 CNN Model Prediction - properly proxy multipart form data to Flask
+const multer = require('multer');
+const upload = multer({ storage: multer.memoryStorage() });
+
+app.post('/predict', upload.single('image'), async (req, res) => {
     try {
-        // Proxy to Flask (can be local or remote)
-        const response = await axios.post(`${SKIN_AI_URL}/predict`, req, {
-            headers: req.headers,
+        if (!req.file) {
+            return res.status(400).json({ success: false, error: 'No image file provided' });
+        }
+
+        // Re-send the image file as multipart to Flask
+        const FormData = require('form-data');
+        const form = new FormData();
+        form.append('image', req.file.buffer, {
+            filename: req.file.originalname || 'image.jpg',
+            contentType: req.file.mimetype || 'image/jpeg'
+        });
+
+        const response = await axios.post(`${SKIN_AI_URL}/predict`, form, {
+            headers: form.getHeaders(),
             maxContentLength: Infinity,
-            maxBodyLength: Infinity
+            maxBodyLength: Infinity,
+            timeout: 30000
         });
         res.json(response.data);
     } catch (err) {
-        res.status(500).json({ success: false, message: `Skin AI Server unreachable at ${SKIN_AI_URL}. Run 'skin_api.py'.` });
+        const errMsg = err.response?.data || err.message;
+        res.status(500).json({ success: false, message: `AI prediction failed: ${errMsg}` });
     }
 });
 
