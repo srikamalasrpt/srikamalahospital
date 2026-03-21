@@ -1,5 +1,5 @@
 import React from 'react';
-import { Facebook, Twitter, Instagram, Mail, Phone, MapPin, ExternalLink, Globe, ShieldCheck, Award, Heart } from 'lucide-react';
+import { Phone, MapPin, ShieldCheck, Award, Heart, Lock, FileText, HelpCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
@@ -29,12 +29,14 @@ const Footer = () => {
                         <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-hospital-secondary text-sm">త్వరిత నావిగేషన్</h4>
                         <div className="grid grid-cols-2 gap-2">
                             {[
-                                { n: 'About', t: 'గురించి' },
-                                { n: 'Doctors', t: 'వైద్యులు' },
-                                { n: 'Shop', t: 'షాపు' },
-                                { n: 'Tests', t: 'పరీక్షలు' }
+                                { n: 'About', t: 'గురించి', to: '/info/about' },
+                                { n: 'Doctors', t: 'వైద్యులు', to: '/doctors' },
+                                { n: 'Shop', t: 'షాపు', to: '/medical-shop' },
+                                { n: 'Tests', t: 'పరీక్షలు', to: '/diagnosis' },
+                                { n: 'Booking', t: 'బుకింగ్', to: '/book' },
+                                { n: 'Reviews', t: 'సమీక్షలు', to: '/reviews' }
                             ].map((item, i) => (
-                                <Link key={i} to="#" className="text-[10px] font-bold text-gray-400 hover:text-white transition-all flex flex-col uppercase tracking-widest group">
+                                <Link key={i} to={item.to} className="text-[10px] font-bold text-gray-400 hover:text-white transition-all flex flex-col uppercase tracking-widest group">
                                    <span className="font-['Noto_Sans_Telugu'] text-xs font-black tracking-normal lowercase group-hover:text-hospital-primary">{item.t}</span>
                                    <span className="opacity-40">{item.n}</span>
                                 </Link>
@@ -61,18 +63,34 @@ const Footer = () => {
                         </div>
                     </div>
 
-                    {/* Certifications Block */}
+                    {/* Legal + Security Block */}
                     <div className="space-y-6">
-                        <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-hospital-secondary text-sm">గుర్తింపు</h4>
-                        <div className="flex gap-3">
-                           <div className="p-4 bg-white/5 rounded-[24px] border border-white/5 flex flex-col items-center justify-center text-center">
-                               <ShieldCheck size={20} className="text-hospital-secondary mb-2" />
-                               <p className="text-[7px] font-black uppercase text-gray-400 font-['Noto_Sans_Telugu']">సురక్షితం</p>
-                           </div>
-                           <div className="p-4 bg-white/5 rounded-[24px] border border-white/5 flex flex-col items-center justify-center text-center">
-                               <Award size={20} className="text-hospital-primary mb-2" />
-                               <p className="text-[7px] font-black uppercase text-gray-400 font-['Noto_Sans_Telugu']">మంచి సేవ</p>
-                           </div>
+                        <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-hospital-secondary text-sm">Legal & Security</h4>
+                        <div className="space-y-3">
+                           <Link to="/info/security" className="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/5 hover:border-hospital-primary/40 transition-all">
+                               <Lock size={14} className="text-hospital-primary" />
+                               <span className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">Security</span>
+                           </Link>
+                           <Link to="/info/privacy-policy" className="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/5 hover:border-hospital-primary/40 transition-all">
+                               <ShieldCheck size={14} className="text-hospital-secondary" />
+                               <span className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">Privacy Policy</span>
+                           </Link>
+                           <Link to="/info/terms" className="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/5 hover:border-hospital-primary/40 transition-all">
+                               <FileText size={14} className="text-hospital-primary" />
+                               <span className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">Terms & Conditions</span>
+                           </Link>
+                           <Link to="/info/faq" className="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/5 hover:border-hospital-primary/40 transition-all">
+                               <HelpCircle size={14} className="text-hospital-secondary" />
+                               <span className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">FAQ</span>
+                           </Link>
+                           <Link to="/info/contact" className="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/5 hover:border-hospital-primary/40 transition-all">
+                               <Phone size={14} className="text-hospital-primary" />
+                               <span className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">Contact Page</span>
+                           </Link>
+                           <Link to="/info/sitemap" className="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/5 hover:border-hospital-primary/40 transition-all">
+                               <Award size={14} className="text-hospital-primary" />
+                               <span className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">Sitemap</span>
+                           </Link>
                         </div>
                     </div>
 

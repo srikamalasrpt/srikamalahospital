@@ -12,6 +12,7 @@ import BookingPage from './pages/BookingPage';
 import DoctorsPage from './pages/DoctorsPage';
 import ReviewsPage from './pages/ReviewsPage';
 import AIHealthPage from './pages/AIHealthPage';
+import SiteInfoPage from './pages/SiteInfoPage';
 
 const ScrollToTop = () => {
     const { pathname } = useLocation();
@@ -56,6 +57,7 @@ const App = () => {
                     <Route path="/diagnosis" element={<Diagnosis />} />
                     <Route path="/medical-shop" element={<MedicalShop />} />
                     <Route path="/ai-health" element={<AIHealthPage />} />
+                    <Route path="/info/:slug" element={<SiteInfoPage />} />
                     <Route path="/6665" element={<AdminDashboard />} />
                     <Route path="/receipt" element={<Receipt />} />
                     <Route path="/contact.html" element={<Navigate to="/" replace />} />

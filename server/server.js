@@ -298,6 +298,38 @@ app.post('/api/ai/vision', async (req, res) => {
         
         if (!jsonContent) throw new Error("Empty response from Vision AI.");
 
+        const buildVisionFallback = (rawText) => ({
+            condition: {
+                en: "Clinical image analysis is temporarily unavailable.",
+                te: "క్లినికల్ ఇమేజ్ విశ్లేషణ తాత్కాలికంగా అందుబాటులో లేదు."
+            },
+            precautions: [
+                {
+                    en: "Please consult a doctor for direct clinical assessment.",
+                    te: "దయచేసి ప్రత్యక్ష క్లినికల్ అంచనాకు వైద్యుడిని సంప్రదించండి."
+                }
+            ],
+            requirements: [
+                {
+                    en: "Provide a clearer image and symptom details for better analysis.",
+                    te: "మెరుగైన విశ్లేషణ కోసం స్పష్టమైన చిత్రం మరియు లక్షణాల వివరాలు ఇవ్వండి."
+                }
+            ],
+            medicine: [
+                {
+                    en: "Do not self-medicate based only on image output.",
+                    te: "కేవలం చిత్రం ఫలితాల ఆధారంగా స్వయంగా మందులు తీసుకోకండి."
+                }
+            ],
+            lab_tests: [
+                {
+                    en: "Physical examination and lab confirmation are recommended.",
+                    te: "భౌతిక పరీక్ష మరియు ల్యాబ్ నిర్ధారణ సిఫార్సు చేయబడింది."
+                }
+            ],
+            note: typeof rawText === 'string' ? rawText.slice(0, 220) : ''
+        });
+
         let jsonResponse;
         try {
             // High-precision cleanup for common AI markdown artifacts
@@ -305,17 +337,21 @@ app.post('/api/ai/vision', async (req, res) => {
             if (cleaned.includes('```')) {
                 cleaned = cleaned.replace(/```json\n?|```/g, '').trim();
             }
-            jsonResponse = JSON.parse(cleaned);
+            try {
+                jsonResponse = JSON.parse(cleaned);
+            } catch {
+                // Try extracting first JSON object when model adds extra prose/refusal text.
+                const firstBrace = cleaned.indexOf('{');
+                const lastBrace = cleaned.lastIndexOf('}');
+                if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+                    jsonResponse = JSON.parse(cleaned.slice(firstBrace, lastBrace + 1));
+                } else {
+                    throw new Error('No JSON object found in model response');
+                }
+            }
         } catch (e) {
             console.error("JSON Parse Error in Vision AI:", jsonContent);
-            // Fallback for non-compliant JSON
-            jsonResponse = {
-                condition: { en: "Clinical Image Analysis Incomplete", te: "క్లినికల్ ఇమేజ్ విశ్లేషణ పూర్తి కాలేదు" },
-                precautions: { en: ["Please consult a doctor for official diagnosis"], te: ["దయచేసి అధికారిక వైద్యుడిని సంప్రదించండి"] },
-                requirements: { en: ["Digital report pending"], te: ["డిజిటల్ నివేదిక పెండింగ్‌లో ఉంది"] },
-                medicine: { en: ["Self-medication not advised"], te: ["స్వీయ వైద్యం సలహా ఇవ్వబడదు"] },
-                lab_tests: { en: ["Physical examination recommended"], te: ["భౌతిక పరీక్ష సిఫార్సు చేయబడింది"] }
-            };
+            jsonResponse = buildVisionFallback(jsonContent);
         }
 
         res.json({ success: true, analysis: jsonResponse });
