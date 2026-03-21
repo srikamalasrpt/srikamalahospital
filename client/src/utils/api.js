@@ -32,6 +32,7 @@ export const fetchMedicinesCatalog = () => api.get('/medicines/catalog');
 
 export const analyzeSymptoms = (symptoms) => api.post('/ai/symptom', { symptoms });
 export const analyzeVisionImage = (image, symptoms) => api.post('/ai/vision', { image, symptoms });
+export const analyzeOCR = (image) => api.post('/ai/ocr', { image });
 export const chatWithAI = (query) => api.post('/ai/chat', { query });
 export const discoverMedicines = (keyword) => api.post('/ai/medicine-discovery', { keyword });
 export const savePatientClinicalNote = (data) => api.post('/admin/patient-clinical-note', data);

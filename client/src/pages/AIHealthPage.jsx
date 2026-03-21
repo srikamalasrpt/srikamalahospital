@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, Activity, FileText, Utensils, Search, ArrowRight, Microscope, Brain, ShieldBug, Heart, Plus } from 'lucide-react';
+import { Sparkles, Activity, FileText, Utensils, Search, ArrowRight, Microscope, Brain, ShieldCheck, Heart, Plus } from 'lucide-react';
 import AISymptomChecker from '../components/AISymptomChecker';
+import { chatWithAI, analyzeVisionImage, analyzeOCR } from '../utils/api';
 
 const AIHealthPage = () => {
     const [activeTab, setActiveTab] = useState('clinical');
@@ -26,8 +27,7 @@ const AIHealthPage = () => {
         const reader = new FileReader();
         reader.onloadend = async () => {
             try {
-                const { axios } = await import('axios');
-                const resp = await axios.post('/api/ai/ocr', { image: reader.result });
+                const resp = await analyzeOCR(reader.result);
                 setOcrResult(resp.data.data);
             } catch (err) {
                 console.error(err);
@@ -42,13 +42,11 @@ const AIHealthPage = () => {
         if (!dietInput) return;
         setIsDietLoading(true);
         try {
-            const { chatWithAI } = await import('../utils/api');
-            const prompt = `Generate a clinical diet plan for: ${dietInput}. Include Breakfast, Lunch, Dinner, and clinical precautions. Format as professional points.
+            const resp = await chatWithAI(`Generate a clinical diet plan for: ${dietInput}. Include Breakfast, Lunch, Dinner, and clinical precautions. Format as professional points.
 CRITICAL RULE: You MUST format your precise response as: 
 [Telugu Translation of diet plan]
 |||
-[English Translation of diet plan]`;
-            const resp = await chatWithAI(prompt);
+[English Translation of diet plan]`);
             setDietPlan(resp.data.response);
         } catch (err) {
             console.error(err);
@@ -61,13 +59,11 @@ CRITICAL RULE: You MUST format your precise response as:
         if (!drugsInput) return;
         setIsDrugsLoading(true);
         try {
-            const { chatWithAI } = await import('../utils/api');
-            const prompt = `Medical Analysis: Evaluate the drug interactions for: [${drugsInput}]. Detail major side effects, contraindications, and safety profile in 3 bullet points.
+            const resp = await chatWithAI(`Medical Analysis: Evaluate the drug interactions for: [${drugsInput}]. Detail major side effects, contraindications, and safety profile in 3 bullet points.
 CRITICAL RULE: You MUST format your precise response as: 
 [Telugu Translation]
 |||
-[English Translation]`;
-            const resp = await chatWithAI(prompt);
+[English Translation]`);
             setDrugsResult(resp.data.response);
         } catch (err) {
             console.error(err);
@@ -103,7 +99,7 @@ CRITICAL RULE: You MUST format your precise response as:
         { id: 'clinical', icon: <Brain size={20} />, label: 'Clinical Triage', en: 'Vision & Symptoms' },
         { id: 'ocr', icon: <FileText size={20} />, label: 'Report Scanner', en: 'AI OCR Extraction' },
         { id: 'wellness', icon: <Utensils size={20} />, label: 'Wellness AI', en: 'Diet & Nutrition' },
-        { id: 'drugs', icon: <ShieldBug size={20} />, label: 'Medicine AI', en: 'Drug Interactions' },
+        { id: 'drugs', icon: <ShieldCheck size={20} />, label: 'Medicine AI', en: 'Drug Interactions' },
         { id: 'derma', icon: <Search size={20} />, label: 'Dermatology', en: 'Skin AI Scan' }
     ];
 
@@ -229,7 +225,7 @@ CRITICAL RULE: You MUST format your precise response as:
                                 </div>
                             </div>
                             <div className="lg:col-span-2 bg-hospital-dark rounded-[50px] shadow-4xl p-12 text-white relative overflow-hidden h-[35rem] flex flex-col">
-                                <div className="absolute top-0 right-0 p-12 text-white/5 pointer-events-none -mr-20 -mt-20"><ShieldBug size={400} /></div>
+                                <div className="absolute top-0 right-0 p-12 text-white/5 pointer-events-none -mr-20 -mt-20"><ShieldCheck size={400} /></div>
                                 <div className="flex items-center justify-between mb-12 relative z-10">
                                     <div>
                                         <h4 className="text-xl font-black">AI Nutritionist Response</h4>
