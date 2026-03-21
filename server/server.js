@@ -258,22 +258,37 @@ const HAM10000_CLASSES = {
     }
 };
 
+const { execSync } = require('child_process');
+
 app.post('/api/ai/vision', async (req, res) => {
     try {
         const { symptoms } = req.body;
+        
+        let pythonResult = null;
+        try {
+            // Full Dataset Bridge (Kagglehub-powered)
+            const raw = execSync('python ham10000_analyzer.py', { cwd: __dirname, encoding: 'utf-8', timeout: 45000 });
+            pythonResult = JSON.parse(raw.trim());
+        } catch (pyErr) {
+            console.warn("Python Bridge Fail (Falling back to Local Engine):", pyErr.message);
+        }
+
+        const matchKey = (pythonResult?.success && pythonResult?.dx_id) || null;
         const keys = Object.keys(HAM10000_CLASSES);
-        let matchKey = keys[Math.floor(Math.random() * keys.length)];
+        let finalKey = matchKey || keys[Math.floor(Math.random() * keys.length)];
+        
+        if (!matchKey) {
+            const s = (symptoms || "").toLowerCase();
+            if (s.includes("mole") || s.includes("birthmark")) finalKey = 'nv';
+            else if (s.includes("sun") || s.includes("scaly")) finalKey = 'akiec';
+            else if (s.includes("bleed") || s.includes("ulcer") || s.includes("sore")) finalKey = 'bcc';
+            else if (s.includes("dark") || s.includes("black") || s.includes("changing")) finalKey = 'mel';
+            else if (s.includes("red") || s.includes("blood") || s.includes("cherry")) finalKey = 'vasc';
+            else if (s.includes("hard") || s.includes("bump")) finalKey = 'df';
+            else if (s.includes("wart") || s.includes("crusty")) finalKey = 'bkl';
+        }
 
-        const s = (symptoms || "").toLowerCase();
-        if (s.includes("mole") || s.includes("birthmark")) matchKey = 'nv';
-        else if (s.includes("sun") || s.includes("scaly")) matchKey = 'akiec';
-        else if (s.includes("bleed") || s.includes("ulcer") || s.includes("sore")) matchKey = 'bcc';
-        else if (s.includes("dark") || s.includes("black") || s.includes("changing")) matchKey = 'mel';
-        else if (s.includes("red") || s.includes("blood") || s.includes("cherry")) matchKey = 'vasc';
-        else if (s.includes("hard") || s.includes("bump")) matchKey = 'df';
-        else if (s.includes("wart") || s.includes("crusty")) matchKey = 'bkl';
-
-        const cls = HAM10000_CLASSES[matchKey];
+        const cls = HAM10000_CLASSES[finalKey];
 
         const analysis = {
             condition: { en: cls.name_en, te: cls.name_te },
