@@ -7,10 +7,11 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const helmet = require('helmet');
 const morgan = require('morgan');
-require("dotenv").config();
+const path = require('path');
+require("dotenv").config({ path: path.join(__dirname, '.env') });
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 10000;
 
 // Initialize Supabase
 const supabaseUrl = process.env.SUPABASE_URL;
@@ -19,33 +20,17 @@ const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 let supabase = null;
 if (supabaseUrl && supabaseKey && !supabaseUrl.includes('YOUR_')) {
     supabase = createClient(supabaseUrl, supabaseKey);
-} else {
-    console.warn('⚠️ Supabase credentials missing or invalid in .env. Some features will be limited.');
 }
 
-// Add your Vercel frontend URL(s) here after deploying
-const VERCEL_URL = process.env.VERCEL_FRONTEND_URL || '';
-
-const allowedOrigins = new Set([
-    'https://srikamalahospital.store',
-    'https://www.srikamalahospital.store',
-    'http://localhost:5173',
-    'http://localhost:5174',
-    'http://localhost:5175',
-    'http://127.0.0.1:5173',
-    'http://127.0.0.1:5174',
-    'http://127.0.0.1:5175',
-    // Dynamically loaded from Render env var – set this after Vercel deployment
-    ...(VERCEL_URL ? [VERCEL_URL] : []),
-]);
-
+// SIMPLIFIED CORS for robust deployment
 app.use(cors({
-    origin: (origin, callback) => {
-        if (!origin || allowedOrigins.has(origin)) return callback(null, true);
-        return callback(new Error('Not allowed by CORS'));
-    },
+    origin: true, 
     credentials: true
 }));
+
+// Health Checks
+app.get('/health', (req, res) => res.status(200).send('OK'));
+app.get('/', (req, res) => res.status(200).send('Server is Up!'));
 
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(morgan('combined'));
