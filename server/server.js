@@ -408,11 +408,22 @@ app.post('/api/ai/ocr', async (req, res) => {
                         messages: [{
                             role: "user",
                             content: [
-                                { type: "text", text: "Extract clinical text as JSON: { \"patient\": \"...\", \"medicines\": [\"...\"], \"diagnosis\": \"...\", \"date\": \"...\" }" },
+                                { type: "text", text: `Extract clinical text as JSON with the following schema: 
+                                { 
+                                  "patient": "Patient Name", 
+                                  "date": "Detection Date", 
+                                  "medicines": ["list of medicines if any"], 
+                                  "test_results": [
+                                    { "item_en": "Test Name", "item_te": "Telugu Name", "value": "Result", "range": "Normal Range", "status": "Normal/Abnormal" }
+                                  ],
+                                  "explanation_te": "Detailed Telugu medical summary and advice for the patient",
+                                  "explanation_en": "Detailed English medical summary and advice"
+                                } 
+                                ONLY output valid JSON. Use Telugu for names and explanations where specified.` },
                                 { type: "image_url", image_url: { url: image } }
                             ]
                         }],
-                        max_tokens: 1024,
+                        max_tokens: 2048,
                         temperature: 0.1
                     }, {
                         headers: { "Authorization": `Bearer ${currentKey}`, "Content-Type": "application/json" },

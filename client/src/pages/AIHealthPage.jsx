@@ -176,25 +176,59 @@ CRITICAL RULE: You MUST format your precise response as:
                                         <h4 className="text-[10px] font-black uppercase tracking-widest text-hospital-primary mb-4">Extracted Insights</h4>
                                         {ocrResult ? (
                                             <div className="space-y-6">
-                                                <div className="grid grid-cols-2 gap-4">
+                                                <div className="grid grid-cols-2 gap-4 pb-4 border-b border-white/10">
                                                     <div>
-                                                        <p className="text-[8px] uppercase tracking-widest text-white/40 mb-1">Patient</p>
+                                                        <p className="text-[8px] uppercase tracking-widest text-white/40 mb-1">పేషెంట్ (PATIENT)</p>
                                                         <p className="text-sm font-black text-white">{ocrResult.patient || 'Generic'}</p>
                                                     </div>
                                                     <div>
-                                                        <p className="text-[8px] uppercase tracking-widest text-white/40 mb-1">Date</p>
+                                                        <p className="text-[8px] uppercase tracking-widest text-white/40 mb-1">తేదీ (DATE)</p>
                                                         <p className="text-sm font-black text-white">{ocrResult.date || 'Today'}</p>
                                                     </div>
                                                 </div>
-                                                <div>
-                                                    <p className="text-[8px] uppercase tracking-widest text-white/40 mb-1">Detected Medicines</p>
-                                                    <div className="flex flex-wrap gap-2 mt-2">
-                                                        {ocrResult.medicines?.map((m, i) => <span key={i} className="px-3 py-1 bg-white/10 rounded-lg text-[10px] font-bold">{m}</span>)}
+                                                
+                                                {/* Test Results Table */}
+                                                {ocrResult.test_results && ocrResult.test_results.length > 0 && (
+                                                    <div className="overflow-x-auto">
+                                                        <table className="w-full text-left text-[10px]">
+                                                            <thead>
+                                                                <tr className="border-b border-white/5 text-white/40 uppercase tracking-widest">
+                                                                    <th className="py-2">పరీక్ష (TEST)</th>
+                                                                    <th className="py-2">ఫలితం (VALUE)</th>
+                                                                    <th className="py-2">సాధారణ పరిధి (RANGE)</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody className="text-white/80">
+                                                                {ocrResult.test_results.slice(0, 8).map((t, idx) => (
+                                                                    <tr key={idx} className="border-b border-white/5 last:border-0">
+                                                                        <td className="py-3 pr-2">
+                                                                            <p className="font-['Noto_Sans_Telugu'] font-bold text-hospital-secondary leading-none mb-0.5">{t.item_te || t.item_en}</p>
+                                                                            <p className="opacity-40 text-[7px] uppercase tracking-tight">{t.item_en}</p>
+                                                                        </td>
+                                                                        <td className="py-3 font-black text-white">{t.value}</td>
+                                                                        <td className="py-3 opacity-50">{t.range}</td>
+                                                                    </tr>
+                                                                ))}
+                                                            </tbody>
+                                                        </table>
                                                     </div>
-                                                </div>
-                                                <div className="pt-4 border-t border-white/10">
-                                                    <p className="text-[8px] uppercase tracking-widest text-white/40 mb-1">Clinical Finding</p>
-                                                    <p className="text-xs font-medium leading-relaxed italic text-hospital-secondary">{ocrResult.diagnosis || ocrResult.raw_extraction}</p>
+                                                )}
+
+                                                <div className="pt-4 border-t border-white/10 space-y-4">
+                                                    <div>
+                                                        <p className="text-[8px] uppercase tracking-widest text-white/40 mb-2">వైద్య వివరణ (MEDICAL EXPLANATION)</p>
+                                                        <p className="text-sm font-['Noto_Sans_Telugu'] font-medium leading-relaxed text-white/90">{ocrResult.explanation_te || ocrResult.diagnosis || ocrResult.raw_extraction}</p>
+                                                        <p className="text-[10px] font-black uppercase tracking-widest text-hospital-secondary opacity-80 mt-2">{ocrResult.explanation_en}</p>
+                                                    </div>
+                                                    
+                                                    {ocrResult.medicines && ocrResult.medicines.length > 0 && (
+                                                        <div>
+                                                            <p className="text-[8px] uppercase tracking-widest text-white/40 mb-2">గుర్తించిన మందులు (DETECTED MEDICINES)</p>
+                                                            <div className="flex flex-wrap gap-2">
+                                                                {ocrResult.medicines.map((m, i) => <span key={i} className="px-3 py-1 bg-white/10 rounded-lg text-[10px] font-bold text-hospital-secondary">{m}</span>)}
+                                                            </div>
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </div>
                                         ) : (
