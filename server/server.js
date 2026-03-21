@@ -215,8 +215,8 @@ app.post('/api/ai/symptom', async (req, res) => {
             message: "AI upstream service temporarily unavailable.",
             analysis: {
                 advice: {
-                    en: "AI service is temporarily unavailable. Please try again later or contact +91 91544 04051.",
-                    te: "AI సేవ తాత్కాలికంగా అందుబాటులో లేదు. దయచేసి తర్వాత మళ్లీ ప్రయత్నించండి లేదా +91 91544 04051 కు కాల్ చేయండి."
+                    en: "AI service is temporarily unavailable. Please try again later or contact +91 99480 76665.",
+                    te: "AI సేవ తాత్కాలికంగా అందుబాటులో లేదు. దయచేసి తర్వాత మళ్లీ ప్రయత్నించండి లేదా +91 99480 76665 కు కాల్ చేయండి."
                 },
                 department: { en: "Support", te: "మద్దతు" }
             }
@@ -240,39 +240,91 @@ app.post('/api/ai/vision', async (req, res) => {
             "Content-Type": "application/json"
         };
 
-        const payload = {
-            "model": "meta/llama-3.2-90b-vision-instruct",
-            "messages": [{
-                "role": "user",
-                "content": [
-                    { "type": "text", "text": `Analyze the clinical image. Patient symptoms: ${symptoms || 'None'}. Output purely JSON containing: 'condition' (suspected condition names), 'precautions' (array), 'requirements' (array), 'medicine' (array for OTC info but emphasize doctor), and 'lab_tests' (array). Provide all fields in bilingual format (English and Telugu) inside an object, e.g., "condition": { "en": "...", "te": "..." }. No markdown.` },
-                    { "type": "image_url", "image_url": { "url": image } }
-                ]
-            }],
-            "max_tokens": 512,
-            "temperature": 1.00,
-            "top_p": 1.00,
-            "frequency_penalty": 0.00,
-            "presence_penalty": 0.00,
-            "stream": false
-        };
+        const visionModelCandidates = [
+            process.env.NVIDIA_VISION_MODEL,
+            "meta/llama-3.2-90b-vision-instruct",
+            "nvidia/llama-3.1-405b-instruct"
+        ].filter(Boolean);
 
-        const response = await axios.post(invokeUrl, payload, { headers });
-        const jsonContent = response.data.choices[0].message.content;
+        let response = null;
+        let lastError = null;
+
+        for (const modelName of visionModelCandidates) {
+            try {
+                const payload = {
+                    "model": modelName,
+                    "messages": [{
+                        "role": "user",
+                        "content": [
+                            { 
+                              "type": "text", 
+                              "text": `You are a clinical diagnostic expert. Analyze this medical image. 
+                              Patient context: ${symptoms || 'Visual only analysis'}. 
+                              Output ONLY a JSON object (strictly no markdown) with these keys: 
+                              'condition' (Primary diagnosis/issue detected), 
+                              'precautions' (At least 3 specific safety precautions), 
+                              'medicine' (Suggested OTC first-aid/small medicines, but add a medical warning), 
+                              'lab_tests' (Recommended blood or diagnostic tests). 
+                              CRITICAL: Every value MUST be an object { "en": "English text", "te": "Telugu text" }. 
+                              The 'precautions', 'medicine', and 'lab_tests' values should be ARRAYS of these objects.` 
+                            },
+                            { 
+                              "type": "image_url", 
+                              "image_url": { "url": image } 
+                            }
+                        ]
+                    }],
+                    "max_tokens": 1024,
+                    "temperature": 0.1, // Near-zero for strict structure adherence
+                    "top_p": 0.7
+                };
+
+                response = await axios.post(invokeUrl, payload, { headers, timeout: 90000 });
+                if (response.status === 200) break;
+            } catch (err) {
+                lastError = err;
+                console.warn(`Vision model ${modelName} failed:`, err.message);
+                if (err.response?.status === 404 || err.response?.status === 429) continue;
+                throw err;
+            }
+        }
+
+        if (!response) throw lastError || new Error("No available Vision AI models responded.");
+        const jsonContent = response.data?.choices?.[0]?.message?.content;
+        
+        if (!jsonContent) throw new Error("Empty response from Vision AI.");
 
         let jsonResponse;
         try {
-            jsonResponse = JSON.parse(jsonContent);
-        } catch (e) {
-            // Cleanup markdown if AI ignores instructions
-            const cleaned = jsonContent.replace(/```json/g, '').replace(/```/g, '');
+            // High-precision cleanup for common AI markdown artifacts
+            let cleaned = jsonContent.trim();
+            if (cleaned.includes('```')) {
+                cleaned = cleaned.replace(/```json\n?|```/g, '').trim();
+            }
             jsonResponse = JSON.parse(cleaned);
+        } catch (e) {
+            console.error("JSON Parse Error in Vision AI:", jsonContent);
+            // Fallback for non-compliant JSON
+            jsonResponse = {
+                condition: { en: "Clinical Image Analysis Incomplete", te: "క్లినికల్ ఇమేజ్ విశ్లేషణ పూర్తి కాలేదు" },
+                precautions: { en: ["Please consult a doctor for official diagnosis"], te: ["దయచేసి అధికారిక వైద్యుడిని సంప్రదించండి"] },
+                requirements: { en: ["Digital report pending"], te: ["డిజిటల్ నివేదిక పెండింగ్‌లో ఉంది"] },
+                medicine: { en: ["Self-medication not advised"], te: ["స్వీయ వైద్యం సలహా ఇవ్వబడదు"] },
+                lab_tests: { en: ["Physical examination recommended"], te: ["భౌతిక పరీక్ష సిఫార్సు చేయబడింది"] }
+            };
         }
 
         res.json({ success: true, analysis: jsonResponse });
     } catch (err) {
-        console.error("AI Vision Python-Migrated Error:", err.response?.data || err.message);
-        res.status(500).json({ success: false, message: "Failed to analyze clinical image via custom Vision API." });
+        const errorDetail = err.response?.data || err.message;
+        console.error("AI Vision Python-Migrated Error:", JSON.stringify(errorDetail));
+        
+        // Return a more descriptive error if possible for debugging (key issues, quota, etc)
+        res.status(500).json({ 
+            success: false, 
+            message: "Failed to analyze clinical image.",
+            error_reason: JSON.stringify(errorDetail).includes('quota') ? 'API Quota Exhausted' : 'Check NVIDIA_VISION_API_KEY value'
+        });
     }
 });
 
@@ -299,7 +351,7 @@ app.post('/api/ai/chat', async (req, res) => {
         res.json({ success: true, response: completion.choices[0].message.content });
     } catch (err) {
         console.error("AI Chat Error:", err);
-        res.status(500).json({ success: false, message: "Clinical AI is currently resting." });
+        res.status(500).json({ success: false, message: "Clinical AI is currently resting. For urgent queries call +91 99480 76665." });
     }
 });
 

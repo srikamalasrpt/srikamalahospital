@@ -47,7 +47,7 @@ const AISymptomChecker = () => {
         } catch (err) {
             console.error("AI Error:", err);
             setResult({
-                advice: { en: "Cannot connect to clinical AI network. Call +91 91544 04051 for queries.", te: "క్లినికల్ AI నెట్‌వర్క్‌కి కనెక్ట్ కాలేదు. సందేహాల కోసం +91 91544 04051 కి కాల్ చేయండి." },
+                advice: { en: "Cannot connect to clinical AI network. Call +91 99480 76665 for queries.", te: "క్లినికల్ AI నెట్‌వర్క్‌కి కనెక్ట్ కాలేదు. సందేహాల కోసం +91 99480 76665 కి కాల్ చేయండి." },
                 department: { en: "Support", te: "మద్దతు" }
             });
         } finally {
