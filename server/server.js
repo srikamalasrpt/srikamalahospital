@@ -107,7 +107,19 @@ const openai = new OpenAI({
 app.post('/api/ai/symptom', async (req, res) => {
     try {
         const { symptoms } = req.body;
-        if (!process.env.NVIDIA_API_KEY) return res.status(400).json({ success: false, message: "NVIDIA API Key not configured." });
+        if (!process.env.NVIDIA_API_KEY) {
+            return res.json({
+                success: false,
+                message: "NVIDIA API Key not configured.",
+                analysis: {
+                    advice: {
+                        en: "AI service is temporarily unavailable. Please try again later or contact hospital support.",
+                        te: "AI సేవ తాత్కాలికంగా అందుబాటులో లేదు. దయచేసి తర్వాత మళ్లీ ప్రయత్నించండి లేదా ఆసుపత్రి సపోర్ట్‌ను సంప్రదించండి."
+                    },
+                    department: { en: "General", te: "జనరల్" }
+                }
+            });
+        }
 
         const completion = await openai.chat.completions.create({
             model: "nvidia/llama-3.1-nemotron-70b-instruct",
@@ -123,11 +135,41 @@ app.post('/api/ai/symptom', async (req, res) => {
             max_tokens: 1024,
         });
 
-        const jsonResponse = JSON.parse(completion.choices[0].message.content);
+        const modelText = completion?.choices?.[0]?.message?.content || '';
+        let jsonResponse = null;
+        try {
+            jsonResponse = JSON.parse(modelText);
+        } catch (e) {
+            const cleaned = modelText.replace(/```json/g, '').replace(/```/g, '').trim();
+            try {
+                jsonResponse = JSON.parse(cleaned);
+            } catch {
+                jsonResponse = {
+                    advice: {
+                        en: typeof modelText === 'string' && modelText.trim()
+                            ? modelText
+                            : "Unable to generate AI summary at the moment.",
+                        te: "ప్రస్తుతం AI సారాంశాన్ని రూపొందించలేకపోయాము."
+                    },
+                    department: { en: "General", te: "జనరల్" }
+                };
+            }
+        }
+
         res.json({ success: true, analysis: jsonResponse });
     } catch (err) {
-        console.error("AI Symptom Error:", err);
-        res.status(500).json({ success: false, message: "Failed to analyze symptoms." });
+        console.error("AI Symptom Error:", err.response?.data || err.message);
+        res.json({
+            success: false,
+            message: "AI upstream service temporarily unavailable.",
+            analysis: {
+                advice: {
+                    en: "AI service is temporarily unavailable. Please try again later or contact +91 91544 04051.",
+                    te: "AI సేవ తాత్కాలికంగా అందుబాటులో లేదు. దయచేసి తర్వాత మళ్లీ ప్రయత్నించండి లేదా +91 91544 04051 కు కాల్ చేయండి."
+                },
+                department: { en: "Support", te: "మద్దతు" }
+            }
+        });
     }
 });
 
