@@ -4,7 +4,7 @@ import {
     Sparkles, Activity, FileText, Utensils, Search, Brain,
     ShieldCheck, Heart, Plus, Zap, Eye, Pill, Scan, Upload,
     CheckCircle, AlertTriangle, TrendingUp, Clock, Star,
-    ChevronRight, Cpu, Microscope, Stethoscope, Dna
+    ChevronRight, Cpu, Microscope, Stethoscope, Dna, ArrowRight
 } from 'lucide-react';
 import AISymptomChecker from '../components/AISymptomChecker';
 import { chatWithAI, analyzeVisionImage, analyzeOCR } from '../utils/api';
@@ -98,444 +98,392 @@ CRITICAL RULE: You MUST format your precise response as:
     };
 
     const tabs = [
-        { id: 'clinical', icon: Stethoscope, label: 'Clinical Triage', sub: 'Symptom AI', color: '#6366f1' },
-        { id: 'ocr', icon: Scan, label: 'Report Scanner', sub: 'AI OCR', color: '#06b6d4' },
-        { id: 'wellness', icon: Utensils, label: 'Wellness AI', sub: 'Diet Plan', color: '#10b981' },
-        { id: 'drugs', icon: Pill, label: 'Medicine AI', sub: 'Drug Check', color: '#f59e0b' },
-        { id: 'derma', icon: Eye, label: 'Dermatology', sub: 'Skin AI', color: '#ec4899' },
-    ];
-
-    const stats = [
-        { icon: Cpu, value: '10K+', label: 'Images Trained', color: '#6366f1' },
-        { icon: TrendingUp, value: '84%', label: 'AI Accuracy', color: '#10b981' },
-        { icon: Clock, value: '<2s', label: 'Response Time', color: '#06b6d4' },
-        { icon: Star, value: '7', label: 'Conditions', color: '#f59e0b' },
+        { id: 'clinical', icon: Stethoscope, label: 'Clinical Triage', color: '#10b981' },
+        { id: 'ocr', icon: Scan, label: 'Report Scanner', color: '#3b82f6' },
+        { id: 'wellness', icon: Utensils, label: 'Wellness AI', color: '#10b981' },
+        { id: 'drugs', icon: Pill, label: 'Medicine AI', color: '#3b82f6' },
+        { id: 'derma', icon: Eye, label: 'Dermatology', color: '#10b981' },
     ];
 
     const riskColors = { High: '#ef4444', Medium: '#f59e0b', Low: '#10b981' };
 
     return (
-        <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%)', paddingTop: '5rem', paddingBottom: '4rem', overflow: 'hidden', position: 'relative' }}>
+        <div className="min-h-screen bg-[#fcfdfe] pt-32 pb-24 px-6 relative overflow-hidden">
+            
+            {/* Elegant Background Elements */}
+            <div className="absolute top-0 right-0 w-[50%] h-[500px] bg-gradient-to-bl from-hospital-primary/5 via-transparent to-transparent pointer-events-none rounded-full blur-3xl opacity-50"></div>
+            <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-hospital-secondary/5 rounded-full blur-3xl pointer-events-none"></div>
 
-            {/* Animated BG Orbs */}
-            <div style={{ position: 'absolute', top: '10%', left: '5%', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%)', pointerEvents: 'none', animation: 'pulse 4s ease-in-out infinite' }} />
-            <div style={{ position: 'absolute', bottom: '10%', right: '5%', width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(236,72,153,0.1) 0%, transparent 70%)', pointerEvents: 'none', animation: 'pulse 6s ease-in-out infinite' }} />
-            <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 800, height: 800, borderRadius: '50%', background: 'radial-gradient(circle, rgba(6,182,212,0.05) 0%, transparent 70%)', pointerEvents: 'none' }} />
-
-            <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 1.5rem', position: 'relative', zIndex: 1 }}>
-
-                {/* Header */}
-                <motion.div initial={{ y: -30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} style={{ textAlign: 'center', marginBottom: '3rem' }}>
-                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(99,102,241,0.15)', border: '1px solid rgba(99,102,241,0.3)', borderRadius: 100, padding: '8px 20px', marginBottom: '1.5rem', backdropFilter: 'blur(10px)' }}>
-                        <Sparkles size={14} color="#6366f1" />
-                        <span style={{ color: '#6366f1', fontSize: 10, fontWeight: 900, letterSpacing: '0.4em', textTransform: 'uppercase' }}>Multimodal Clinical AI v3.2</span>
-                        <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#10b981', animation: 'pulse 2s infinite' }} />
-                    </div>
-
-                    <h1 style={{ fontSize: 'clamp(2.5rem, 6vw, 5rem)', fontWeight: 900, lineHeight: 1, marginBottom: '1rem', background: 'linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.7) 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                        AI <span style={{ background: 'linear-gradient(135deg, #6366f1, #ec4899)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>ఆరోగ్య</span> కేంద్రం
-                    </h1>
-                    <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11, fontWeight: 700, letterSpacing: '0.4em', textTransform: 'uppercase' }}>Sri Kamala Hospitals · Central AI Command Dashboard</p>
-                </motion.div>
-
-                {/* Stats Bar */}
-                <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.1 }} style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginBottom: '2.5rem' }}>
-                    {stats.map((s, i) => (
-                        <div key={i} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 20, padding: '1.25rem', backdropFilter: 'blur(10px)', textAlign: 'center' }}>
-                            <s.icon size={20} color={s.color} style={{ marginBottom: 8 }} />
-                            <div style={{ fontSize: 24, fontWeight: 900, color: '#fff', lineHeight: 1 }}>{s.value}</div>
-                            <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: 4 }}>{s.label}</div>
+            <div className="container mx-auto max-w-7xl relative z-10">
+                
+                {/* Header with Round AI Banner */}
+                <div className="flex flex-col items-center text-center mb-16">
+                    <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
+                        className="mb-8 relative">
+                        {/* Round AI Banner badge */}
+                        <div className="w-20 h-20 bg-white rounded-full p-1.5 shadow-xl border border-hospital-primary/20 flex items-center justify-center relative overflow-hidden group">
+                            <div className="absolute inset-0 bg-hospital-primary/5 group-hover:bg-hospital-primary/10 transition-colors"></div>
+                            <div className="relative z-10 text-hospital-primary flex flex-col items-center">
+                                <span className="text-[10px] font-black tracking-widest leading-none">AI</span>
+                                <Sparkles size={20} className="mt-1 animate-pulse" />
+                            </div>
+                            {/* Rotating Ring */}
+                            <div className="absolute inset-0 border-2 border-dashed border-hospital-primary/20 rounded-full animate-[spin_10s_linear_infinite]"></div>
                         </div>
-                    ))}
-                </motion.div>
+                    </motion.div>
 
-                {/* Tabs */}
-                <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.15 }} style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: '2.5rem', justifyContent: 'center' }}>
+                    <h1 className="text-4xl lg:text-6xl font-black text-hospital-dark mb-4 leading-tight">
+                        Intelligent <span className="text-hospital-primary italic">Health</span> Command
+                    </h1>
+                    <p className="text-sm font-bold text-gray-400 uppercase tracking-[0.3em] max-w-xl">Sri Kamala Hospitals · Professional Clinical AI Services</p>
+                </div>
+
+                {/* Navigation Tabs - Modern Professional */}
+                <div className="flex flex-wrap justify-center gap-3 mb-12">
                     {tabs.map(tab => (
                         <button key={tab.id} onClick={() => setActiveTab(tab.id)}
-                            style={{
-                                padding: '14px 24px', borderRadius: 16, border: `1px solid ${activeTab === tab.id ? tab.color : 'rgba(255,255,255,0.08)'}`,
-                                background: activeTab === tab.id ? `linear-gradient(135deg, ${tab.color}22, ${tab.color}11)` : 'rgba(255,255,255,0.03)',
-                                cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 10, transition: 'all 0.3s',
-                                backdropFilter: 'blur(10px)', transform: activeTab === tab.id ? 'scale(1.03)' : 'scale(1)',
-                                boxShadow: activeTab === tab.id ? `0 0 30px ${tab.color}30` : 'none'
-                            }}>
-                            <tab.icon size={18} color={activeTab === tab.id ? tab.color : 'rgba(255,255,255,0.4)'} />
-                            <div style={{ textAlign: 'left' }}>
-                                <div style={{ color: activeTab === tab.id ? '#fff' : 'rgba(255,255,255,0.5)', fontSize: 13, fontWeight: 800, lineHeight: 1 }}>{tab.label}</div>
-                                <div style={{ color: 'rgba(255,255,255,0.25)', fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.15em', marginTop: 3 }}>{tab.sub}</div>
-                            </div>
+                            className={`px-8 py-5 rounded-[24px] font-bold text-sm transition-all flex items-center gap-3 border ${activeTab === tab.id ? 'bg-white text-hospital-dark border-hospital-primary/20 shadow-xl scale-105' : 'bg-transparent text-gray-400 border-gray-100/50 hover:bg-gray-50'}`}>
+                            <tab.icon size={18} color={activeTab === tab.id ? tab.color : '#94a3b8'} className={activeTab === tab.id ? "animate-pulse" : ""} />
+                            <span className="font-['Outfit']">{tab.label}</span>
                         </button>
                     ))}
-                </motion.div>
+                </div>
 
-                {/* Tab Content */}
-                <AnimatePresence mode="wait">
-
-                    {/* Clinical */}
-                    {activeTab === 'clinical' && (
-                        <motion.div key="clinical" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
-                            <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 32, overflow: 'hidden', backdropFilter: 'blur(20px)' }}>
-                                <div style={{ padding: '1.5rem 2rem', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', gap: 12 }}>
-                                    <div style={{ width: 40, height: 40, borderRadius: 12, background: 'rgba(99,102,241,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                        <Stethoscope size={20} color="#6366f1" />
-                                    </div>
+                {/* Content Area - Clean Hospital Architecture */}
+                <div className="bg-white rounded-[40px] shadow-2xl shadow-hospital-dark/5 border border-gray-50 p-8 lg:p-16 min-h-[600px] overflow-hidden">
+                    <AnimatePresence mode="wait">
+                        
+                        {/* Clinical Symptom Checker */}
+                        {activeTab === 'clinical' && (
+                            <motion.div key="clinical" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="h-full">
+                                <div className="flex items-center gap-4 mb-10 pb-6 border-b border-gray-50">
+                                    <div className="p-3 bg-hospital-primary/10 rounded-2xl text-hospital-primary"><Stethoscope size={28} /></div>
                                     <div>
-                                        <div style={{ color: '#fff', fontWeight: 800, fontSize: 16 }}>Clinical Triage & Symptom Analysis</div>
-                                        <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.15em' }}>AI-Powered Diagnosis Assistant</div>
+                                        <h2 className="text-2xl font-black text-hospital-dark">Clinical Triage Engine</h2>
+                                        <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Autonomous Symptom Parsing v4.0</p>
                                     </div>
                                 </div>
-                                <div style={{ padding: '1.5rem' }}>
-                                    <AISymptomChecker dark />
-                                </div>
-                            </div>
-                        </motion.div>
-                    )}
+                                <AISymptomChecker />
+                            </motion.div>
+                        )}
 
-                    {/* OCR Report Scanner */}
-                    {activeTab === 'ocr' && (
-                        <motion.div key="ocr" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
-                            <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 32, padding: '2.5rem', backdropFilter: 'blur(20px)' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: '2rem' }}>
-                                    <div style={{ width: 48, height: 48, borderRadius: 16, background: 'rgba(6,182,212,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                        <Scan size={24} color="#06b6d4" />
-                                    </div>
-                                    <div>
-                                        <h2 style={{ color: '#fff', fontWeight: 900, fontSize: 24, margin: 0 }}>Medical Report Scanner</h2>
-                                        <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.2em', margin: 0 }}>Digitize Handwriting & Prescriptions via AI OCR</p>
-                                    </div>
-                                </div>
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: 24 }}>
-                                    <label style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 320, border: '2px dashed rgba(6,182,212,0.3)', borderRadius: 24, cursor: 'pointer', background: 'rgba(6,182,212,0.05)', transition: 'all 0.3s', textAlign: 'center', padding: '2rem' }}>
-                                        {isOcrLoading ? (
-                                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
-                                                <div style={{ width: 56, height: 56, borderRadius: '50%', border: '3px solid rgba(6,182,212,0.2)', borderTopColor: '#06b6d4', animation: 'spin 1s linear infinite' }} />
-                                                <p style={{ color: '#06b6d4', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.2em' }}>AI Reading Document...</p>
+                        {/* OCR Scanner */}
+                        {activeTab === 'ocr' && (
+                            <motion.div key="ocr" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                                    <div className="space-y-8">
+                                        <div className="flex items-center gap-4 mb-4">
+                                            <div className="p-3 bg-hospital-secondary/10 rounded-2xl text-hospital-secondary"><Scan size={28} /></div>
+                                            <div>
+                                                <h2 className="text-2xl font-black text-hospital-dark">Report Digitization</h2>
+                                                <p className="text-xs font-bold text-gray-400 uppercase tracking-widest text-[#3b82f6]">Llama 3.2 90B Vision Protocol</p>
                                             </div>
-                                        ) : (
-                                            <>
-                                                <div style={{ width: 72, height: 72, borderRadius: 20, background: 'rgba(6,182,212,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
-                                                    <Upload size={32} color="#06b6d4" />
-                                                </div>
-                                                <p style={{ color: '#fff', fontWeight: 800, fontSize: 16, marginBottom: 8 }}>Upload Medical Report</p>
-                                                <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: 11 }}>JPG, PNG, PDF • Max 10MB</p>
-                                                <div style={{ marginTop: 24, padding: '10px 24px', background: 'rgba(6,182,212,0.15)', borderRadius: 12, color: '#06b6d4', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.15em' }}>
-                                                    Choose File
-                                                </div>
-                                            </>
-                                        )}
-                                        <input type="file" style={{ display: 'none' }} accept="image/*" onChange={handleOCR} />
-                                    </label>
-
-                                    <div style={{ background: 'rgba(0,0,0,0.4)', borderRadius: 24, padding: '1.5rem', border: '1px solid rgba(255,255,255,0.06)', minHeight: 320 }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: '1.25rem' }}>
-                                            <Sparkles size={14} color="#06b6d4" />
-                                            <span style={{ color: '#06b6d4', fontSize: 10, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.2em' }}>AI Extracted Results</span>
                                         </div>
-                                        {ocrResult ? (
-                                            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-                                                    {[
-                                                        { label: 'Patient', value: ocrResult.patient || 'Generic' },
-                                                        { label: 'Date', value: ocrResult.date || 'Today' }
-                                                    ].map((item, i) => (
-                                                        <div key={i} style={{ background: 'rgba(255,255,255,0.05)', borderRadius: 12, padding: '12px' }}>
-                                                            <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: 9, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: 4 }}>{item.label}</p>
-                                                            <p style={{ color: '#fff', fontWeight: 800, fontSize: 14 }}>{item.value}</p>
-                                                        </div>
-                                                    ))}
+                                        
+                                        <label className="block w-full min-h-[400px] border-4 border-dashed border-gray-100 rounded-[32px] hover:border-hospital-secondary/30 transition-all bg-gray-50/50 cursor-pointer p-12 text-center group">
+                                            {isOcrLoading ? (
+                                                <div className="flex flex-col items-center justify-center h-full gap-4">
+                                                    <div className="w-16 h-16 border-4 border-hospital-secondary/20 border-t-hospital-secondary rounded-full animate-spin"></div>
+                                                    <p className="text-sm font-black text-hospital-secondary uppercase tracking-[0.2em]">Digitizing Report...</p>
                                                 </div>
-                                                {ocrResult.test_results?.length > 0 && (
-                                                    <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: 12, overflow: 'hidden' }}>
-                                                        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11 }}>
-                                                            <thead>
-                                                                <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-                                                                    {['Test', 'Value', 'Range'].map(h => (
-                                                                        <th key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'rgba(255,255,255,0.3)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', fontSize: 9 }}>{h}</th>
-                                                                    ))}
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                {ocrResult.test_results.slice(0, 6).map((t, idx) => (
-                                                                    <tr key={idx} style={{ borderBottom: '1px solid rgba(255,255,255,0.03)' }}>
-                                                                        <td style={{ padding: '10px 12px', color: '#06b6d4', fontWeight: 700 }}>{t.item_te || t.item_en}</td>
-                                                                        <td style={{ padding: '10px 12px', color: '#fff', fontWeight: 800 }}>{t.value}</td>
-                                                                        <td style={{ padding: '10px 12px', color: 'rgba(255,255,255,0.4)' }}>{t.range}</td>
-                                                                    </tr>
-                                                                ))}
-                                                            </tbody>
-                                                        </table>
+                                            ) : (
+                                                <div className="flex flex-col items-center justify-center h-full space-y-6">
+                                                    <div className="w-20 h-20 bg-white rounded-3xl shadow-lg flex items-center justify-center text-hospital-secondary group-hover:scale-110 transition-transform"><Upload size={32} /></div>
+                                                    <div>
+                                                        <h4 className="text-xl font-bold text-hospital-dark">Upload Prescription</h4>
+                                                        <p className="text-xs text-gray-400 mt-2">Handwritten notes or Lab results (PNG, JPG, PDF)</p>
+                                                    </div>
+                                                </div>
+                                            )}
+                                            <input type="file" className="hidden" accept="image/*" onChange={handleOCR} />
+                                        </label>
+                                    </div>
+
+                                    <div className="bg-hospital-dark rounded-[32px] p-10 text-white shadow-2xl relative overflow-hidden">
+                                        <div className="absolute top-0 right-0 p-10 opacity-5 pointer-events-none"><FileText size={200} /></div>
+                                        <div className="flex items-center gap-3 mb-8">
+                                            <div className="w-2 h-2 bg-hospital-secondary rounded-full animate-pulse"></div>
+                                            <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-hospital-secondary">Extraction Insights</h4>
+                                        </div>
+
+                                        {ocrResult ? (
+                                            <div className="space-y-8 relative z-10">
+                                                <div className="grid grid-cols-2 gap-4">
+                                                    <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
+                                                        <p className="text-[9px] text-white/40 uppercase tracking-widest mb-1">Patient</p>
+                                                        <p className="text-sm font-bold">{ocrResult.patient || 'Standard'}</p>
+                                                    </div>
+                                                    <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
+                                                        <p className="text-[9px] text-white/40 uppercase tracking-widest mb-1">Clinic Date</p>
+                                                        <p className="text-sm font-bold">{ocrResult.date || 'Today'}</p>
+                                                    </div>
+                                                </div>
+
+                                                <div className="space-y-3">
+                                                    <p className="text-[9px] text-white/40 uppercase tracking-widest">Clinical Explanation</p>
+                                                    <p className="text-sm leading-relaxed text-white/90 font-['Noto_Sans_Telugu']">{ocrResult.explanation_te || ocrResult.diagnosis_en}</p>
+                                                    <p className="text-[11px] text-hospital-secondary font-medium leading-relaxed mt-4 italic">{ocrResult.explanation_en}</p>
+                                                </div>
+
+                                                {ocrResult.medicines?.length > 0 && (
+                                                    <div>
+                                                        <p className="text-[9px] text-white/40 uppercase tracking-widest mb-3">Detected Medications</p>
+                                                        <div className="flex flex-wrap gap-2">
+                                                            {ocrResult.medicines.map((m, i) => <span key={i} className="px-3 py-1.5 bg-hospital-secondary/10 border border-hospital-secondary/20 rounded-lg text-[10px] font-bold text-hospital-secondary">{m}</span>)}
+                                                        </div>
                                                     </div>
                                                 )}
-                                                <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12, lineHeight: 1.7 }}>{ocrResult.explanation_en || ocrResult.diagnosis}</p>
                                             </div>
                                         ) : (
-                                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', opacity: 0.2, gap: 12 }}>
-                                                <FileText size={48} color="#fff" />
-                                                <p style={{ color: '#fff', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.2em' }}>Awaiting Document</p>
+                                            <div className="h-full flex flex-col items-center justify-center opacity-20 py-20">
+                                                <Brain size={64} />
+                                                <p className="text-xs font-black uppercase tracking-[0.3em] mt-6">Awaiting Input Scan</p>
                                             </div>
                                         )}
                                     </div>
                                 </div>
-                            </div>
-                        </motion.div>
-                    )}
+                            </motion.div>
+                        )}
 
-                    {/* Wellness / Diet */}
-                    {activeTab === 'wellness' && (
-                        <motion.div key="wellness" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: 24 }}>
-                                <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(16,185,129,0.2)', borderRadius: 28, padding: '2rem', backdropFilter: 'blur(20px)' }}>
-                                    <div style={{ width: 56, height: 56, borderRadius: 18, background: 'rgba(16,185,129,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
-                                        <Utensils size={26} color="#10b981" />
-                                    </div>
-                                    <h3 style={{ color: '#fff', fontWeight: 900, fontSize: 22, marginBottom: 8 }}>Diet AI Specialist</h3>
-                                    <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12, lineHeight: 1.7, marginBottom: '1.5rem' }}>Enter your condition or health goals to generate a precision medical diet plan.</p>
-
-                                    {['Type 2 Diabetes', 'Hypertension', 'Weight Loss', 'Post-Surgery'].map((tag, i) => (
-                                        <button key={i} onClick={() => setDietInput(tag)}
-                                            style={{ margin: '0 6px 8px 0', padding: '6px 14px', borderRadius: 100, border: '1px solid rgba(16,185,129,0.3)', background: 'rgba(16,185,129,0.08)', color: '#10b981', fontSize: 11, fontWeight: 700, cursor: 'pointer', transition: 'all 0.2s' }}>
-                                            {tag}
-                                        </button>
-                                    ))}
-
-                                    <textarea value={dietInput} onChange={(e) => setDietInput(e.target.value)}
-                                        placeholder="e.g. Type 2 Diabetes, High Blood Pressure..."
-                                        style={{ width: '100%', background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 16, padding: '1rem', minHeight: 120, color: '#fff', fontSize: 13, fontWeight: 600, outline: 'none', resize: 'none', marginTop: '1rem', boxSizing: 'border-box', fontFamily: 'inherit' }} />
-
-                                    <button onClick={generateDietPlan} disabled={isDietLoading}
-                                        style={{ width: '100%', marginTop: '1rem', padding: '14px', borderRadius: 16, border: 'none', background: isDietLoading ? 'rgba(16,185,129,0.3)' : 'linear-gradient(135deg, #10b981, #059669)', color: '#fff', fontWeight: 900, fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.2em', cursor: 'pointer', transition: 'all 0.3s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-                                        {isDietLoading ? <><div style={{ width: 16, height: 16, borderRadius: '50%', border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', animation: 'spin 1s linear infinite' }} /> Generating...</> : <><Zap size={16} /> Generate Plan</>}
-                                    </button>
-                                </div>
-
-                                <div style={{ background: 'rgba(0,0,0,0.5)', borderRadius: 28, padding: '2rem', border: '1px solid rgba(255,255,255,0.06)', backdropFilter: 'blur(20px)', minHeight: 480, display: 'flex', flexDirection: 'column' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: '1.5rem' }}>
-                                        <Heart size={16} color="#10b981" />
-                                        <span style={{ color: '#10b981', fontSize: 10, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.2em' }}>AI Nutritionist Response</span>
-                                    </div>
-                                    <div style={{ flex: 1, overflowY: 'auto' }}>
-                                        {dietPlan ? (
-                                            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-                                                {dietPlan.includes('|||') ? (
-                                                    <>
-                                                        <div style={{ background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.15)', borderRadius: 16, padding: '1.25rem' }}>
-                                                            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 9, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: 10 }}>Telugu</p>
-                                                            <p style={{ color: 'rgba(255,255,255,0.9)', fontSize: 13, lineHeight: 1.8, fontFamily: "'Noto Sans Telugu', sans-serif", whiteSpace: 'pre-wrap' }}>{dietPlan.split('|||')[0].trim()}</p>
-                                                        </div>
-                                                        <div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: 16, padding: '1.25rem' }}>
-                                                            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 9, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: 10 }}>English</p>
-                                                            <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: 12, lineHeight: 1.8, whiteSpace: 'pre-wrap' }}>{dietPlan.split('|||')[1].trim()}</p>
-                                                        </div>
-                                                    </>
-                                                ) : (
-                                                    <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: 13, lineHeight: 1.8, whiteSpace: 'pre-wrap' }}>{dietPlan}</p>
-                                                )}
-                                            </div>
-                                        ) : (
-                                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', opacity: 0.15, gap: 12 }}>
-                                                <Utensils size={64} color="#fff" />
-                                                <p style={{ color: '#fff', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.3em' }}>Awaiting Input</p>
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div style={{ marginTop: '1rem', padding: '12px 16px', background: 'rgba(255,255,255,0.03)', borderRadius: 12, border: '1px solid rgba(255,255,255,0.06)' }}>
-                                        <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: 10 }}>⚕️ This plan is AI-generated. Clinical oversight required before starting new dietary regimens.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </motion.div>
-                    )}
-
-                    {/* Drug Interactions */}
-                    {activeTab === 'drugs' && (
-                        <motion.div key="drugs" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
-                            <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(245,158,11,0.2)', borderRadius: 28, padding: '2.5rem', backdropFilter: 'blur(20px)' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: '2rem' }}>
-                                    <div style={{ width: 52, height: 52, borderRadius: 16, background: 'rgba(245,158,11,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                        <Pill size={24} color="#f59e0b" />
-                                    </div>
-                                    <div>
-                                        <h2 style={{ color: '#fff', fontWeight: 900, fontSize: 22, margin: 0 }}>Drug Interaction Analyzer</h2>
-                                        <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.2em', margin: 0 }}>AI-Powered Drug Safety Intelligence</p>
-                                    </div>
-                                </div>
-
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: 24 }}>
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                                            {['Aspirin', 'Ibuprofen', 'Paracetamol', 'Warfarin', 'Metformin'].map((med, i) => (
-                                                <button key={i} onClick={() => setDrugsInput(p => p ? `${p}, ${med}` : med)}
-                                                    style={{ padding: '6px 14px', borderRadius: 100, border: '1px solid rgba(245,158,11,0.3)', background: 'rgba(245,158,11,0.08)', color: '#f59e0b', fontSize: 11, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}>
-                                                    <Plus size={10} /> {med}
+                        {/* Wellness AI - Modern Clean */}
+                        {activeTab === 'wellness' && (
+                            <motion.div key="wellness" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+                                <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                                    <div className="lg:col-span-1 space-y-8">
+                                        <div className="p-4 bg-hospital-primary/5 rounded-3xl border border-hospital-primary/10 flex items-center gap-4">
+                                            <div className="p-3 bg-white rounded-2xl shadow-sm text-hospital-primary"><Utensils size={24} /></div>
+                                            <h3 className="font-bold text-hospital-dark">Wellness Specialist</h3>
+                                        </div>
+                                        <p className="text-sm text-gray-500 leading-relaxed font-medium">Generate medical-grade nutrition plans tailored to your specific clinical condition.</p>
+                                        
+                                        <div className="space-y-4">
+                                            {['Diabetes Type 2', 'Hypertension', 'High Protein Diet', 'Pregnancy Nutrition'].map(tag => (
+                                                <button key={tag} onClick={() => setDietInput(tag)} className="w-full p-4 text-left text-sm font-bold text-gray-600 bg-gray-50 hover:bg-white hover:shadow-lg hover:border-hospital-primary/30 border border-transparent rounded-2xl transition-all flex items-center justify-between group">
+                                                    {tag} <ArrowRight size={16} className="opacity-0 group-hover:opacity-100 transition-opacity" />
                                                 </button>
                                             ))}
+                                            <textarea value={dietInput} onChange={(e) => setDietInput(e.target.value)} placeholder="Enter details manually..."
+                                                className="w-full bg-gray-50/50 border border-gray-100 rounded-2xl p-6 min-h-[150px] text-sm font-medium outline-none focus:ring-2 ring-hospital-primary/10" />
+                                            <button onClick={generateDietPlan} disabled={isDietLoading}
+                                                className="w-full py-5 bg-hospital-primary text-white rounded-2xl font-black text-xs uppercase tracking-[0.3em] shadow-xl hover:shadow-hospital-primary/20 transition-all flex items-center justify-center gap-3">
+                                                {isDietLoading ? <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"></div> : <><Sparkles size={16}/> Build Clinical Plan</>}
+                                            </button>
                                         </div>
-                                        <textarea value={drugsInput} onChange={(e) => setDrugsInput(e.target.value)}
-                                            placeholder="Enter medicines separated by commas..."
-                                            style={{ background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 16, padding: '1rem', minHeight: 140, color: '#fff', fontSize: 13, fontWeight: 600, outline: 'none', resize: 'none', fontFamily: 'inherit' }} />
-                                        <button onClick={checkDrugInteractions} disabled={isDrugsLoading}
-                                            style={{ padding: '14px', borderRadius: 16, border: 'none', background: isDrugsLoading ? 'rgba(245,158,11,0.3)' : 'linear-gradient(135deg, #f59e0b, #d97706)', color: '#fff', fontWeight: 900, fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.2em', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-                                            {isDrugsLoading ? <><div style={{ width: 16, height: 16, borderRadius: '50%', border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', animation: 'spin 1s linear infinite' }} /> Analyzing...</> : <><ShieldCheck size={16} /> Analyze Safety</>}
-                                        </button>
+                                    </div>
+                                    <div className="lg:col-span-2 bg-gray-50 rounded-[40px] p-10 border border-gray-100 flex flex-col min-h-[500px]">
+                                        <div className="flex items-center justify-between mb-8 pb-4 border-b border-gray-200/50">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-2 h-2 bg-hospital-primary rounded-full"></div>
+                                                <span className="text-[10px] font-black uppercase tracking-widest text-hospital-primary">Scientific Nutrition Response</span>
+                                            </div>
+                                            <Heart size={20} className="text-gray-300" />
+                                        </div>
+                                        <div className="flex-1 overflow-y-auto pr-4 scrollbar-hide">
+                                            {dietPlan ? (
+                                                <div className="space-y-10">
+                                                    {dietPlan.includes('|||') ? (
+                                                        <>
+                                                            <div className="space-y-4">
+                                                                <p className="text-[9px] font-black text-hospital-primary uppercase tracking-[0.2em]">Telugu Clinical Advice</p>
+                                                                <p className="text-lg font-['Noto_Sans_Telugu'] font-bold text-hospital-dark leading-relaxed">{dietPlan.split('|||')[0].trim()}</p>
+                                                            </div>
+                                                            <div className="pt-8 border-t border-gray-200/50">
+                                                                <p className="text-[9px] font-black text-hospital-primary uppercase tracking-[0.2em]">English Medical Plan</p>
+                                                                <p className="text-sm font-medium text-gray-500 leading-relaxed whitespace-pre-wrap mt-2">{dietPlan.split('|||')[1].trim()}</p>
+                                                            </div>
+                                                        </>
+                                                    ) : (
+                                                        <p className="text-lg font-bold text-hospital-dark italic">{dietPlan}</p>
+                                                    )}
+                                                </div>
+                                            ) : (
+                                                <div className="h-full flex flex-col items-center justify-center opacity-10 text-center">
+                                                    <Utensils size={80} />
+                                                    <p className="text-xs font-black uppercase tracking-[0.4em] mt-4">Waiting for health parameters</p>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        )}
+
+                        {/* Skin AI - Modern Diagnostic */}
+                        {activeTab === 'derma' && (
+                            <motion.div key="derma" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                                    <div className="space-y-10">
+                                        <div className="flex items-center gap-4">
+                                            <div className="p-3 bg-hospital-primary/10 rounded-2xl text-hospital-primary"><Eye size={28} /></div>
+                                            <div>
+                                                <h2 className="text-2xl font-black text-hospital-dark">Dermatology Scan</h2>
+                                                <p className="text-xs font-bold text-gray-400 uppercase tracking-widest leading-none">CNN Skin Intelligence v4.2</p>
+                                            </div>
+                                        </div>
+
+                                        <label
+                                            onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+                                            onDragLeave={() => setDragOver(false)}
+                                            onDrop={(e) => { e.preventDefault(); setDragOver(false); analyzeSkin(e.dataTransfer.files[0]); }}
+                                            className={`block w-full min-h-[350px] border-4 border-dashed rounded-[40px] cursor-pointer transition-all relative overflow-hidden flex flex-col items-center justify-center text-center p-8 ${dragOver ? 'border-hospital-primary bg-hospital-primary/5 shadow-2xl' : 'border-gray-100 bg-gray-50 hover:border-hospital-primary/20 hover:bg-white hover:shadow-xl'}`}>
+                                            {isSkinLoading ? (
+                                                <div className="flex flex-col items-center gap-6">
+                                                    <div className="w-16 h-16 border-4 border-hospital-primary/10 border-t-hospital-primary rounded-full animate-spin"></div>
+                                                    <p className="text-sm font-black text-hospital-primary uppercase tracking-[0.2em]">Analyzing lesion pattern...</p>
+                                                </div>
+                                            ) : skinImage ? (
+                                                <div className="relative w-full h-full flex items-center justify-center">
+                                                    <img src={skinImage} className="max-h-[300px] rounded-3xl object-contain shadow-2xl border-4 border-white" alt="skin" />
+                                                    <div className="absolute inset-0 bg-hospital-primary/10 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center">
+                                                        <span className="bg-white px-6 py-2 rounded-full text-[10px] font-black uppercase text-hospital-primary shadow-xl">Update Photo</span>
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <div className="space-y-6 flex flex-col items-center">
+                                                    <div className="w-20 h-20 bg-white rounded-[30px] shadow-lg flex items-center justify-center text-hospital-primary"><Microscope size={36} /></div>
+                                                    <div>
+                                                        <h4 className="text-xl font-bold text-hospital-dark">Drop Skin Photo</h4>
+                                                        <p className="text-xs text-gray-400 mt-2">Visual analysis of rashes, moles, or lesions</p>
+                                                    </div>
+                                                </div>
+                                            )}
+                                            <input type="file" className="hidden" accept="image/*" onChange={(e) => analyzeSkin(e.target.files[0])} />
+                                        </label>
                                     </div>
 
-                                    <div style={{ background: 'rgba(0,0,0,0.4)', borderRadius: 20, padding: '1.5rem', border: '1px solid rgba(255,255,255,0.06)' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: '1.25rem' }}>
-                                            <AlertTriangle size={14} color="#f59e0b" />
-                                            <span style={{ color: '#f59e0b', fontSize: 10, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.2em' }}>Safety Report</span>
+                                    <div className="flex flex-col">
+                                        <div className="bg-hospital-dark rounded-[40px] p-10 text-white min-h-[450px] flex flex-col justify-center relative overflow-hidden group shadow-2xl">
+                                             <div className="absolute top-0 right-0 p-10 opacity-5 group-hover:opacity-10 transition-opacity"><Dna size={300} /></div>
+                                             
+                                             <div className="flex items-center gap-3 mb-10 relative z-10">
+                                                <div className="w-6 h-6 bg-hospital-primary/20 rounded-lg flex items-center justify-center"><Activity size={14} color="#10b981" /></div>
+                                                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-hospital-primary">Diagnostic Risk Assessment</span>
+                                             </div>
+
+                                             {skinResult ? (
+                                                 <div className="space-y-8 relative z-10">
+                                                     <div className="space-y-2">
+                                                         <p className="text-[10px] uppercase tracking-widest text-white/30">Detected Condition</p>
+                                                         <h4 className="text-4xl font-black">{skinResult.condition}</h4>
+                                                         <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest mt-4`} style={{ backgroundColor: `${riskColors[skinResult.risk]}20`, color: riskColors[skinResult.risk] }}>
+                                                             <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: riskColors[skinResult.risk] }}></div>
+                                                             {skinResult.risk} Level Risk Identified
+                                                         </div>
+                                                     </div>
+
+                                                     <div className="space-y-4 bg-white/5 p-6 rounded-3xl border border-white/10">
+                                                        <div className="flex items-center justify-between mb-2">
+                                                            <span className="text-[10px] font-bold text-white/40 uppercase">AI Pattern Confidence</span>
+                                                            <span className="text-sm font-black text-hospital-primary">{skinResult.confidence}%</span>
+                                                        </div>
+                                                        <div className="w-full h-2 bg-white/5 rounded-full overflow-hidden">
+                                                            <motion.div initial={{ width: 0 }} animate={{ width: `${skinResult.confidence}%` }} transition={{ duration: 1.2 }}
+                                                                className="h-full bg-hospital-primary rounded-full shadow-[0_0_10px_#10b981]" />
+                                                        </div>
+                                                     </div>
+
+                                                     <div className="p-5 border-l-4 border-hospital-primary bg-hospital-primary/5 rounded-r-2xl">
+                                                         <p className="text-xs text-white/80 leading-relaxed italic uppercase font-bold tracking-tight">Clinical Note: Results are experimental and part of clinical research AI program. Consult a doctor immediately.</p>
+                                                     </div>
+                                                 </div>
+                                             ) : (
+                                                 <div className="flex flex-col items-center justify-center h-full opacity-10 gap-6">
+                                                     <Eye size={80} />
+                                                     <p className="text-xs font-black uppercase tracking-[0.4em]">Visual pattern parsing engine offline</p>
+                                                 </div>
+                                             )}
+                                        </div>
+                                        
+                                        {/* Emergency Trigger */}
+                                        <div className="mt-6 p-4 bg-red-50 rounded-2xl border border-red-100 flex items-center justify-between">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-sm"><AlertTriangle size={16} className="text-red-500" /></div>
+                                                <p className="text-[10px] font-bold text-red-600 uppercase">Immediate Emergency Concern?</p>
+                                            </div>
+                                            <a href="tel:9154404051" className="text-xs font-black text-red-600 bg-white px-4 py-2 rounded-xl shadow-sm hover:bg-red-500 hover:text-white transition-all">CALL NOW</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        )}
+
+                        {/* Drugs / Medicine AI */}
+                        {activeTab === 'drugs' && (
+                            <motion.div key="drugs" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                                    <div className="space-y-2">
+                                        <div className="flex items-center gap-4 mb-4">
+                                            <div className="p-3 bg-hospital-secondary/10 rounded-2xl text-hospital-secondary"><Pill size={28} /></div>
+                                            <div>
+                                                <h2 className="text-2xl font-black text-hospital-dark">Medicine Compatibility</h2>
+                                                <p className="text-xs font-bold text-gray-400 uppercase tracking-widest text-[#3b82f6]">Dynamic Pharmacological Checker</p>
+                                            </div>
+                                        </div>
+                                        <p className="text-sm text-gray-500 leading-relaxed font-medium mb-8">Analyze drug interactions, side effects, and safe dosage patterns across your medications.</p>
+                                        
+                                        <div className="space-y-6">
+                                            <div className="flex flex-wrap gap-2">
+                                                {['Aspirin', 'Metformin', 'Ibuprofen', 'Paracetamol'].map(m => (
+                                                    <button key={m} onClick={() => setDrugsInput(p => p ? `${p}, ${m}` : m)}
+                                                        className="px-4 py-2 bg-gray-50 border border-gray-100 rounded-xl text-xs font-bold text-gray-600 hover:border-hospital-secondary/30 transition-all flex items-center gap-2">
+                                                        <Plus size={12} className="text-hospital-secondary" /> {m}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                            <textarea value={drugsInput} onChange={(e) => setDrugsInput(e.target.value)} placeholder="Type drug names separated by commas..."
+                                                className="w-full bg-gray-50/50 border border-gray-100 rounded-2xl p-6 min-h-[120px] text-sm font-medium outline-none" />
+                                            <button onClick={checkDrugInteractions} disabled={isDrugsLoading}
+                                                className="w-full py-5 bg-hospital-secondary text-white rounded-2xl font-black text-xs uppercase tracking-[0.3em] shadow-xl hover:shadow-hospital-secondary/20 transition-all flex items-center justify-center gap-3">
+                                                {isDrugsLoading ? <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"></div> : <><ShieldCheck size={16}/> Cross-Verify Safety</>}
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div className="bg-hospital-dark rounded-[40px] p-10 text-white shadow-2xl min-h-[400px]">
+                                        <div className="flex items-center gap-3 mb-8">
+                                            <div className="w-2 h-2 bg-hospital-secondary rounded-full animate-pulse"></div>
+                                            <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-hospital-secondary">Pharmacology AI Report</h4>
                                         </div>
                                         {drugsResult ? (
-                                            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                                            <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4">
                                                 {drugsResult.includes('|||') ? (
                                                     <>
-                                                        <p style={{ color: 'rgba(255,255,255,0.9)', fontSize: 13, lineHeight: 1.8, whiteSpace: 'pre-wrap', fontFamily: "'Noto Sans Telugu', sans-serif" }}>{drugsResult.split('|||')[0].trim()}</p>
-                                                        <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: 16 }}>
-                                                            <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12, lineHeight: 1.8, whiteSpace: 'pre-wrap' }}>{drugsResult.split('|||')[1].trim()}</p>
+                                                        <div className="space-y-4">
+                                                            <p className="text-[10px] text-white/40 uppercase tracking-widest">Telugu Summary</p>
+                                                            <p className="text-base font-['Noto_Sans_Telugu'] font-bold text-white/90 leading-relaxed">{drugsResult.split('|||')[0].trim()}</p>
+                                                        </div>
+                                                        <div className="pt-8 border-t border-white/10 space-y-4">
+                                                            <p className="text-[10px] text-white/40 uppercase tracking-widest">English Safety Profile</p>
+                                                            <p className="text-sm font-medium text-hospital-secondary leading-relaxed italic">{drugsResult.split('|||')[1].trim()}</p>
                                                         </div>
                                                     </>
                                                 ) : (
-                                                    <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: 13, lineHeight: 1.8 }}>{drugsResult}</p>
+                                                    <p className="text-lg font-bold text-white/80">{drugsResult}</p>
                                                 )}
                                             </div>
                                         ) : (
-                                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 200, opacity: 0.15, gap: 12 }}>
-                                                <Pill size={48} color="#fff" />
-                                                <p style={{ color: '#fff', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.2em' }}>Add Medicines Above</p>
+                                            <div className="h-full flex flex-col items-center justify-center opacity-10 py-16">
+                                                <Pill size={80} />
+                                                <p className="text-xs font-black uppercase tracking-[0.3em] mt-6">Safety logic idle</p>
                                             </div>
                                         )}
                                     </div>
                                 </div>
-                            </div>
-                        </motion.div>
-                    )}
+                            </motion.div>
+                        )}
 
-                    {/* Dermatology / Skin AI */}
-                    {activeTab === 'derma' && (
-                        <motion.div key="derma" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
+                    </AnimatePresence>
+                </div>
 
-                                {/* Upload Zone */}
-                                <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(236,72,153,0.2)', borderRadius: 28, padding: '2rem', backdropFilter: 'blur(20px)' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: '1.5rem' }}>
-                                        <div style={{ width: 48, height: 48, borderRadius: 16, background: 'rgba(236,72,153,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                            <Eye size={22} color="#ec4899" />
-                                        </div>
-                                        <div>
-                                            <h3 style={{ color: '#fff', fontWeight: 900, fontSize: 20, margin: 0 }}>Skin AI Scanner</h3>
-                                            <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.15em', margin: 0 }}>CNN Trained on 10K+ Clinical Images</p>
-                                        </div>
-                                    </div>
+                {/* Bottom Trust Badge */}
+                <div className="mt-20 flex justify-center">
+                    <div className="px-8 py-4 bg-white rounded-full border border-gray-100 flex items-center gap-4 shadow-sm">
+                        <ShieldCheck size={20} className="text-hospital-primary" />
+                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-none">Powered by NVIDIA Medical AI & Meta Llama 3.2 90B Protocol</p>
+                    </div>
+                </div>
 
-                                    <label
-                                        onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
-                                        onDragLeave={() => setDragOver(false)}
-                                        onDrop={(e) => { e.preventDefault(); setDragOver(false); analyzeSkin(e.dataTransfer.files[0]); }}
-                                        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 260, border: `2px dashed ${dragOver ? '#ec4899' : 'rgba(236,72,153,0.3)'}`, borderRadius: 20, cursor: 'pointer', background: dragOver ? 'rgba(236,72,153,0.1)' : 'rgba(236,72,153,0.04)', transition: 'all 0.3s', position: 'relative', overflow: 'hidden' }}>
-                                        {isSkinLoading ? (
-                                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
-                                                <div style={{ width: 64, height: 64, borderRadius: '50%', border: '3px solid rgba(236,72,153,0.2)', borderTopColor: '#ec4899', animation: 'spin 1s linear infinite' }} />
-                                                <p style={{ color: '#ec4899', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.2em' }}>CNN Analyzing...</p>
-                                                <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 10 }}>Processing 10,015 pattern database</p>
-                                            </div>
-                                        ) : skinImage ? (
-                                            <img src={skinImage} alt="skin" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.7, borderRadius: 18 }} />
-                                        ) : (
-                                            <>
-                                                <div style={{ width: 72, height: 72, borderRadius: 20, background: 'rgba(236,72,153,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
-                                                    <Microscope size={32} color="#ec4899" />
-                                                </div>
-                                                <p style={{ color: '#fff', fontWeight: 800, fontSize: 16, marginBottom: 8 }}>Drop Skin Image Here</p>
-                                                <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11 }}>or click to browse files</p>
-                                                <div style={{ marginTop: 20, padding: '8px 20px', background: 'rgba(236,72,153,0.15)', borderRadius: 12, color: '#ec4899', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.15em', display: 'flex', alignItems: 'center', gap: 6 }}>
-                                                    <Upload size={12} /> Upload Image
-                                                </div>
-                                            </>
-                                        )}
-                                        <input type="file" style={{ display: 'none' }} accept="image/*" onChange={(e) => analyzeSkin(e.target.files[0])} />
-                                    </label>
-
-                                    {skinImage && !isSkinLoading && (
-                                        <button onClick={() => { setSkinImage(null); setSkinResult(null); }}
-                                            style={{ marginTop: 12, width: '100%', padding: '10px', borderRadius: 12, border: '1px solid rgba(255,255,255,0.1)', background: 'transparent', color: 'rgba(255,255,255,0.5)', fontSize: 11, fontWeight: 700, cursor: 'pointer' }}>
-                                            Clear & Scan New Image
-                                        </button>
-                                    )}
-
-                                    <div style={{ marginTop: 16, display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                                        {['Melanocytic Nevi', 'Melanoma', 'Basal Cell', 'Dermatofibroma'].map((c, i) => (
-                                            <div key={i} style={{ padding: '4px 12px', borderRadius: 100, background: 'rgba(236,72,153,0.08)', border: '1px solid rgba(236,72,153,0.15)', color: '#ec4899', fontSize: 10, fontWeight: 700 }}>
-                                                {c}
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                {/* Results */}
-                                <div style={{ background: 'rgba(0,0,0,0.5)', borderRadius: 28, padding: '2rem', border: '1px solid rgba(255,255,255,0.06)', backdropFilter: 'blur(20px)', display: 'flex', flexDirection: 'column' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: '1.5rem' }}>
-                                        <Dna size={16} color="#ec4899" />
-                                        <span style={{ color: '#ec4899', fontSize: 10, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.2em' }}>Dermatology AI Report</span>
-                                    </div>
-
-                                    {skinResult ? skinResult.error ? (
-                                        <div style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)', borderRadius: 16, padding: '1rem' }}>
-                                            <p style={{ color: '#ef4444', fontSize: 13, fontWeight: 700 }}>⚠️ {skinResult.error}</p>
-                                        </div>
-                                    ) : (
-                                        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                                            <div style={{ background: `rgba(${skinResult.risk === 'High' ? '239,68,68' : skinResult.risk === 'Medium' ? '245,158,11' : '16,185,129'},0.1)`, border: `1px solid rgba(${skinResult.risk === 'High' ? '239,68,68' : skinResult.risk === 'Medium' ? '245,158,11' : '16,185,129'},0.3)`, borderRadius: 20, padding: '1.5rem', textAlign: 'center' }}>
-                                                <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 10, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: 12 }}>Detected Condition</p>
-                                                <p style={{ color: '#fff', fontSize: 24, fontWeight: 900, marginBottom: 8 }}>{skinResult.condition}</p>
-                                                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 16px', borderRadius: 100, background: 'rgba(255,255,255,0.1)' }}>
-                                                    <div style={{ width: 8, height: 8, borderRadius: '50%', background: riskColors[skinResult.risk] }} />
-                                                    <span style={{ color: riskColors[skinResult.risk], fontSize: 11, fontWeight: 800 }}>{skinResult.risk} Risk</span>
-                                                </div>
-                                            </div>
-
-                                            <div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: 16, padding: '1.25rem' }}>
-                                                <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 10, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: 12 }}>AI Confidence Score</p>
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                                                    <div style={{ flex: 1, height: 8, background: 'rgba(255,255,255,0.1)', borderRadius: 100, overflow: 'hidden' }}>
-                                                        <motion.div initial={{ width: 0 }} animate={{ width: `${skinResult.confidence}%` }} transition={{ duration: 1, delay: 0.3 }}
-                                                            style={{ height: '100%', background: 'linear-gradient(90deg, #ec4899, #6366f1)', borderRadius: 100 }} />
-                                                    </div>
-                                                    <span style={{ color: '#fff', fontWeight: 900, fontSize: 18 }}>{skinResult.confidence}%</span>
-                                                </div>
-                                            </div>
-
-                                            <div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: 16, padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: 8 }}>
-                                                <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 10, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.15em' }}>Recommendations</p>
-                                                {['Consult a certified dermatologist', 'Avoid direct sun exposure on affected area', 'Do not self-medicate based on AI results'].map((r, i) => (
-                                                    <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
-                                                        <CheckCircle size={14} color="#10b981" style={{ marginTop: 2, flexShrink: 0 }} />
-                                                        <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12, lineHeight: 1.5 }}>{r}</p>
-                                                    </div>
-                                                ))}
-                                            </div>
-
-                                            <div style={{ padding: '12px 16px', background: 'rgba(255,255,255,0.03)', borderRadius: 12, border: '1px solid rgba(255,255,255,0.06)' }}>
-                                                <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: 10 }}>⚕️ This is an AI screening tool only. Not a medical diagnosis. Consult a licensed physician.</p>
-                                            </div>
-                                        </div>
-                                    ) : (
-                                        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', opacity: 0.15, gap: 12, minHeight: 300 }}>
-                                            <Eye size={64} color="#fff" />
-                                            <p style={{ color: '#fff', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.3em', textAlign: 'center' }}>Upload a skin image to begin analysis</p>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        </motion.div>
-                    )}
-
-                </AnimatePresence>
             </div>
-
-            <style>{`
-                @keyframes spin { to { transform: rotate(360deg); } }
-                @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-            `}</style>
         </div>
     );
 };
