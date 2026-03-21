@@ -4,7 +4,7 @@ services:
     runtime: node
     region: oregon
     buildCommand: cd server && npm install
-    startCommand: node server/server.js
+    startCommand: cd server && node server.js
     healthCheckPath: /api/config
     envVars:
       - key: NODE_ENV
