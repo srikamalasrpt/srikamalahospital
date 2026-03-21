@@ -139,6 +139,11 @@ const symptomModelCandidates = [
     "meta/llama3-70b-instruct"
 ].filter(Boolean);
 
+const normalizeApiKey = (key) => {
+    if (!key || typeof key !== 'string') return '';
+    return key.trim().replace(/^Bearer\s+/i, '');
+};
+
 // AI Symptom Checker using NVIDIA NeMo AI (Nemotron 70B)
 app.post('/api/ai/symptom', async (req, res) => {
     try {
@@ -228,8 +233,7 @@ app.post('/api/ai/symptom', async (req, res) => {
 app.post('/api/ai/vision', async (req, res) => {
     try {
         const { image, symptoms } = req.body;
-        // Using the separate Vision API Key from the user's request
-        const visionKey = process.env.NVIDIA_VISION_API_KEY;
+        const visionKey = normalizeApiKey(process.env.NVIDIA_VISION_API_KEY) || normalizeApiKey(process.env.NVIDIA_API_KEY);
         if (!visionKey) return res.status(400).json({ success: false, message: "NVIDIA Vision API Key not configured." });
         if (!image) return res.status(400).json({ success: false, message: "No image provided." });
 
