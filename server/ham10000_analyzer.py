@@ -62,7 +62,7 @@ def analyze():
             "age": int(sample['age']) if 'age' in sample and not pd.isna(sample['age']) else "Unknown",
             "sex": sample['sex'] if 'sex' in sample else "Unknown",
             "localization": sample['localization'] if 'localization' in sample else "Unknown",
-            "dataset_match_id": sample['lesson_id'] if 'lesson_id' in sample else "H10k_Mata"
+            "dataset_match_id": sample['lesion_id'] if 'lesion_id' in sample else "H10k_Meta"
         }
         print(json.dumps(result))
 
