@@ -383,9 +383,9 @@ app.post('/api/ai/ocr', async (req, res) => {
                 ].filter(Boolean);
 
                 const modelCandidates = [
+                    "meta/llama-3.2-90b-vision-instruct",
                     "meta/llama-3.2-11b-vision-instruct",
-                    "microsoft/phi-3.5-vision-instruct",
-                    "google/paligemma"
+                    "microsoft/phi-3.5-vision-instruct"
                 ];
 
                 let response;
@@ -398,18 +398,27 @@ app.post('/api/ai/ocr', async (req, res) => {
                                     role: "user",
                                     content: [
                                         {
-                                            type: "text", text: `Extract clinical text as JSON with the following schema: 
-                                { 
-                                  "patient": "Patient Name", 
-                                  "date": "Detection Date", 
-                                  "medicines": ["list of medicines if any"], 
-                                  "test_results": [
-                                    { "item_en": "Test Name", "item_te": "Telugu Name", "value": "Result", "range": "Normal Range", "status": "Normal/Abnormal" }
-                                  ],
-                                  "explanation_te": "Detailed Telugu medical summary and advice for the patient",
-                                  "explanation_en": "Detailed English medical summary and advice"
-                                } 
-                                ONLY output valid JSON. Use Telugu for names and explanations where specified.` },
+                                            type: "text", text: `### CLINICAL OCR PROTOCOL V2.0
+Digitize this medical document with 100% precision. 
+Identify all handwriting, printed tests, values, and doctor signatures.
+
+Extract as JSON:
+{ 
+  "patient": "Patient Name", 
+  "date": "Detection Date", 
+  "medicines": ["list of medication names, dosages, and frequencies"], 
+  "test_results": [
+    { "item_en": "Test Name", "item_te": "తెలుగు పేరు", "value": "Result", "range": "Reference Range", "status": "Normal/Abnormal" }
+  ],
+  "diagnosis_en": "Primary Medical Finding",
+  "explanation_te": "తెలుగులో వైద్య సారాంశం మరియు రోగికి సూచనలు (3-4 sentences)",
+  "explanation_en": "Comprehensive English medical summary and actionable clinical advice"
+}
+
+IMPORTANT:
+1. ONLY output VALID JSON.
+2. Use 'Not Found' for missing values.
+3. Transliterate medical terms into Telugu script for Te fields.` },
                                         { type: "image_url", image_url: { url: image } }
                                     ]
                                 }],
