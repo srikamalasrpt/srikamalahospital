@@ -5,77 +5,99 @@
 @tailwind utilities;
 
 :root {
-  --primary: #008080; /* Deep Teal */
-  --secondary: #ff8fa3; /* Lotus Pink */
-  --accent: #3d5a80; /* Serene Blue */
-  --glass: rgba(255, 255, 255, 0.85);
-  --glass-dark: rgba(26, 32, 44, 0.8);
+  --hospital-primary: #008080; /* Deep Teal */
+  --hospital-secondary: #ff8fa3; /* Lotus Pink */
+  --hospital-dark: #0f172a;
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-bg: rgba(255, 255, 255, 0.6);
+  --neon-glow: 0 0 15px rgba(0, 128, 128, 0.3);
 }
 
 @layer base {
   body {
-    @apply m-0 font-['Outfit'] bg-[#f8fafc] text-[#1e293b] overflow-x-hidden selection:bg-primary/20;
+    @apply m-0 font-['Outfit'] bg-[#f8fafc] text-[#1e293b] selection:bg-hospital-primary/20;
     scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
   }
 }
 
 @layer components {
-  .glass-card {
-    @apply bg-white/70 backdrop-blur-md border border-white/40 shadow-[0_8px_32px_0_rgba(31,38,135,0.07)] rounded-[24px] transition-all duration-500;
-  }
-  
-  .premium-button {
-    @apply px-6 py-2.5 rounded-full font-bold text-sm tracking-wide transition-all duration-500 flex items-center gap-2 active:scale-95;
+  .glass-panel {
+    @apply bg-white/70 backdrop-blur-xl border border-white/40 shadow-[0_8px_32px_rgba(0,0,0,0.03)] rounded-[32px] transition-all duration-700;
   }
 
-  /* Compact interface tweaks */
-  .section-padding {
-    @apply py-16 md:py-24;
+  .premium-card {
+    @apply relative overflow-hidden bg-white rounded-[40px] border border-gray-100/50 shadow-xl hover:shadow-2xl hover:border-hospital-primary/10 transition-all duration-700;
   }
 
-  .title-lg {
-    @apply font-['Playfair_Display'] text-4xl md:text-5xl font-black leading-[1.1] tracking-tighter;
+  .glow-text {
+    text-shadow: 0 0 10px rgba(0, 128, 128, 0.2);
   }
 
-  .text-compact {
-    @apply text-sm md:text-base leading-relaxed text-gray-500 font-medium;
+  .mesh-gradient {
+    background: radial-gradient(at 0% 0%, rgba(0, 128, 128, 0.05) 0%, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(255, 143, 163, 0.05) 0%, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(0, 128, 128, 0.05) 0%, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(255, 143, 163, 0.05) 0%, transparent 50%);
+  }
+
+  .nav-blur {
+    @apply backdrop-blur-lg bg-white/80 border-b border-gray-100/50;
   }
 }
 
-/* Animations */
-@keyframes float-gentle {
-  0% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-10px) rotate(1deg); }
-  100% { transform: translateY(0px) rotate(0deg); }
+/* Futuristic Animations */
+@keyframes pulse-soft {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.05); opacity: 1; }
 }
 
-.animate-float-gentle {
-  animation: float-gentle 6s ease-in-out infinite;
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
-/* Scroll reveal helper */
-.reveal {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+@keyframes slide-up-reveal {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
+.animate-pulse-soft {
+  animation: pulse-soft 3s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
+}
+
+.reveal-anim {
+  animation: slide-up-reveal 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: #f1f5f9;
 }
 ::-webkit-scrollbar-thumb {
   background: #cbd5e1;
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--primary);
+  background: var(--hospital-primary);
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Neon Glow Utilities */
+.shadow-neon-primary {
+  box-shadow: 0 0 20px -5px rgba(0, 128, 128, 0.4);
+}
+
+.shadow-neon-secondary {
+  box-shadow: 0 0 20px -5px rgba(255, 143, 163, 0.4);
 }

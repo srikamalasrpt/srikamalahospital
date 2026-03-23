@@ -1,78 +1,106 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShieldCheck, ArrowRight, Activity, Calendar, Play } from 'lucide-react';
+import { ShieldCheck, ArrowRight, Activity, Calendar, Play, Sparkles, Cpu, Fingerprint } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Hero = () => {
     return (
-        <section className="relative min-h-[90vh] lg:min-h-[80vh] flex items-center justify-center overflow-hidden bg-[#ffffff] pt-24 pb-12 px-6">
-            <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-                <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 0.05, scale: 1 }} transition={{ duration: 3 }}
-                    className="absolute -top-[10%] -right-[5%] w-[400px] h-[400px] bg-hospital-secondary rounded-full blur-[80px]" />
-                <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 0.05, scale: 1 }} transition={{ duration: 4 }}
-                    className="absolute bottom-0 -left-[5%] w-[300px] h-[300px] bg-hospital-primary rounded-full blur-[60px]" />
-            </div>
+        <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#fafafa] pt-24 pb-20 px-6 mesh-gradient">
+            
+            {/* Holographic Background Orbs */}
+            <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-hospital-primary/5 rounded-full blur-[140px] pointer-events-none animate-pulse-soft"></div>
+            <div className="absolute -bottom-40 -left-40 w-[600px] h-[600px] bg-hospital-secondary/5 rounded-full blur-[120px] pointer-events-none animate-pulse-soft" style={{ animationDelay: '2s' }}></div>
 
-            <div className="container mx-auto max-w-7xl relative z-10">
-                <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
-                    
-                    <div className="lg:w-3/5 text-center lg:text-left">
-                        <motion.div initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2 }}
-                            className="inline-flex items-center gap-2 px-3 py-1 bg-white/60 backdrop-blur-md rounded-full border border-white/40 shadow-sm mb-6">
-                            <div className="p-0.5 bg-green-500 rounded-full animate-pulse-slow"><div className="w-1.5 h-1.5 bg-white rounded-full"></div></div>
-                            <span className="text-[9px] font-black uppercase tracking-widest text-hospital-dark">Emergency Line: 99480 76665 | 24 Hours Open</span>
-                        </motion.div>
-
-                        <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.4 }} className="mb-6 space-y-1">
-                            <p className="font-['Noto_Sans_Telugu'] text-4xl lg:text-5xl font-black text-hospital-primary leading-tight tracking-tight">ప్రాణాలను రక్షించడం</p>
-                            <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl font-black text-hospital-dark tracking-tighter uppercase opacity-40">Healing <span className="italic">Lives</span></h1>
-                        </motion.div>
-
-                        <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.5 }} className="mb-8">
-                            <p className="font-['Noto_Sans_Telugu'] text-2xl lg:text-3xl font-black text-hospital-secondary">ఉత్తమ మధుమేహం వైద్యం</p>
-                            <p className="text-hospital-dark/20 text-xs font-black tracking-widest uppercase italic">Best Treatment for Diabetes</p>
-                        </motion.div>
-
-                        <motion.p initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.6 }}
-                            className="text-compact text-sm md:text-base max-w-md mx-auto lg:mx-0 mb-10 text-gray-400 font-medium">
-                            Located at MG Road, Suryapet, we specialize in diagnostics and emergency care. Special consultation for diabetes available 24/7.
-                        </motion.p>
-
-                        <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.8 }}
-                            className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
-                            <Link to="/book" className="premium-button bg-hospital-dark text-white px-8 py-4 text-xs shadow-xl hover:scale-105 group overflow-hidden relative border-none">
-                                <div className="absolute inset-0 bg-hospital-primary translate-y-full group-hover:translate-y-0 transition-transform duration-500 z-0"></div>
-                                <Calendar className="relative z-10" size={16} /> 
-                                <span className="relative z-10 font-['Noto_Sans_Telugu'] text-lg mr-2 leading-none">డాక్టర్‌ని కలవండి</span>
-                                <span className="relative z-10 font-black tracking-widest uppercase text-[9px] opacity-40">/ Book</span>
-                            </Link>
-                            <Link to="/ai-health" className="premium-button bg-gradient-to-r from-hospital-secondary to-hospital-primary text-white px-6 py-4 text-xs hover:shadow-2xl hover:scale-105 flex items-center gap-3 border-none relative overflow-hidden group">
-                               <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500 z-0"></div>
-                               <div className="relative z-10 w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center text-white shadow-inner"><Activity size={14} className="animate-pulse"/></div>
-                               <div className="relative z-10 flex flex-col items-start leading-none">
-                                  <span className="font-['Noto_Sans_Telugu'] text-base font-black">AI హెల్త్ స్కాన్</span>
-                                  <span className="font-black uppercase text-[8px] tracking-widest opacity-80 mt-1">Smart Triage</span>
-                               </div>
-                            </Link>
-                        </motion.div>
+            <div className="container mx-auto max-w-7xl relative z-10 text-center">
+                
+                <motion.div 
+                    initial={{ y: 20, opacity: 0 }} 
+                    animate={{ y: 0, opacity: 1 }} 
+                    transition={{ duration: 0.8 }}
+                    className="inline-flex items-center gap-3 px-6 py-2 bg-white/40 backdrop-blur-md rounded-full border border-white/60 shadow-xl mb-10 mx-auto"
+                >
+                    <div className="relative">
+                        <div className="w-2 h-2 bg-green-500 rounded-full animate-ping"></div>
+                        <div className="absolute inset-0 w-2 h-2 bg-green-500 rounded-full"></div>
                     </div>
+                    <span className="text-[10px] font-black uppercase tracking-[0.4em] text-hospital-dark/60">Advanced Clinical Excellence Center</span>
+                </motion.div>
 
-                    <div className="lg:w-2/5 relative">
-                        <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.5, duration: 1 }}
-                            className="relative z-10 flex justify-center">
-                            <div className="w-full aspect-square md:w-[350px] md:h-[350px] bg-gradient-to-tr from-hospital-mint via-white to-hospital-primary/10 rounded-[60px] border-2 border-white shadow-2xl flex items-center justify-center relative group">
-                                <img src="/logo.png" className="w-[70%] h-[70%] object-contain drop-shadow-2xl animate-float-gentle" alt="Hospital Logo" />
+                <div className="max-w-5xl mx-auto mb-16 space-y-6">
+                    <motion.div 
+                        initial={{ y: 30, opacity: 0 }} 
+                        animate={{ y: 0, opacity: 1 }} 
+                        transition={{ delay: 0.2, duration: 0.8 }}
+                    >
+                        <h1 className="text-6xl lg:text-9xl font-black text-hospital-dark tracking-tighter leading-[0.9] flex flex-col items-center">
+                            <span className="font-['Playfair_Display'] italic text-hospital-primary">Scientific</span>
+                            <span className="bg-gradient-to-r from-hospital-dark to-gray-500 bg-clip-text text-transparent">Pioneering.</span>
+                        </h1>
+                    </motion.div>
 
-                                <motion.div animate={{ y: [0, -5, 0] }} transition={{ repeat: Infinity, duration: 4 }}
-                                    className="absolute -top-6 -right-6 bg-white p-4 rounded-3xl shadow-xl flex items-center gap-3 border border-gray-50 scale-90">
-                                    <div className="w-8 h-8 bg-hospital-primary rounded-xl flex items-center justify-center text-white"><ShieldCheck size={16}/></div>
-                                    <div><p className="text-[8px] font-black uppercase text-gray-400 leading-none mb-1">REAL CONSULTATION</p><p className="text-[10px] font-black leading-tight text-hospital-dark font-['Noto_Sans_Telugu']">మంచి స్పందన</p></div>
-                                </motion.div>
-                            </div>
-                        </motion.div>
-                    </div>
+                    <motion.div 
+                        initial={{ y: 30, opacity: 0 }} 
+                        animate={{ y: 0, opacity: 1 }} 
+                        transition={{ delay: 0.4, duration: 0.8 }}
+                        className="flex flex-col items-center justify-center gap-2"
+                    >
+                        <p className="font-['Noto_Sans_Telugu'] text-4xl lg:text-5xl font-black text-hospital-secondary leading-tight italic glow-text">ప్రాణాలను రక్షించడం మా బాధ్యత</p>
+                        <p className="text-[10px] font-black uppercase tracking-[0.6em] text-gray-300">Preserving Humanity through Precision Medicine</p>
+                    </motion.div>
                 </div>
+
+                <motion.div 
+                    initial={{ scale: 0.9, opacity: 0 }} 
+                    animate={{ scale: 1, opacity: 1 }} 
+                    transition={{ delay: 0.6, duration: 1 }}
+                    className="flex flex-col sm:flex-row items-center justify-center gap-8"
+                >
+                    <Link to="/book" className="group relative px-12 py-6 bg-hospital-dark text-white rounded-[32px] font-black text-xs uppercase tracking-[0.4em] shadow-2xl overflow-hidden hover:scale-105 transition-all">
+                        <div className="absolute inset-0 bg-gradient-to-r from-hospital-primary to-hospital-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                        <span className="relative z-10 font-['Noto_Sans_Telugu'] text-xl mr-3">బుకింగ్ చేయండి</span>
+                        <span className="relative z-10 opacity-40 group-hover:opacity-100">/ RESERVE</span>
+                    </Link>
+
+                    <Link to="/ai-health" className="group relative px-10 py-6 bg-white/60 backdrop-blur-xl text-hospital-dark rounded-[32px] font-black text-xs uppercase tracking-[0.4em] border border-white/60 shadow-xl overflow-hidden hover:scale-105 transition-all">
+                        <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-125 group-hover:rotate-12 transition-transform duration-700"><Sparkles size={60} /></div>
+                        <div className="flex items-center gap-4 relative z-10">
+                            <div className="w-10 h-10 bg-hospital-primary/10 rounded-2xl flex items-center justify-center text-hospital-primary shadow-inner"><Cpu size={18} /></div>
+                            <div className="text-left leading-none">
+                                <span className="font-['Noto_Sans_Telugu'] text-lg block">AI హెల్త్ స్క్రీన్</span>
+                                <span className="text-[8px] opacity-40">DIAGNOSTIC CORE</span>
+                            </div>
+                        </div>
+                    </Link>
+                </motion.div>
+
+                {/* Floating Tech Badges */}
+                <div className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+                    {[
+                        { icon: <ShieldCheck size={16}/>, label: 'HIPAA Secure', text: 'Data Privacy' },
+                        { icon: <Activity size={16}/>, label: '24/7 Monitoring', text: 'Live Vitals' },
+                        { icon: <Fingerprint size={16}/>, label: 'Personalized', text: 'Genomic AI' },
+                        { icon: <Play size={16}/>, label: 'Telehealth', text: 'Virtual Core' }
+                    ].map((badge, i) => (
+                        <motion.div 
+                            key={i} 
+                            initial={{ opacity: 0, y: 30 }} 
+                            animate={{ opacity: 1, y: 0 }} 
+                            transition={{ delay: 0.8 + (i * 0.1) }}
+                            className="p-6 glass-panel flex flex-col items-center hover:bg-white transition-all group cursor-default shadow-neon-primary"
+                        >
+                            <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-hospital-primary mb-3 group-hover:scale-110 transition-transform">{badge.icon}</div>
+                            <h4 className="text-[10px] font-black uppercase tracking-widest text-hospital-dark mb-1">{badge.label}</h4>
+                            <p className="text-[8px] font-bold text-gray-300 uppercase tracking-[0.2em]">{badge.text}</p>
+                        </motion.div>
+                    ))}
+                </div>
+
             </div>
+
+            {/* Decor - Floating Plus Signs */}
+            <div className="absolute top-1/4 left-[10%] opacity-10 animate-spin-slow pointer-events-none"><Plus size={100} strokeWidth={4} /></div>
+            <div className="absolute bottom-1/4 right-[10%] opacity-10 animate-spin-slow pointer-events-none text-hospital-secondary"><Plus size={80} strokeWidth={4} /></div>
+
         </section>
     );
 };
