@@ -82,14 +82,14 @@ Format: [Telugu] ||| [English]`;
             {isOpen && (
                 <>
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                        className="fixed inset-0 bg-hospital-dark/60 backdrop-blur-sm z-40 pointer-events-auto" onClick={onClose} />
+                        className="fixed inset-0 bg-hospital-dark/60 backdrop-blur-sm z-[150] pointer-events-auto" onClick={onClose} />
                     
                     <motion.div 
                         initial={{ opacity: 0, y: 50, scale: 0.95, x: 20 }} 
                         animate={{ opacity: 1, y: 0, scale: 1, x: 0 }} 
                         exit={{ opacity: 0, y: 30, scale: 0.95 }}
                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                        className="fixed bottom-0 right-0 md:bottom-6 md:right-6 w-full md:w-[380px] h-[85vh] md:h-[580px] bg-white rounded-t-[40px] md:rounded-[40px] shadow-4xl z-50 overflow-hidden flex flex-col border border-gray-100">
+                        className="fixed bottom-0 right-0 md:bottom-6 md:right-6 w-full md:w-[380px] h-[85vh] md:h-[580px] bg-white rounded-t-[40px] md:rounded-[40px] shadow-4xl z-[160] overflow-hidden flex flex-col border border-gray-100">
 
                         {/* Header */}
                         <div className="bg-hospital-dark px-6 py-5 relative flex items-center gap-4 flex-shrink-0">
