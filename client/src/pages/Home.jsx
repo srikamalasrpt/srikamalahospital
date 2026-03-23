@@ -3,9 +3,8 @@ import Hero from '../components/Hero';
 import FeatureGrid from '../components/FeatureGrid';
 import Stats from '../components/Stats';
 import QuickActionGrid from '../components/QuickActionGrid';
-import HealthAwareness from '../components/HealthAwareness';
 import OPBoard from '../components/OPBoard';
-import BMICalculator from '../components/BMICalculator';
+import PatientReviews from '../components/PatientReviews';
 import { motion } from 'framer-motion';
 import { getConfig } from '../utils/api';
 
@@ -42,25 +41,20 @@ function Home() {
 
       <main className="relative z-10 pt-20">
         <Hero />
-        
+
         <QuickActionGrid />
-        
-        {showHealthAwareness && (
-           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
-              <HealthAwareness />
-           </motion.div>
-        )}
-        
-        <Stats />
-        
-        <BMICalculator />
+
         <OPBoard />
-        
+
         {showCoreServices && (
-           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
-              <FeatureGrid />
-           </motion.div>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
+            <FeatureGrid />
+          </motion.div>
         )}
+
+        <div id="reviews" className="mt-20">
+          <PatientReviews />
+        </div>
       </main>
     </div>
   );

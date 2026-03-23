@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const path = require('path');
+const rateLimit = require('express-rate-limit');
 require("dotenv").config({ path: path.join(__dirname, '.env') });
 
 const app = express();
@@ -28,51 +29,52 @@ try {
     console.error('❌ Supabase initialization failed:', e.message);
 }
 
+// Global Rate Limiter
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // limit each IP to 100 requests per windowMs
+    message: { success: false, message: "Too many requests from this IP, please try again later." },
+    standardHeaders: true,
+    legacyHeaders: false,
+});
+
+// AI endpoints specific rate limiter (stricter)
+const aiLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000, // 1 hour
+    max: 20, // limit each IP to 20 AI requests per hour
+    message: { success: false, message: "AI daily limit reached. Call +91 99480 76665 for immediate clinical guidance." },
+});
+
 // SIMPLIFIED CORS for robust deployment
 app.use(cors({
     origin: true,
     credentials: true
 }));
 
+// Security & Utility Middleware
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'", "'unsafe-inline'"],
+            styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+            imgSrc: ["'self'", "data:", "https://images.unsplash.com", "https://*.supabase.co"],
+            connectSrc: ["'self'", "https://*.supabase.co", "https://integrate.api.nvidia.com", (process.env.SKIN_AI_URL || "https://*")],
+            fontSrc: ["'self'", "https://fonts.gstatic.com"],
+            objectSrc: ["'none'"],
+            mediaSrc: ["'self'"],
+            frameSrc: ["'none'"],
+        },
+    },
+}));
+app.use(morgan('combined'));
+app.use(express.json({ limit: '30mb' })); // Reduced for security
+app.use(express.urlencoded({ limit: '30mb', extended: true }));
+app.use(limiter);
+
 // Health Checks
 app.get('/health', (req, res) => res.status(200).send('OK'));
-app.get('/', (req, res) => res.status(200).send('Server is Up!'));
-app.get('/api/debug/env', (req, res) => {
-    const mask = (value) => {
-        if (!value || typeof value !== 'string') return null;
-        const trimmed = value.trim();
-        if (!trimmed) return null;
-        if (trimmed.length <= 8) return `${trimmed[0]}***${trimmed[trimmed.length - 1]}`;
-        return `${trimmed.slice(0, 4)}...${trimmed.slice(-4)}`;
-    };
-
-    res.json({
-        success: true,
-        env: {
-            hasNvidiaApiKey: Boolean(process.env.NVIDIA_API_KEY && process.env.NVIDIA_API_KEY.trim()),
-            hasNvidiaVisionApiKey: Boolean(process.env.NVIDIA_VISION_API_KEY && process.env.NVIDIA_VISION_API_KEY.trim()),
-            hasNvidiaVisionFallbackApiKey: Boolean(process.env.NVIDIA_VISION_FALLBACK_API_KEY && process.env.NVIDIA_VISION_FALLBACK_API_KEY.trim()),
-            hasNvidiaBaseUrl: Boolean(process.env.NVIDIA_BASE_URL && process.env.NVIDIA_BASE_URL.trim()),
-            hasAdminPassword: Boolean(process.env.ADMIN_PASSWORD && process.env.ADMIN_PASSWORD.trim()),
-            hasSupabaseUrl: Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_URL.trim()),
-            hasSupabaseServiceRoleKey: Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY && process.env.SUPABASE_SERVICE_ROLE_KEY.trim()),
-            nvidiaBaseUrlResolved: (process.env.NVIDIA_BASE_URL || 'https://integrate.api.nvidia.com/v1').trim(),
-            nvidiaKeyPreview: mask(process.env.NVIDIA_API_KEY),
-            nvidiaVisionKeyPreview: mask(process.env.NVIDIA_VISION_API_KEY),
-            nvidiaVisionFallbackKeyPreview: mask(process.env.NVIDIA_VISION_FALLBACK_API_KEY)
-        },
-        server: {
-            port: PORT,
-            supabaseInitialized: Boolean(supabase)
-        },
-        time: new Date().toISOString()
-    });
-});
-
-app.use(helmet({ contentSecurityPolicy: false }));
-app.use(morgan('combined'));
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ limit: '50mb', extended: true }));
+app.get('/', (req, res) => res.status(200).send('Sri Kamala Hospital Backend Live'));
 
 // Backward compatibility for older frontend bundles that call endpoints without /api prefix.
 app.use((req, res, next) => {
@@ -106,6 +108,9 @@ app.use((req, res, next) => {
     }
     next();
 });
+
+// Apply stricter limit to AI endpoints
+app.use('/api/ai/', aiLimiter);
 
 // Global Config Store
 let siteConfig = {

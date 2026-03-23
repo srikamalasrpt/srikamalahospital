@@ -7,7 +7,11 @@ const PatientReviews = () => {
     { name: 'Sunitha Nicky', role: 'Patient Response', text: "Nice hospital and very good response and good staff nurses", rating: 5 },
     { name: 'Ganesh Bommagani', role: 'Diabetes Treatment', text: "Nice hospital best best treatment to diabetes", rating: 5 },
     { name: 'Chamakuri Lokesh', role: 'General Consultation', text: "Good equipment and good consultation", rating: 5 },
-    { name: 'Anonymous', role: 'Emergency Care', text: "Very talented Doctor.. Available even in midnight in case of emergency..thanqu very much for your service in hard times", rating: 5 }
+    { name: 'Sravanthi G', role: 'Emergency Care', text: "Very talented Doctor.. Available even in midnight in case of emergency..thanqu very much for your service in hard times", rating: 5 },
+    { name: 'Mahesh Kumar', role: 'General Medicine', text: "Great care and affordable treatment. Dr. Kiran is very patient and explains everything clearly.", rating: 5 },
+    { name: 'Vinay Reddy', role: 'Laboratory Services', text: "Laboratory reports are very accurate and fast. Staff are helpful.", rating: 5 },
+    { name: 'Priya Reddy', role: 'Pediatric Care', text: "Highly recommended for families. The hospitality is great and management is quick.", rating: 5 },
+    { name: 'Anil Kumar', role: 'Diagnostics', text: "Sri Kamala Hospitals is best for all types of blood tests and scans in Suryapet.", rating: 5 }
   ];
 
   return (

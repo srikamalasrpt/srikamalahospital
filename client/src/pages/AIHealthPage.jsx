@@ -97,25 +97,79 @@ CRITICAL RULE: You MUST format your precise response as:
         }
     };
 
+    const [bmi, setBmi] = useState({ height: '', weight: '', result: null, aiAdvice: '' });
+    const [isBmiLoading, setIsBmiLoading] = useState(false);
+
+    const calculateBMI = async () => {
+        if (!bmi.height || !bmi.weight) return;
+        const h = parseFloat(bmi.height) / 100;
+        const w = parseFloat(bmi.weight);
+        const bmiValue = (w / (h * h)).toFixed(1);
+
+        let category = '';
+        if (bmiValue < 18.5) category = 'Underweight';
+        else if (bmiValue < 25) category = 'Normal';
+        else if (bmiValue < 30) category = 'Overweight';
+        else category = 'Obese';
+
+        setBmi(p => ({ ...p, result: { value: bmiValue, category } }));
+        setIsBmiLoading(true);
+
+        try {
+            const resp = await chatWithAI(`Clinical Analysis: BMI is ${bmiValue} (${category}). Provide a 3-point clinical action plan for this profile.
+CRITICAL RULE: You MUST format your precise response as: 
+[Telugu Translation]
+|||
+[English Translation]`);
+            setBmi(p => ({ ...p, aiAdvice: resp.data.response }));
+        } catch (err) { console.error(err); }
+        finally { setIsBmiLoading(false); }
+    };
+
     const tabs = [
         { id: 'clinical', icon: Stethoscope, label: 'Clinical Triage', color: '#10b981' },
         { id: 'ocr', icon: Scan, label: 'Report Scanner', color: '#3b82f6' },
-        { id: 'wellness', icon: Utensils, label: 'Wellness AI', color: '#10b981' },
-        { id: 'drugs', icon: Pill, label: 'Medicine AI', color: '#3b82f6' },
+        { id: 'bmi', icon: Activity, label: 'BMI Intelligence', color: '#10b981' },
+        { id: 'wellness', icon: Utensils, label: 'Wellness AI', color: '#3b82f6' },
+        { id: 'drugs', icon: Pill, label: 'Medicine AI', color: '#10b981' },
+        { id: 'score', icon: Activity, label: 'AI Health Score', color: '#3b82f6' },
         { id: 'derma', icon: Eye, label: 'Dermatology', color: '#10b981' },
     ];
+
+    const [healthData, setHealthData] = useState({ age: '', activity: 'Moderate', sleep: '7-8', nutrition: 'Balanced' });
+    const [healthScore, setHealthScore] = useState(null);
+    const [isScoreLoading, setIsScoreLoading] = useState(false);
+
+    const calculateHealthScore = async () => {
+        setIsScoreLoading(true);
+        try {
+            const prompt = `Health Profile: Age ${healthData.age}, Activity ${healthData.activity}, Sleep ${healthData.sleep}, Nutrition ${healthData.nutrition}. 
+Calculate a health score (0-100) and provide a 3-point medical optimization plan.
+CRITICAL RULE: Always format response as: 
+Score: [Number]
+|||
+[Telugu Translation]
+|||
+[English Translation]`;
+            const resp = await chatWithAI(prompt);
+            const parts = resp.data.response.split('|||');
+            const score = parts[0].replace('Score:', '').trim();
+            setHealthScore({ score, adviceTe: parts[1], adviceEn: parts[2] });
+        } catch (err) { console.error(err); }
+        finally { setIsScoreLoading(false); }
+    };
 
     const riskColors = { High: '#ef4444', Medium: '#f59e0b', Low: '#10b981' };
 
     return (
         <div className="min-h-screen bg-[#fcfdfe] pt-32 pb-24 px-6 relative overflow-hidden">
-            
+
             {/* Elegant Background Elements */}
             <div className="absolute top-0 right-0 w-[50%] h-[500px] bg-gradient-to-bl from-hospital-primary/5 via-transparent to-transparent pointer-events-none rounded-full blur-3xl opacity-50"></div>
             <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-hospital-secondary/5 rounded-full blur-3xl pointer-events-none"></div>
 
             <div className="container mx-auto max-w-7xl relative z-10">
-                
+
                 {/* Header with Round AI Banner */}
                 <div className="flex flex-col items-center text-center mb-16">
                     <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
@@ -152,7 +206,7 @@ CRITICAL RULE: You MUST format your precise response as:
                 {/* Content Area - Clean Hospital Architecture */}
                 <div className="bg-white rounded-[40px] shadow-2xl shadow-hospital-dark/5 border border-gray-50 p-8 lg:p-16 min-h-[600px] overflow-hidden">
                     <AnimatePresence mode="wait">
-                        
+
                         {/* Clinical Symptom Checker */}
                         {activeTab === 'clinical' && (
                             <motion.div key="clinical" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="h-full">
@@ -166,8 +220,7 @@ CRITICAL RULE: You MUST format your precise response as:
                                 <AISymptomChecker />
                             </motion.div>
                         )}
-
-                        {/* OCR Scanner */}
+                        {/* Report Scanner (OCR) */}
                         {activeTab === 'ocr' && (
                             <motion.div key="ocr" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
                                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -179,7 +232,7 @@ CRITICAL RULE: You MUST format your precise response as:
                                                 <p className="text-xs font-bold text-gray-400 uppercase tracking-widest text-[#3b82f6]">Llama 3.2 90B Vision Protocol</p>
                                             </div>
                                         </div>
-                                        
+
                                         <label className="block w-full min-h-[400px] border-4 border-dashed border-gray-100 rounded-[32px] hover:border-hospital-secondary/30 transition-all bg-gray-50/50 cursor-pointer p-12 text-center group">
                                             {isOcrLoading ? (
                                                 <div className="flex flex-col items-center justify-center h-full gap-4">
@@ -245,6 +298,82 @@ CRITICAL RULE: You MUST format your precise response as:
                             </motion.div>
                         )}
 
+                        {/* BMI Intelligence */}
+                        {activeTab === 'bmi' && (
+                            <motion.div key="bmi" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                                    <div className="space-y-10">
+                                        <div className="flex items-center gap-4">
+                                            <div className="p-3 bg-hospital-primary/10 rounded-2xl text-hospital-primary"><Activity size={28} /></div>
+                                            <div>
+                                                <h2 className="text-2xl font-black text-hospital-dark">BMI Intelligence</h2>
+                                                <p className="text-xs font-bold text-gray-400 uppercase tracking-widest text-hospital-primary">Metabolic Risk Parser v1.0</p>
+                                            </div>
+                                        </div>
+
+                                        <div className="space-y-6">
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <div className="space-y-2">
+                                                    <label className="text-[10px] uppercase font-black tracking-widest text-gray-400 ml-4">Height (cm)</label>
+                                                    <input type="number" value={bmi.height} onChange={(e) => setBmi(p => ({ ...p, height: e.target.value }))}
+                                                        className="w-full bg-gray-50 border border-gray-100 rounded-2xl p-5 text-sm font-bold outline-none focus:ring-2 ring-hospital-primary/20" placeholder="170" />
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <label className="text-[10px] uppercase font-black tracking-widest text-gray-400 ml-4">Weight (kg)</label>
+                                                    <input type="number" value={bmi.weight} onChange={(e) => setBmi(p => ({ ...p, weight: e.target.value }))}
+                                                        className="w-full bg-gray-50 border border-gray-100 rounded-2xl p-5 text-sm font-bold outline-none focus:ring-2 ring-hospital-primary/20" placeholder="70" />
+                                                </div>
+                                            </div>
+                                            <button onClick={calculateBMI} disabled={isBmiLoading}
+                                                className="w-full py-5 bg-hospital-dark text-white rounded-2xl font-black text-xs uppercase tracking-[0.3em] shadow-xl hover:shadow-hospital-dark/20 transition-all flex items-center justify-center gap-3">
+                                                {isBmiLoading ? <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"></div> : <><Sparkles size={16} /> Analyze Body Metrics</>}
+                                            </button>
+                                        </div>
+
+                                        {bmi.result && (
+                                            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+                                                className="p-8 bg-hospital-primary/10 rounded-[32px] border border-hospital-primary/20">
+                                                <div className="flex items-center justify-between mb-4">
+                                                    <p className="text-[10px] font-black uppercase tracking-widest text-hospital-primary">Calculated BMI</p>
+                                                    <span className="px-3 py-1 bg-white rounded-full text-[10px] font-black text-hospital-primary shadow-sm">{bmi.result.category}</span>
+                                                </div>
+                                                <div className="flex items-end gap-2">
+                                                    <h3 className="text-5xl font-black text-hospital-dark tracking-tighter">{bmi.result.value}</h3>
+                                                    <span className="text-[10px] font-bold text-gray-400 mb-2 font-['Outfit']">kg/m²</span>
+                                                </div>
+                                            </motion.div>
+                                        )}
+                                    </div>
+
+                                    <div className="bg-white rounded-[40px] border border-gray-100 p-8 lg:p-12 shadow-2xl relative overflow-hidden min-h-[400px]">
+                                        <div className="absolute top-0 right-0 p-8 opacity-5"><TrendingUp size={200} /></div>
+                                        <div className="flex items-center gap-3 mb-8">
+                                            <div className="w-2 h-2 bg-hospital-primary rounded-full animate-pulse"></div>
+                                            <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-hospital-primary">AI Clinical Interpretation</h4>
+                                        </div>
+
+                                        {bmi.aiAdvice ? (
+                                            <div className="space-y-8 relative z-10">
+                                                <div className="space-y-2">
+                                                    <p className="text-[10px] uppercase tracking-widest text-gray-400">Telugu Clinical Advice</p>
+                                                    <p className="text-base font-['Noto_Sans_Telugu'] font-bold text-hospital-dark leading-relaxed">{bmi.aiAdvice.split('|||')[0]?.trim()}</p>
+                                                </div>
+                                                <div className="pt-8 border-t border-gray-100 space-y-4">
+                                                    <p className="text-[10px] uppercase tracking-widest text-gray-400">English Medical Breakdown</p>
+                                                    <p className="text-xs font-medium text-gray-500 leading-relaxed whitespace-pre-wrap">{bmi.aiAdvice.split('|||')[1]?.trim()}</p>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div className="h-full flex flex-col items-center justify-center opacity-10 gap-4 mt-20">
+                                                <Activity size={80} />
+                                                <p className="text-xs font-black uppercase tracking-[0.4em]">Awaiting body measurements</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </motion.div>
+                        )}
+
                         {/* Wellness AI - Modern Clean */}
                         {activeTab === 'wellness' && (
                             <motion.div key="wellness" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
@@ -255,7 +384,7 @@ CRITICAL RULE: You MUST format your precise response as:
                                             <h3 className="font-bold text-hospital-dark">Wellness Specialist</h3>
                                         </div>
                                         <p className="text-sm text-gray-500 leading-relaxed font-medium">Generate medical-grade nutrition plans tailored to your specific clinical condition.</p>
-                                        
+
                                         <div className="space-y-4">
                                             {['Diabetes Type 2', 'Hypertension', 'High Protein Diet', 'Pregnancy Nutrition'].map(tag => (
                                                 <button key={tag} onClick={() => setDietInput(tag)} className="w-full p-4 text-left text-sm font-bold text-gray-600 bg-gray-50 hover:bg-white hover:shadow-lg hover:border-hospital-primary/30 border border-transparent rounded-2xl transition-all flex items-center justify-between group">
@@ -266,7 +395,7 @@ CRITICAL RULE: You MUST format your precise response as:
                                                 className="w-full bg-gray-50/50 border border-gray-100 rounded-2xl p-6 min-h-[150px] text-sm font-medium outline-none focus:ring-2 ring-hospital-primary/10" />
                                             <button onClick={generateDietPlan} disabled={isDietLoading}
                                                 className="w-full py-5 bg-hospital-primary text-white rounded-2xl font-black text-xs uppercase tracking-[0.3em] shadow-xl hover:shadow-hospital-primary/20 transition-all flex items-center justify-center gap-3">
-                                                {isDietLoading ? <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"></div> : <><Sparkles size={16}/> Build Clinical Plan</>}
+                                                {isDietLoading ? <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"></div> : <><Sparkles size={16} /> Build Clinical Plan</>}
                                             </button>
                                         </div>
                                     </div>
@@ -353,25 +482,25 @@ CRITICAL RULE: You MUST format your precise response as:
 
                                     <div className="flex flex-col">
                                         <div className="bg-hospital-dark rounded-[40px] p-10 text-white min-h-[450px] flex flex-col justify-center relative overflow-hidden group shadow-2xl">
-                                             <div className="absolute top-0 right-0 p-10 opacity-5 group-hover:opacity-10 transition-opacity"><Dna size={300} /></div>
-                                             
-                                             <div className="flex items-center gap-3 mb-10 relative z-10">
+                                            <div className="absolute top-0 right-0 p-10 opacity-5 group-hover:opacity-10 transition-opacity"><Dna size={300} /></div>
+
+                                            <div className="flex items-center gap-3 mb-10 relative z-10">
                                                 <div className="w-6 h-6 bg-hospital-primary/20 rounded-lg flex items-center justify-center"><Activity size={14} color="#10b981" /></div>
                                                 <span className="text-[10px] font-black uppercase tracking-[0.4em] text-hospital-primary">Diagnostic Risk Assessment</span>
-                                             </div>
+                                            </div>
 
-                                             {skinResult ? (
-                                                 <div className="space-y-8 relative z-10">
-                                                     <div className="space-y-2">
-                                                         <p className="text-[10px] uppercase tracking-widest text-white/30">Detected Condition</p>
-                                                         <h4 className="text-4xl font-black">{skinResult.condition}</h4>
-                                                         <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest mt-4`} style={{ backgroundColor: `${riskColors[skinResult.risk]}20`, color: riskColors[skinResult.risk] }}>
-                                                             <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: riskColors[skinResult.risk] }}></div>
-                                                             {skinResult.risk} Level Risk Identified
-                                                         </div>
-                                                     </div>
+                                            {skinResult ? (
+                                                <div className="space-y-8 relative z-10">
+                                                    <div className="space-y-2">
+                                                        <p className="text-[10px] uppercase tracking-widest text-white/30">Detected Condition</p>
+                                                        <h4 className="text-4xl font-black">{skinResult.condition}</h4>
+                                                        <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest mt-4`} style={{ backgroundColor: `${riskColors[skinResult.risk]}20`, color: riskColors[skinResult.risk] }}>
+                                                            <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: riskColors[skinResult.risk] }}></div>
+                                                            {skinResult.risk} Level Risk Identified
+                                                        </div>
+                                                    </div>
 
-                                                     <div className="space-y-4 bg-white/5 p-6 rounded-3xl border border-white/10">
+                                                    <div className="space-y-4 bg-white/5 p-6 rounded-3xl border border-white/10">
                                                         <div className="flex items-center justify-between mb-2">
                                                             <span className="text-[10px] font-bold text-white/40 uppercase">AI Pattern Confidence</span>
                                                             <span className="text-sm font-black text-hospital-primary">{skinResult.confidence}%</span>
@@ -380,20 +509,20 @@ CRITICAL RULE: You MUST format your precise response as:
                                                             <motion.div initial={{ width: 0 }} animate={{ width: `${skinResult.confidence}%` }} transition={{ duration: 1.2 }}
                                                                 className="h-full bg-hospital-primary rounded-full shadow-[0_0_10px_#10b981]" />
                                                         </div>
-                                                     </div>
+                                                    </div>
 
-                                                     <div className="p-5 border-l-4 border-hospital-primary bg-hospital-primary/5 rounded-r-2xl">
-                                                         <p className="text-xs text-white/80 leading-relaxed italic uppercase font-bold tracking-tight">Clinical Note: Results are experimental and part of clinical research AI program. Consult a doctor immediately.</p>
-                                                     </div>
-                                                 </div>
-                                             ) : (
-                                                 <div className="flex flex-col items-center justify-center h-full opacity-10 gap-6">
-                                                     <Eye size={80} />
-                                                     <p className="text-xs font-black uppercase tracking-[0.4em]">Visual pattern parsing engine offline</p>
-                                                 </div>
-                                             )}
+                                                    <div className="p-5 border-l-4 border-hospital-primary bg-hospital-primary/5 rounded-r-2xl">
+                                                        <p className="text-xs text-white/80 leading-relaxed italic uppercase font-bold tracking-tight">Clinical Note: Results are experimental and part of clinical research AI program. Consult a doctor immediately.</p>
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <div className="flex flex-col items-center justify-center h-full opacity-10 gap-6">
+                                                    <Eye size={80} />
+                                                    <p className="text-xs font-black uppercase tracking-[0.4em]">Visual pattern parsing engine offline</p>
+                                                </div>
+                                            )}
                                         </div>
-                                        
+
                                         {/* Emergency Trigger */}
                                         <div className="mt-6 p-4 bg-red-50 rounded-2xl border border-red-100 flex items-center justify-between">
                                             <div className="flex items-center gap-3">
@@ -420,7 +549,7 @@ CRITICAL RULE: You MUST format your precise response as:
                                             </div>
                                         </div>
                                         <p className="text-sm text-gray-500 leading-relaxed font-medium mb-8">Analyze drug interactions, side effects, and safe dosage patterns across your medications.</p>
-                                        
+
                                         <div className="space-y-6">
                                             <div className="flex flex-wrap gap-2">
                                                 {['Aspirin', 'Metformin', 'Ibuprofen', 'Paracetamol'].map(m => (
@@ -434,7 +563,7 @@ CRITICAL RULE: You MUST format your precise response as:
                                                 className="w-full bg-gray-50/50 border border-gray-100 rounded-2xl p-6 min-h-[120px] text-sm font-medium outline-none" />
                                             <button onClick={checkDrugInteractions} disabled={isDrugsLoading}
                                                 className="w-full py-5 bg-hospital-secondary text-white rounded-2xl font-black text-xs uppercase tracking-[0.3em] shadow-xl hover:shadow-hospital-secondary/20 transition-all flex items-center justify-center gap-3">
-                                                {isDrugsLoading ? <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"></div> : <><ShieldCheck size={16}/> Cross-Verify Safety</>}
+                                                {isDrugsLoading ? <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"></div> : <><ShieldCheck size={16} /> Cross-Verify Safety</>}
                                             </button>
                                         </div>
                                     </div>
@@ -465,6 +594,83 @@ CRITICAL RULE: You MUST format your precise response as:
                                             <div className="h-full flex flex-col items-center justify-center opacity-10 py-16">
                                                 <Pill size={80} />
                                                 <p className="text-xs font-black uppercase tracking-[0.3em] mt-6">Safety logic idle</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </motion.div>
+                        )}
+
+                        {/* AI Health Score */}
+                        {activeTab === 'score' && (
+                            <motion.div key="healthscore" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
+                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                                    <div className="space-y-10">
+                                        <div className="flex items-center gap-4">
+                                            <div className="p-3 bg-hospital-primary/10 rounded-2xl text-hospital-primary"><Activity size={28} /></div>
+                                            <div>
+                                                <h2 className="text-2xl font-black text-hospital-dark">AI Health Scoring</h2>
+                                                <p className="text-xs font-bold text-gray-400 uppercase tracking-widest text-hospital-primary">Sri Kamala Clinical Quotient v2.1</p>
+                                            </div>
+                                        </div>
+
+                                        <div className="grid grid-cols-2 gap-6">
+                                            <div className="space-y-2">
+                                                <label className="text-[10px] uppercase font-black tracking-widest text-[#1e293b]/40 ml-1">Patient Age</label>
+                                                <input type="number" value={healthData.age} onChange={e => setHealthData({ ...healthData, age: e.target.value })} className="w-full bg-gray-50 border border-gray-100 rounded-2xl p-4 text-sm font-bold shadow-inner outline-none" />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-[10px] uppercase font-black tracking-widest text-[#1e293b]/40 ml-1">Physical Activity</label>
+                                                <select value={healthData.activity} onChange={e => setHealthData({ ...healthData, activity: e.target.value })} className="w-full bg-gray-50 border border-gray-100 rounded-2xl p-4 text-sm font-bold shadow-inner outline-none">
+                                                    <option>Low (Sedentary)</option><option>Moderate</option><option>High (Active)</option>
+                                                </select>
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-[10px] uppercase font-black tracking-widest text-[#1e293b]/40 ml-1">Daily Sleep (Hrs)</label>
+                                                <select value={healthData.sleep} onChange={e => setHealthData({ ...healthData, sleep: e.target.value })} className="w-full bg-gray-50 border border-gray-100 rounded-2xl p-4 text-sm font-bold shadow-inner outline-none">
+                                                    <option>4-6</option><option>7-8</option><option>9-10</option>
+                                                </select>
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-[10px] uppercase font-black tracking-widest text-[#1e293b]/40 ml-1">Nutrition Style</label>
+                                                <select value={healthData.nutrition} onChange={e => setHealthData({ ...healthData, nutrition: e.target.value })} className="w-full bg-gray-50 border border-gray-100 rounded-2xl p-4 text-sm font-bold shadow-inner outline-none">
+                                                    <option>Balanced</option><option>High Protein</option><option>Veg Only</option><option>Junk Food</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <button onClick={calculateHealthScore} disabled={isScoreLoading}
+                                            className="w-full py-5 bg-hospital-dark text-white rounded-2xl font-black text-xs uppercase tracking-[0.3em] shadow-xl hover:shadow-hospital-dark/20 transition-all flex items-center justify-center gap-3">
+                                            {isScoreLoading ? <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"></div> : <><Sparkles size={16} /> Compute Health Index</>}
+                                        </button>
+                                    </div>
+
+                                    <div className="bg-hospital-dark rounded-[50px] p-10 text-white shadow-2xl relative overflow-hidden">
+                                        <div className="absolute top-0 right-0 p-10 opacity-5 pointer-events-none"><Sparkles size={240} /></div>
+                                        {healthScore ? (
+                                            <div className="relative z-10 space-y-12">
+                                                <div className="text-center">
+                                                    <p className="text-[10px] font-black uppercase tracking-[0.4em] text-hospital-secondary mb-4 underline decoration-hospital-secondary/30">Your Health Quotient</p>
+                                                    <div className="text-8xl font-black text-white leading-none tracking-tighter flex items-end justify-center gap-2">
+                                                        {healthScore.score}<span className="text-2xl text-hospital-secondary mb-4">pts</span>
+                                                    </div>
+                                                </div>
+
+                                                <div className="space-y-8 text-left">
+                                                    <div className="space-y-4">
+                                                        <h5 className="text-[9px] font-black uppercase tracking-widest text-hospital-primary">Clinical Advice [Telugu]</h5>
+                                                        <p className="text-base font-bold font-['Noto_Sans_Telugu'] leading-relaxed">{healthScore.adviceTe}</p>
+                                                    </div>
+                                                    <div className="space-y-4 pt-8 border-t border-white/10">
+                                                        <h5 className="text-[9px] font-black uppercase tracking-widest text-hospital-secondary">Medical Breakdown [English]</h5>
+                                                        <p className="text-[11px] font-medium text-white/60 leading-relaxed whitespace-pre-wrap italic">{healthScore.adviceEn}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div className="h-full flex flex-col items-center justify-center py-20 opacity-20">
+                                                <Activity size={80} className="animate-pulse" />
+                                                <p className="text-sm font-black uppercase tracking-[0.4em] mt-8 text-center">Ready for clinical <br />assessment</p>
                                             </div>
                                         )}
                                     </div>

@@ -59,8 +59,8 @@ const Navbar = () => {
 
         {/* Action Buttons */}
         <div className="hidden lg:flex items-center gap-2">
-          <a href="tel:+919154404051" className="premium-button bg-hospital-secondary text-white px-4 py-2 border-none shadow-md">
-            <Phone size={12} /> <span className="uppercase text-[9px] tracking-wider">+91 91544</span>
+          <a href="tel:+919948076665" className="premium-button bg-hospital-secondary text-white px-4 py-2 border-none shadow-md">
+            <Phone size={12} /> <span className="uppercase text-[9px] tracking-wider">+91 99480 76665</span>
           </a>
         </div>
 
