@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, Award, HeartPulse, ShieldCheck, Activity, Star, MessageSquare } from 'lucide-react';
 import DoctorConsultationModal from './DoctorConsultationModal';
+import drKiran from '../assets/dr-kiran.jpg';
 
 const doctors = [
   {
@@ -9,7 +10,7 @@ const doctors = [
     name: 'Dr. D. Kiran',
     specialty: 'General Medicine (MD)',
     exp: '15+ Yrs',
-    img: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=400&h=400',
+    img: drKiran,
     color: 'bg-emerald-50 text-emerald-600 border-emerald-100',
     keywords: ['general medicine', 'physician', 'internal'],
     regNo: '64309',
