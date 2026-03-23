@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FlaskRound as Flask, Search, Heart, Plus, Microscope, Orbit } from 'lucide-react';
+import { FlaskRound as Flask, Search, Heart, Plus, Microscope, Orbit, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { fetchLabTests } from '../utils/api';
 import DiagnosticBookingModal from '../components/DiagnosticBookingModal';
@@ -9,6 +9,7 @@ const Diagnosis = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTest, setSelectedTest] = useState(null);
   const [aiInput, setAiInput] = useState('');
   const [isAiLoading, setIsAiLoading] = useState(false);
   const [aiRecommendation, setAiRecommendation] = useState(null);
@@ -129,12 +130,12 @@ CRITICAL RULE: You MUST format your precise response as:
               {aiRecommendation && (
                 <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="mt-4 p-4 bg-white/5 rounded-2xl border border-white/10">
                   {aiRecommendation.includes('|||') ? (
-                     <>
-                        <p className="text-[11px] font-bold leading-relaxed text-white font-['Noto_Sans_Telugu']">{aiRecommendation.split('|||')[0].trim()}</p>
-                        <p className="text-[9px] font-black uppercase tracking-widest text-hospital-primary opacity-80 mt-2">{aiRecommendation.split('|||')[1].trim()}</p>
-                     </>
+                    <>
+                      <p className="text-[11px] font-bold leading-relaxed text-white font-['Noto_Sans_Telugu']">{aiRecommendation.split('|||')[0].trim()}</p>
+                      <p className="text-[9px] font-black uppercase tracking-widest text-hospital-primary opacity-80 mt-2">{aiRecommendation.split('|||')[1].trim()}</p>
+                    </>
                   ) : (
-                     <p className="text-[11px] font-bold leading-relaxed text-white font-['Noto_Sans_Telugu']">{aiRecommendation}</p>
+                    <p className="text-[11px] font-bold leading-relaxed text-white font-['Noto_Sans_Telugu']">{aiRecommendation}</p>
                   )}
                 </motion.div>
               )}

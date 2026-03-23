@@ -567,7 +567,8 @@ IMPORTANT:
                 if (!name || !phone) return res.status(400).json({ success: false, message: "Missing required fields" });
 
                 // Prefix logic
-                const isDia = department.toLowerCase().includes('lab') || department.toLowerCase().includes('diagnosis');
+                const safeDept = department || '';
+                const isDia = safeDept.toLowerCase().includes('lab') || safeDept.toLowerCase().includes('diagnosis');
                 const prefix = isDia ? 'KAMALADIA' : 'KAMALA-OP';
 
                 let finalToken = null;
