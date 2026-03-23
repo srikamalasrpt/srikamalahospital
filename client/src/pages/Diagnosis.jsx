@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FlaskRound as Flask, Search, Heart, Plus, Microscope, Orbit, ArrowRight } from 'lucide-react';
+import { FlaskRound as Flask, Search, Heart, Plus, Microscope, Orbit, ArrowRight, Sparkles, Info, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { fetchLabTests } from '../utils/api';
 import DiagnosticBookingModal from '../components/DiagnosticBookingModal';
@@ -13,6 +13,7 @@ const Diagnosis = () => {
   const [aiInput, setAiInput] = useState('');
   const [isAiLoading, setIsAiLoading] = useState(false);
   const [aiRecommendation, setAiRecommendation] = useState(null);
+  const [activeInfo, setActiveInfo] = useState(null);
 
   useEffect(() => {
     const loadTests = async () => {
@@ -29,25 +30,70 @@ const Diagnosis = () => {
   }, []);
 
   const fallbackTests = [
-    { name: 'Complete Blood Picture (CBP)', category: 'Hematology', price: 250, report_time: 12 },
-    { name: 'Blood Glucose (Sugar)', category: 'Biochemistry', price: 150, report_time: 6 },
-    { name: 'Differential Count (DC)', category: 'Hematology', price: 200, report_time: 12 },
-    { name: 'ESR (1st & 2nd Hour)', category: 'Hematology', price: 100, report_time: 12 },
-    { name: 'Absolute Eosinophils Count (AEC)', category: 'Hematology', price: 300, report_time: 12 },
-    { name: 'Hemoglobin (Hb)', category: 'Hematology', price: 120, report_time: 8 },
-    { name: 'Packed Cell Volume (PCV)', category: 'Hematology', price: 140, report_time: 8 },
-    { name: 'Total Leukocyte Count (TLC)', category: 'Hematology', price: 170, report_time: 12 },
-    { name: 'Platelet Count', category: 'Hematology', price: 180, report_time: 12 },
-    { name: 'Reticulocyte Count', category: 'Hematology', price: 260, report_time: 18 },
-    { name: 'PT/INR', category: 'Coagulation', price: 320, report_time: 18 },
-    { name: 'APTT', category: 'Coagulation', price: 350, report_time: 24 },
-    { name: 'Peripheral Smear', category: 'Hematology', price: 350, report_time: 24 },
-    { name: 'Thyroid Profile (T3/T4/TSH)', category: 'Hormonal', price: 450, report_time: 24 },
-    { name: 'Lipid Profile', category: 'Cardiology', price: 500, report_time: 24 },
-    { name: 'Liver Function Test', category: 'Biochemistry', price: 650, report_time: 24 },
-    { name: 'Kidney Function Test', category: 'Biochemistry', price: 750, report_time: 24 },
-    { name: 'HbA1c', category: 'Diabetes', price: 450, report_time: 24 },
-    { name: 'CRP', category: 'Immunology', price: 420, report_time: 24 }
+    {
+      name: 'Complete Blood Picture (CBP)',
+      category: 'Hematology',
+      price: 250,
+      report_time: 12,
+      img: 'https://images.unsplash.com/photo-1579152276502-745f467599ee?auto=format&fit=crop&q=80&w=400',
+      description: 'Comprehensive analysis of red/white cells and platelets. Fasting not strictly required but recommended.'
+    },
+    {
+      name: 'Blood Glucose (Sugar)',
+      category: 'Biochemistry',
+      price: 150,
+      report_time: 6,
+      img: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&q=80&w=400',
+      description: 'Standard test for diabetes monitoring. 8-10 hours fasting required for accurate results.'
+    },
+    {
+      name: 'Thyroid Profile (T3/T4/TSH)',
+      category: 'Hormonal',
+      price: 450,
+      report_time: 24,
+      img: 'https://images.unsplash.com/photo-1511174511562-5f7f185854c8?auto=format&fit=crop&q=80&w=400',
+      description: 'Evaluates thyroid gland function. Best performed in the morning.'
+    },
+    {
+      name: 'Lipid Profile',
+      category: 'Cardiology',
+      price: 500,
+      report_time: 24,
+      img: 'https://images.unsplash.com/photo-1628595304645-83bc3e301272?auto=format&fit=crop&q=80&w=400',
+      description: 'Measures cholesterol and triglycerides. Strict 12-hour fasting required.'
+    },
+    {
+      name: 'Liver Function Test',
+      category: 'Biochemistry',
+      price: 650,
+      report_time: 24,
+      img: 'https://images.unsplash.com/photo-1579152438830-466d0938397a?auto=format&fit=crop&q=80&w=400',
+      description: 'Assesses liver health and protein levels. Avoid alcohol 24 hours prior.'
+    },
+    {
+      name: 'Kidney Function Test',
+      category: 'Biochemistry',
+      price: 750,
+      report_time: 24,
+      img: 'https://images.unsplash.com/photo-1647416391456-f331616cda2f?auto=format&fit=crop&q=80&w=400',
+      description: 'Measures creatinine and urea. Stay hydrated before the test.'
+    },
+    {
+      name: 'HbA1c',
+      category: 'Diabetes',
+      price: 450,
+      report_time: 24,
+      img: 'https://images.unsplash.com/photo-1576086213369-97a306dca664?auto=format&fit=crop&q=80&w=400',
+      description: 'Average blood sugar over 3 months. No fasting required.'
+    },
+    {
+      name: 'CRP',
+      category: 'Immunology',
+      price: 420,
+      report_time: 24,
+      img: 'https://images.unsplash.com/photo-1581093458791-9f3c3250bb8b?auto=format&fit=crop&q=80&w=400',
+      description: 'Detects inflammation in the body. Used for acute clinical assessments.'
+    }
   ];
 
   const handleAiRecommend = async () => {
@@ -155,47 +201,72 @@ CRITICAL RULE: You MUST format your precise response as:
               whileInView={{ y: 0, opacity: 1 }}
               transition={{ delay: index * 0.05 }}
               whileHover={{
-                scale: 1.05,
-                rotateX: 2,
-                rotateY: -2,
+                y: -10,
                 boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.15)"
               }}
-              style={{ perspective: "1000px" }}
-              className="bg-white p-8 rounded-[48px] border-2 border-transparent hover:border-hospital-primary/10 shadow-sm transition-all group relative overflow-hidden h-full flex flex-col cursor-pointer"
-              onClick={() => handleBookTest(test)}
+              className="bg-white rounded-[40px] border-2 border-transparent hover:border-hospital-primary/10 shadow-sm transition-all group relative overflow-hidden h-full flex flex-col cursor-pointer"
             >
-              <div className="absolute top-0 right-0 p-6 opacity-0 group-hover:opacity-100 transition-opacity">
-                <div className="w-8 h-8 rounded-full bg-hospital-mint flex items-center justify-center text-hospital-primary"><Plus size={16} /></div>
+              <div className="relative w-full h-48 overflow-hidden bg-gray-100">
+                <img src={test.img || 'https://images.unsplash.com/photo-1511174511562-5f7f185854c8?auto=format&fit=crop&q=80&w=400'} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={test.name} />
+                <div className="absolute top-4 right-4 z-20">
+                  <button
+                    onClick={(e) => { e.stopPropagation(); setActiveInfo(test); }}
+                    className="w-10 h-10 bg-white/90 backdrop-blur-md rounded-2xl flex items-center justify-center text-hospital-dark shadow-xl hover:bg-hospital-primary hover:text-white transition-all ring-4 ring-white/20">
+                    <Info size={18} />
+                  </button>
+                </div>
+                <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-white to-transparent"></div>
               </div>
 
-              <div className="mb-8">
-                <div className="w-16 h-16 bg-hospital-primary rounded-3xl flex items-center justify-center text-white shadow-xl mb-6 group-hover:rotate-12 transition-transform">
-                  <Microscope size={32} />
-                </div>
-                <div className="px-3 py-1 bg-gray-50 rounded-full border border-gray-100 text-[8px] font-black uppercase tracking-widest text-gray-400 inline-block mb-3">
-                  {test.category}
-                </div>
-                <h3 className="text-xl font-black text-hospital-dark leading-tight line-clamp-2 h-[3.5rem]">{test.name}</h3>
-              </div>
-
-              <div className="mt-auto space-y-6">
-                <div className="flex justify-between items-end border-b border-gray-50 pb-4">
-                  <div>
-                    <p className="text-[10px] font-black text-gray-300 uppercase tracking-widest mb-1 leading-none">Price Est.</p>
-                    <p className="text-3xl font-black text-hospital-dark tracking-tighter">₹{test.price}</p>
+              <div className="p-8 flex-1 flex flex-col pt-4">
+                <div className="mb-6 flex-1">
+                  <div className="px-3 py-1 bg-hospital-primary/5 rounded-full border border-hospital-primary/10 text-[8px] font-black uppercase tracking-widest text-hospital-primary inline-block mb-3">
+                    {test.category}
                   </div>
-                  <div className="text-right">
-                    <p className="text-[10px] font-black text-gray-300 uppercase tracking-widest mb-1 leading-none">Report</p>
-                    <p className="text-sm font-black text-hospital-secondary">{test.report_time}H</p>
-                  </div>
+                  <h3 className="text-lg font-black text-hospital-dark leading-tight line-clamp-2 h-[3rem] font-['Noto_Sans_Telugu']">{test.name}</h3>
                 </div>
 
-                <button className="w-full bg-hospital-dark text-white py-4 rounded-[24px] text-[10px] font-black uppercase tracking-widest shadow-lg group-hover:bg-hospital-primary group-hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2 border-none">
-                  <Heart size={14} className="group-hover:fill-white transition-all" /> Book Now
-                </button>
+                <div className="space-y-6 mt-auto">
+                  <div className="flex justify-between items-end border-b border-gray-50 pb-4">
+                    <div>
+                      <p className="text-[10px] font-black text-gray-300 uppercase tracking-widest mb-1 leading-none">Price Est.</p>
+                      <p className="text-2xl font-black text-hospital-dark tracking-tighter">₹{test.price}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-[10px] font-black text-gray-300 uppercase tracking-widest mb-1 leading-none">Report</p>
+                      <p className="text-xs font-black text-hospital-secondary">{test.report_time}H</p>
+                    </div>
+                  </div>
+
+                  <button onClick={() => { handleBookTest(test); }} className="w-full bg-hospital-dark text-white py-4 rounded-[24px] text-[10px] font-black uppercase tracking-widest shadow-lg group-hover:bg-hospital-primary group-hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2 border-none">
+                    <Heart size={14} className="group-hover:fill-white transition-all" /> Book Now
+                  </button>
+                </div>
               </div>
 
-              <div className="absolute -bottom-1 left-0 w-full h-1 bg-hospital-primary transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></div>
+              <AnimatePresence>
+                {activeInfo && activeInfo.name === test.name && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    className="absolute inset-0 z-30 bg-hospital-dark/95 p-8 flex flex-col justify-center text-center backdrop-blur-sm"
+                  >
+                    <button onClick={(e) => { e.stopPropagation(); setActiveInfo(null); }} className="absolute top-6 right-6 text-white/40 hover:text-white"><X size={24} /></button>
+                    <Sparkles className="text-hospital-secondary mx-auto mb-4" size={32} />
+                    <h4 className="text-white text-sm font-black uppercase tracking-widest mb-4">Clinical Preparation</h4>
+                    <p className="text-white/80 text-xs font-medium leading-relaxed font-['Noto_Sans_Telugu']">{test.description || "Consult physician for specific preparation requirements."}</p>
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => { handleBookTest(test); setActiveInfo(null); }}
+                      className="mt-8 py-3 px-6 bg-hospital-primary text-white rounded-full text-[10px] font-black uppercase tracking-widest"
+                    >
+                      Book This Test
+                    </motion.button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </motion.div>
           ))}
         </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ShoppingBag, Search, Filter, Bookmark, Package, Pill, HeartPulse, Activity, Plus, ChevronRight, Info, Sparkles, ArrowRight } from 'lucide-react';
+import { ShoppingBag, Search, Filter, Bookmark, Package, Pill, HeartPulse, Activity, Plus, ChevronRight, Info, Sparkles, ArrowRight, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { fetchPharmacyProducts } from '../utils/api';
 
@@ -10,6 +10,52 @@ const MedicalShop = () => {
   const [aiInput, setAiInput] = useState('');
   const [isAiLoading, setIsAiLoading] = useState(false);
   const [aiInsight, setAiInsight] = useState('');
+  const [activeInfo, setActiveInfo] = useState(null);
+
+  const fallbackProducts = [
+    { 
+      name: 'Paracetamol 650mg', 
+      category: 'Analgesics', 
+      price: 25,
+      img: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=400',
+      description: 'Used for fever and mild to moderate pain relief. Safe for most adults when taken as directed.'
+    },
+    { 
+      name: 'Amoxicillin 500mg', 
+      category: 'Antibiotics', 
+      price: 120,
+      img: 'https://images.unsplash.com/photo-1471864190281-ad5fe9bb072c?auto=format&fit=crop&q=80&w=400',
+      description: 'Broad-spectrum antibiotic for bacterial infections. Requires a valid doctor prescription.'
+    },
+    { 
+      name: 'Cetirizine 10mg', 
+      category: 'Allergy', 
+      price: 45,
+      img: 'https://images.unsplash.com/photo-1631549916768-4119b255f946?auto=format&fit=crop&q=80&w=400',
+      description: 'Non-drowsy antihistamine for hay fever, allergies, and cold symptoms.'
+    },
+    { 
+      name: 'Pantoprazole 40mg', 
+      category: 'Gastritis', 
+      price: 90,
+      img: 'https://images.unsplash.com/photo-1550572017-ed2302ca3f8c?auto=format&fit=crop&q=80&w=400',
+      description: 'Reduces stomach acid. Used for GERD, acidity, and heart burn. Take 30 mins before food.'
+    },
+    { 
+      name: 'ORS Sachet (Orange)', 
+      category: 'Wellness', 
+      price: 15,
+      img: 'https://images.unsplash.com/photo-1512069772995-ec65ed45afd6?auto=format&fit=crop&q=80&w=400',
+      description: 'World Health Organization formula for rehydration during fever or dehydration.'
+    },
+    { 
+      name: 'Multivitamin Complex', 
+      category: 'Supplements', 
+      price: 180,
+      img: 'https://images.unsplash.com/photo-1626202341506-89772589363a?auto=format&fit=crop&q=80&w=400',
+      description: 'Essential vitamins and minerals for daily health and immunity support.'
+    }
+  ];
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -25,13 +71,15 @@ const MedicalShop = () => {
     loadProducts();
   }, []);
 
+  const currentProducts = (products && products.length > 0) ? products : fallbackProducts;
+
   const handleAiAsk = async () => {
     if (!aiInput) return;
     setIsAiLoading(true);
     setAiInsight('');
     try {
       const { chatWithAI } = await import('../utils/api');
-      const stock = products.map(p => p.name).join(', ');
+      const stock = currentProducts.map(p => p.name).join(', ');
       const prompt = `Medicine Inquiry: "${aiInput}". Our stock: [${stock}]. Briefly explain if we have it or a similar alternative, and its primary clinical use. Max 2 sentences.
 CRITICAL RULE: You MUST format your response as:
 [Telugu Translation]
@@ -46,7 +94,7 @@ CRITICAL RULE: You MUST format your response as:
     }
   };
 
-  const filteredProducts = products.filter(product =>
+  const filteredProducts = currentProducts.filter(product =>
     product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     product.category.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -94,9 +142,9 @@ CRITICAL RULE: You MUST format your response as:
               )}
             </div>
             <div className="relative group w-full">
-              <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-300" size={16} />
+              <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-hospital-primary/40" size={20} />
               <input type="text" placeholder="మందుల కోసం వెతకండి (e.g. Paracetamol)" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-white border border-gray-100 p-4 pl-12 rounded-[28px] shadow-lg outline-none text-sm font-black transition-all placeholder:text-gray-200" />
+                className="w-full bg-white border-2 border-transparent focus:border-hospital-secondary/20 shadow-xl p-5 pl-14 rounded-[32px] outline-none text-sm font-bold transition-all" />
             </div>
           </div>
         </div>
@@ -109,29 +157,46 @@ CRITICAL RULE: You MUST format your response as:
             </div>
           ) : (
             <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
               {filteredProducts.map((product, index) => (
-                <motion.div key={index} whileHover={{ y: -6 }} transition={{ duration: 0.8, type: 'spring' }}
-                  className="bg-white rounded-[40px] p-6 border border-gray-100 shadow-md hover:shadow-xl group relative overflow-hidden flex flex-col items-center text-center">
+                <motion.div key={index} whileHover={{ y: -8 }} transition={{ duration: 0.8, type: 'spring' }}
+                  className="bg-white rounded-[40px] p-6 border border-gray-100 shadow-md hover:shadow-2xl group relative overflow-hidden flex flex-col items-center">
 
-                  <div className="w-full aspect-square bg-gray-50 rounded-[32px] overflow-hidden mb-6 border-2 border-white shadow-lg relative flex items-center justify-center p-6 group-hover:bg-hospital-primary/5 transition-colors">
-                    <div className="text-hospital-primary scale-[2] opacity-10 group-hover:scale-[2.5] transition-transform duration-1000">
-                      <Package size={48} strokeWidth={1} />
-                    </div>
-                    <div className="absolute top-3 right-3 text-[7px] font-black text-green-600 bg-green-50 px-2 py-0.5 rounded-full font-['Noto_Sans_Telugu']">అందుబాటులో ఉంది</div>
+                  <div className="w-full aspect-square bg-gray-50 rounded-[32px] overflow-hidden mb-6 relative border-2 border-white shadow-sm">
+                    <img src={product.img || 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=400'} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={product.name} />
+                    <div className="absolute top-3 right-3 text-[7px] font-black text-green-600 bg-white/90 backdrop-blur-md px-2 py-1 rounded-full font-['Noto_Sans_Telugu'] shadow-sm">అందుబాటులో ఉంది</div>
                   </div>
 
-                  <div className="mb-8 w-full">
+                  <div className="mb-8 w-full text-center">
                     <p className="text-[7px] font-black uppercase tracking-[0.2em] text-hospital-secondary mb-1">{product.category}</p>
                     <h3 className="text-lg font-black text-hospital-dark line-clamp-1 leading-none tracking-tight font-['Noto_Sans_Telugu']">{product.name}</h3>
-                    <div className="mt-4">
-                      <p className="text-xl font-black text-hospital-dark tabular-nums">₹{product.price}</p>
+                    <div className="mt-4 flex items-center justify-center gap-2">
+                      <p className="text-2xl font-black text-hospital-dark tabular-nums">₹{product.price}</p>
                     </div>
                   </div>
 
-                  <button className="w-full flex items-center justify-center gap-2 p-3 bg-gray-50 text-gray-400 font-black text-[9px] uppercase tracking-widest rounded-full hover:bg-hospital-primary hover:text-white transition-all shadow-md">
+                  <button 
+                    onClick={() => setActiveInfo(product)}
+                    className="w-full flex items-center justify-center gap-2 p-4 bg-gray-50 text-gray-400 font-black text-[9px] uppercase tracking-widest rounded-[24px] hover:bg-hospital-secondary hover:text-white transition-all shadow-sm border-none">
                     <Info size={14} /> <span className="font-['Noto_Sans_Telugu'] text-xs font-black tracking-normal">వివరాలు</span>
                   </button>
+
+                  <AnimatePresence>
+                    {activeInfo && activeInfo.name === product.name && (
+                      <motion.div 
+                        initial={{ opacity: 0, scale: 0.9 }} 
+                        animate={{ opacity: 1, scale: 1 }} 
+                        exit={{ opacity: 0, scale: 0.9 }}
+                        className="absolute inset-0 z-30 bg-hospital-dark/95 p-6 flex flex-col justify-center text-center backdrop-blur-sm"
+                      >
+                        <button onClick={() => setActiveInfo(null)} className="absolute top-4 right-4 text-white/40 hover:text-white"><X size={20} /></button>
+                        <Sparkles className="text-hospital-secondary mx-auto mb-3" size={24} />
+                        <h4 className="text-white text-[10px] font-black uppercase tracking-widest mb-3">Clinical Insight</h4>
+                        <p className="text-white/80 text-[11px] font-bold leading-relaxed font-['Noto_Sans_Telugu']">{product.description || "General information about this medicine usage."}</p>
+                        <button onClick={() => setActiveInfo(null)} className="mt-6 py-2 px-4 bg-hospital-secondary text-white rounded-full text-[9px] font-black uppercase tracking-widest border-none">Got it</button>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </motion.div>
               ))}
             </motion.div>
