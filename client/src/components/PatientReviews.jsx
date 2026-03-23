@@ -1,5 +1,5 @@
 import React from 'react';
-import { Star, Quote, MessageSquare, Heart, ShieldCheck, Award, TrendingUp, Sparkles, Orbit } from 'lucide-react';
+import { Star, Quote, MessageSquare, Heart, ShieldCheck, Award, TrendingUp, Sparkles, Orbit, ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const PatientReviews = () => {

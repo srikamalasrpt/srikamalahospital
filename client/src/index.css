@@ -93,11 +93,85 @@
   display: none;
 }
 
-/* Neon Glow Utilities */
-.shadow-neon-primary {
-  box-shadow: 0 0 20px -5px rgba(0, 128, 128, 0.4);
+/* --- Liquid Glass & Antigravity Cursor Ecosystem --- */
+:root {
+  --hospital-primary: #008080;
+  --hospital-secondary: #ff8fa3;
+  --liquid-glass: rgba(255, 255, 255, 0.45);
+  --liquid-blur: blur(24px);
+  --gooey-border: rgba(255, 255, 255, 0.6);
+  --antigravity-primary: #008080;
 }
 
-.shadow-neon-secondary {
-  box-shadow: 0 0 20px -5px rgba(255, 143, 163, 0.4);
+@keyframes blob-organic {
+  0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+  50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+}
+
+.liquid-glass {
+  background: var(--liquid-glass);
+  backdrop-filter: var(--liquid-blur);
+  -webkit-backdrop-filter: var(--liquid-blur);
+  border: 1px solid var(--gooey-border);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+}
+
+.glass-organic {
+  animation: blob-organic 12s ease-in-out infinite;
+  background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 100%);
+  border: 1.5px solid rgba(255,255,255,0.8);
+}
+
+.custom-cursor {
+  width: 12px;
+  height: 12px;
+  background: var(--antigravity-primary);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: difference;
+  transition: transform 0.1s ease-out;
+}
+
+.cursor-follower {
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--antigravity-primary);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0.3;
+  transition: transform 0.2s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.main-wrapper {
+  margin-left: 110px;
+  transition: margin 0.5s cubic-bezier(0.2, 0, 0, 1);
+}
+
+@media (max-width: 1024px) {
+  .main-wrapper {
+    margin-left: 0;
+    padding-top: 80px;
+  }
+}
+
+.sidebar-container {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 110px;
+  z-index: 100;
+}
+
+@media (max-width: 1024px) {
+  .sidebar-container {
+    height: 80px;
+    width: 100%;
+    bottom: 0;
+    top: auto;
+  }
 }

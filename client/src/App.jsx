@@ -13,6 +13,7 @@ import DoctorsPage from './pages/DoctorsPage';
 import ReviewsPage from './pages/ReviewsPage';
 import AIHealthPage from './pages/AIHealthPage';
 import SiteInfoPage from './pages/SiteInfoPage';
+import CustomCursor from './components/CustomCursor';
 
 const ScrollToTop = () => {
     const { pathname } = useLocation();
@@ -27,20 +28,22 @@ const Layout = ({ children }) => {
     const isAdmin = pathname === '/6665';
 
     return (
-        <div className="relative selection:bg-primary/30 selection:text-hospital-dark">
+        <div className="relative selection:bg-hospital-primary/30 selection:text-hospital-dark overflow-x-hidden min-h-screen">
             <ScrollToTop />
+            <CustomCursor />
+            
             {!isAdmin && <Navbar />}
             
-            <main className="min-h-screen">
+            <main className={`${!isAdmin ? 'main-wrapper' : ''} min-h-screen relative z-10 antialiased`}>
                 {children}
+                
+                {!isAdmin && (
+                    <>
+                        <HealthBot />
+                        <Footer />
+                    </>
+                )}
             </main>
-            
-            {!isAdmin && (
-                <>
-                    <HealthBot />
-                    <Footer />
-                </>
-            )}
         </div>
     );
 };
