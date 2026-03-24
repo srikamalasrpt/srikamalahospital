@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import Hero from '../components/Hero';
 import FeatureGrid from '../components/FeatureGrid';
-import Stats from '../components/Stats';
 import QuickActionGrid from '../components/QuickActionGrid';
 import OPBoard from '../components/OPBoard';
 import PatientReviews from '../components/PatientReviews';
-import { motion } from 'framer-motion';
+import Doctors from '../components/Doctors';
+import ClinicalPulseDashboard from '../components/ClinicalPulseDashboard';
+import { motion, AnimatePresence } from 'framer-motion';
 import { getConfig } from '../utils/api';
 
 function Home() {
@@ -33,29 +34,59 @@ function Home() {
   };
 
   return (
-    <div className="bg-hospital-background selection:bg-hospital-primary selection:text-white overflow-hidden pb-32">
+    <div className="bg-[#050505] selection:bg-hospital-primary selection:text-black overflow-hidden pb-40 relative">
+      
+      {/* Dynamic Midnight Layering Matrix */}
       <div className="fixed inset-0 z-0 pointer-events-none opacity-20 overflow-hidden">
-        <div className="absolute top-[10%] right-[15%] w-24 h-24 text-hospital-primary flex items-center justify-center font-black text-6xl opacity-30">+</div>
-        <div className="absolute bottom-[20%] left-[10%] w-64 h-64 border-[40px] border-hospital-primary opacity-5 rounded-full blur-2xl"></div>
+        <div className="absolute top-[15%] right-[20%] w-[500px] h-[500px] bg-hospital-primary/10 rounded-full blur-[140px] animate-pulse-soft"></div>
+        <div className="absolute bottom-[25%] left-[15%] w-[400px] h-[400px] bg-hospital-secondary/10 rounded-full blur-[120px] animate-pulse-soft" style={{ animationDelay: '3s' }}></div>
       </div>
 
-      <main className="relative z-10 pt-20">
-        <Hero />
+      <main className="relative z-10">
+        
+        {/* Core Sections Matrix */}
+        <section id="hero" className="relative group">
+            <Hero />
+        </section>
 
-        <QuickActionGrid />
+        <section id="dashboard" className="relative -mt-24 group">
+            <ClinicalPulseDashboard />
+        </section>
 
-        <OPBoard />
+        <section id="actions" className="relative group">
+            <QuickActionGrid />
+        </section>
+
+        <section id="doctors" className="relative group">
+            <Doctors />
+        </section>
+
+        <section id="registry" className="relative group">
+            <OPBoard />
+        </section>
 
         {showCoreServices && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
+          <motion.div 
+            initial={{ opacity: 0, y: 50 }} 
+            whileInView={{ opacity: 1, y: 0 }} 
+            viewport={{ once: true }}
+            transition={{ duration: 1.2 }}
+            id="services"
+          >
             <FeatureGrid />
           </motion.div>
         )}
 
-        <div id="reviews" className="mt-20">
-          <PatientReviews />
-        </div>
+        <section id="reviews" className="relative group mt-20">
+            <PatientReviews />
+        </section>
+
       </main>
+
+      {/* Global Clinical Decor Elements - Procedural Complements */}
+      <div className="absolute top-[50%] right-[-100px] opacity-[0.02] text-white rotate-45 pointer-events-none group-hover:rotate-90 transition-transform duration-[3000ms]"><Plus size={400} strokeWidth={0.5} /></div>
+      <div className="absolute bottom-[10%] left-[-80px] opacity-[0.02] text-hospital-secondary -rotate-12 pointer-events-none"><Heart size={350} strokeWidth={0.5} /></div>
+
     </div>
   );
 }

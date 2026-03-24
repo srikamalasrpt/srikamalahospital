@@ -1,181 +1,210 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { CheckCircle2, Hospital, Download, Heart, ArrowLeft, FileText, Globe } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { CheckCircle2, Download, Heart, ArrowLeft, FileText, Globe, Zap, ShieldCheck, Activity, Cpu } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { getAppointmentByToken } from '../utils/api';
 
 const Receipt = () => {
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
-  const token = searchParams.get('token');
-  const [appointment, setAppointment] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [receiptId] = useState(() => `SKH-RE-${Date.now().toString().slice(-6)}`);
+   const [searchParams] = useSearchParams();
+   const navigate = useNavigate();
+   const token = searchParams.get('token');
+   const [appointment, setAppointment] = useState(null);
+   const [loading, setLoading] = useState(true);
+   const [receiptId] = useState(() => `SKH-RE-${Date.now().toString().slice(-6)}`);
 
-  useEffect(() => {
-    if (token) {
-      fetchAppointment();
-    }
-  }, [token]);
-
-  const fetchAppointment = async () => {
-    try {
-      const resp = await getAppointmentByToken(token);
-      if (resp.data.success) {
-        setAppointment(resp.data.appointment);
+   useEffect(() => {
+      if (token) {
+         fetchAppointment();
       }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+   }, [token]);
 
-  const isPaid = appointment?.paymentStatus === 'Paid';
-  const isDiagnostic = appointment?.token?.startsWith('KAMALADIA');
-  const servicePhone = isDiagnostic ? '98668 95634' : '99480 76665';
-  const serviceTitle = isDiagnostic ? 'SRI KAMALA HOSPITAL | DIAGNOSTICS' : 'SRI KAMALA HOSPITAL | OP SERVICES';
+   const fetchAppointment = async () => {
+      try {
+         const resp = await getAppointmentByToken(token);
+         if (resp.data.success) {
+            setAppointment(resp.data.appointment);
+         }
+      } catch (err) {
+         console.error(err);
+      } finally {
+         setLoading(false);
+      }
+   };
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center bg-[#f1f5f9]">
-    <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1 }} 
-      className="w-16 h-16 border-4 border-hospital-primary/30 border-t-hospital-primary rounded-full shadow-xl" />
-  </div>;
+   const isPaid = appointment?.paymentStatus === 'Paid';
+   const isDiagnostic = appointment?.token?.startsWith('KAMALADIA');
+   const servicePhone = isDiagnostic ? '98668 95634' : '99480 76665';
+   const serviceTitle = isDiagnostic ? 'SRI KAMALA | DIAGNOSTIC NODE' : 'SRI KAMALA | CLINICAL CORE';
 
-  return (
-    <div className="min-h-screen bg-[#f1f5f9] p-6 md:p-12 font-sans flex flex-col items-center">
-      <header className="w-full max-w-4xl flex items-center justify-between mb-8">
-        <button onClick={() => navigate('/')} className="flex items-center gap-2 text-hospital-dark font-black hover:text-hospital-secondary transition-all group">
-           <div className="p-2 bg-white rounded-xl shadow-md border border-gray-50 group-hover:-translate-x-1 transition-transform">
-             <ArrowLeft size={18} />
-           </div>
-           Back to Home
-        </button>
-        <div className="flex gap-4">
-           <button onClick={() => window.print()} className="p-3 bg-white text-hospital-primary rounded-xl shadow-lg border border-gray-50 hover:scale-105 active:scale-95 transition-all">
-              <Download size={22} />
-           </button>
-        </div>
-      </header>
+   if (loading) return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-black gap-8">
+         <motion.div animate={{ rotate: 360, scale: [1, 1.1, 1] }} transition={{ repeat: Infinity, duration: 1.5 }}
+            className="w-20 h-20 border-4 border-hospital-primary/20 border-t-hospital-primary rounded-[30px] shadow-neon-primary" />
+         <p className="text-[10px] font-black text-white uppercase tracking-[0.6em] animate-pulse italic">Synchronizing Receipt Matrix...</p>
+      </div>
+   );
 
-      <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
-        className="w-full max-w-4xl bg-white rounded-2xl shadow-3xl border border-gray-100 relative overflow-hidden print:shadow-none print:border-none">
-        
-        <div className="p-12 border-b-4 border-hospital-primary bg-hospital-dark relative overflow-hidden">
-           <div className="absolute top-0 right-0 w-64 h-64 bg-hospital-primary opacity-10 rounded-full blur-[60px] translate-x-1/2 -translate-y-1/2"></div>
-           <div className="flex flex-col md:flex-row justify-between items-center gap-8 relative z-10 text-white">
-              <div className="flex items-center gap-6">
-                 <div className="w-20 h-20 p-2 bg-white rounded-2xl shadow-2xl flex items-center justify-center">
-                    <img src="/logo.png" className="w-full h-full object-contain" />
-                 </div>
-                 <div>
-                    <h1 className="text-4xl font-black font-['Noto_Sans_Telugu'] mb-1">శ్రీ కమల హాస్పిటల్</h1>
-                    <p className="text-[10px] uppercase font-black tracking-[0.5em] text-hospital-primary leading-none">{serviceTitle}</p>
-                    <div className="mt-4 space-y-1 text-gray-400 text-[10px] font-black uppercase tracking-widest leading-none">
-                       <p>Opp. Tirumala Grand, M.G. Road, Suryapet</p>
-                       <p>Tel: {servicePhone} | Open 24 Hours</p>
-                    </div>
-                 </div>
-              </div>
-              
-              <div className="bg-white/10 p-6 rounded-2xl border border-white/10 backdrop-blur-md text-center min-w-[180px]">
-                 <p className="text-[8px] font-black text-hospital-primary uppercase tracking-[0.4em] mb-2 leading-none">TOKEN NUMBER</p>
-                 <p className="text-3xl font-black font-mono tracking-tighter text-white">{appointment?.token}</p>
-                 <div className={`mt-3 py-1 px-3 rounded-full text-[8px] font-black uppercase tracking-widest ${isPaid ? 'bg-green-500/20 text-green-400' : 'bg-orange-500/20 text-orange-400'}`}>
-                    {isPaid ? 'Confirmed / Paid' : 'Verify & Pay at Counter'}
-                 </div>
-              </div>
-           </div>
-        </div>
+   return (
+      <div className="min-h-screen bg-[#050505] p-6 md:p-12 font-sans flex flex-col items-center relative overflow-hidden">
 
-        <div className="p-16">
-           <div className="flex justify-between items-start mb-16">
-              <div className="space-y-3">
-                 <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-300 mb-6">Patient Certification</h3>
-                 <div className="space-y-1">
-                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none">Patient Identification</p>
-                    <p className="text-2xl font-black text-hospital-dark">{appointment?.name || 'Loading...'}</p>
-                 </div>
-                 <div className="flex gap-10 pt-4">
-                    <div>
-                        <p className="text-[8px] font-black text-gray-400 uppercase tracking-widest leading-none mb-1">Age / Gender</p>
-                        <p className="font-black text-sm text-hospital-dark">{appointment?.age}Y / {appointment?.gender}</p>
-                    </div>
-                    <div>
-                        <p className="text-[8px] font-black text-gray-400 uppercase tracking-widest leading-none mb-1">Phone</p>
-                        <p className="font-black text-sm text-hospital-dark font-mono">{appointment?.phone}</p>
-                    </div>
-                 </div>
-              </div>
+         {/* Background Decor */}
+         <div className="fixed inset-0 z-0 pointer-events-none opacity-20 overflow-hidden">
+            <div className="absolute top-[15%] right-[20%] w-[500px] h-[500px] bg-hospital-primary/10 rounded-full blur-[140px] animate-pulse-soft"></div>
+            <div className="absolute bottom-[25%] left-[15%] w-[400px] h-[400px] bg-hospital-secondary/10 rounded-full blur-[120px] animate-pulse-soft" style={{ animationDelay: '3s' }}></div>
+         </div>
 
-              <div className="text-right space-y-2">
-                 <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100 flex flex-col items-end">
-                    <p className="text-[8px] font-black text-gray-400 uppercase tracking-widest mb-1 leading-none">Appointment Schedule</p>
-                    <p className="text-xl font-black text-hospital-dark">{appointment?.appointmentDate}</p>
-                 </div>
-                 <p className="text-[8px] font-black text-gray-300 uppercase tracking-widest">Valid for 24 hours only</p>
-              </div>
-           </div>
+         <header className="w-full max-w-4xl flex items-center justify-between mb-12 relative z-10">
+            <button onClick={() => navigate('/')} className="flex items-center gap-4 text-white font-black hover:text-hospital-primary transition-all group active:scale-90">
+               <div className="p-3 bg-white/5 rounded-2xl border border-white/10 group-hover:-translate-x-2 transition-transform shadow-4xl backdrop-blur-3xl">
+                  <ArrowLeft size={20} />
+               </div>
+               <span className="text-[11px] font-black uppercase tracking-[0.4em] italic">De-activate Session</span>
+            </button>
+            <div className="flex gap-4">
+               <button onClick={() => window.print()} className="p-4 bg-white/5 text-hospital-primary rounded-2xl border border-white/10 shadow-4xl hover:bg-white/10 active:scale-90 transition-all backdrop-blur-3xl">
+                  <Download size={24} />
+               </button>
+            </div>
+         </header>
 
-           <div className="mb-16">
-              <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-300 mb-8 border-b border-gray-50 pb-4">Service Details</h3>
-              <div className="flex items-center justify-between p-8 bg-[#fdfdfd] border-2 border-gray-50 rounded-[32px] shadow-sm">
-                 <div className="flex items-center gap-6">
-                    <div className="w-14 h-14 bg-hospital-mint rounded-[20px] flex items-center justify-center text-hospital-primary shrink-0">
-                       <Heart size={24} />
-                    </div>
-                    <div>
-                       <p className="text-[8px] font-black text-gray-400 uppercase tracking-widest mb-1 leading-none">Service Sector</p>
-                       <p className="text-xl font-black text-hospital-dark uppercase font-['Noto_Sans_Telugu'] tracking-tight">{appointment?.department}</p>
-                    </div>
-                 </div>
-                 <div className="text-right">
-                    <p className="text-[8px] font-black text-gray-400 uppercase tracking-widest mb-1 leading-none">Consultation/Test Fee</p>
-                    <p className="text-4xl font-black text-hospital-dark">₹{appointment?.reason?.match(/₹(\d+)/)?.[1] || '100.00'}</p>
-                 </div>
-              </div>
-           </div>
+         <motion.div initial={{ y: 50, opacity: 0, scale: 0.95 }} animate={{ y: 0, opacity: 1, scale: 1 }}
+            className="w-full max-w-4xl bg-[#0a0a0a] rounded-[60px] shadow-4xl border border-white/10 relative overflow-hidden print:shadow-none print:border-white/20 backdrop-blur-3xl">
 
-           <div className="flex flex-col md:flex-row justify-between items-end gap-12">
-              <div className="max-w-xs space-y-6">
-                 <div className="flex items-center gap-4 text-gray-400 bg-gray-50/50 p-4 rounded-2xl border border-gray-100">
-                    <FileText size={16} />
-                    <p className="text-[10px] font-black uppercase tracking-widest leading-none">Official Digital Receipt<br/><span className="text-[8px] text-gray-200 mt-1 block">{receiptId}</span></p>
-                 </div>
-                 <p className="text-[9px] font-medium text-gray-400 italic">Please present this digital token or a printout at the reception counter upon arrival. Priority queue follows token sequence.</p>
-              </div>
+            {/* Pass Header */}
+            <div className="p-14 bg-white/5 border-b border-white/10 relative overflow-hidden">
+               <div className="absolute top-0 right-0 w-80 h-80 bg-hospital-primary opacity-[0.03] rounded-full blur-[80px] translate-x-1/2 -translate-y-1/2"></div>
+               <div className="flex flex-col lg:flex-row justify-between items-center gap-12 relative z-10 text-white">
+                  <div className="flex items-center gap-8">
+                     <div className="w-24 h-24 p-3 bg-white rounded-[32px] shadow-4xl flex items-center justify-center group overflow-hidden relative">
+                        <div className="absolute inset-0 bg-hospital-primary opacity-0 group-hover:opacity-10 transition-opacity"></div>
+                        <img src="/logo.png" className="w-full h-full object-contain relative z-10" />
+                     </div>
+                     <div className="text-center lg:text-left">
+                        <h1 className="text-5xl font-black font-['Noto_Sans_Telugu'] mb-3 tracking-tighter italic">శ్రీ కమల హాస్పిటల్</h1>
+                        <p className="text-[11px] uppercase font-black tracking-[0.5em] text-hospital-primary leading-none italic opacity-70">{serviceTitle}</p>
+                        <div className="mt-6 flex flex-wrap gap-4 justify-center lg:justify-start">
+                           <div className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[8px] font-black uppercase tracking-widest text-gray-500 italic">M.G. ROAD, SURYAPET</div>
+                           <div className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[8px] font-black uppercase tracking-widest text-gray-500 italic">TEL: {servicePhone}</div>
+                        </div>
+                     </div>
+                  </div>
 
-              <div className="flex flex-col items-end gap-4 relative">
-                 <div className="w-24 h-24 bg-hospital-dark rounded-2xl p-2 flex items-center justify-center border-4 border-gray-50 shadow-xl">
-                    <div className="w-full h-full bg-hospital-primary rounded-lg opacity-20 flex items-center justify-center"><CheckCircle2 size={30} className="text-white"/></div>
-                 </div>
-                 <p className="text-[8px] font-black uppercase tracking-[0.4em] text-hospital-secondary">Official Stamp</p>
-              </div>
-           </div>
-        </div>
+                  <div className="bg-black/40 p-8 rounded-[40px] border border-white/10 backdrop-blur-3xl text-center min-w-[220px] shadow-4xl group">
+                     <p className="text-[10px] font-black text-hospital-primary uppercase tracking-[0.5em] mb-4 leading-none italic">SECURE TOKEN</p>
+                     <p className="text-5xl font-black font-mono tracking-tighter text-white group-hover:scale-110 transition-transform">{appointment?.token}</p>
+                     <div className={`mt-6 py-2 px-4 rounded-full text-[9px] font-black uppercase tracking-[0.4em] italic flex items-center justify-center gap-2 ${isPaid ? 'bg-green-500/20 text-green-400 border border-green-500/30' : 'bg-orange-500/20 text-orange-400 border border-orange-500/30'}`}>
+                        {isPaid ? <><CheckCircle2 size={12} /> Verified & Active</> : <><Activity size={12} /> Pending Verification</>}
+                     </div>
+                  </div>
+               </div>
+            </div>
 
-        <div className="bg-gray-50 p-6 text-center border-t border-gray-100">
-           <div className="flex items-center justify-center gap-3 text-[10px] font-black text-gray-300 uppercase tracking-widest">
-              <Globe size={12} /> srikamalahospital.store
-           </div>
-        </div>
+            <div className="p-16 lg:p-24">
+               <div className="flex flex-col lg:flex-row justify-between items-start gap-16 mb-20">
+                  <div className="space-y-10">
+                     <h3 className="text-[11px] font-black uppercase tracking-[0.5em] text-gray-700 mb-8 italic">PATIENT IDENTIFICATION LOG</h3>
+                     <div className="space-y-4">
+                        <p className="text-[10px] font-black text-gray-700 uppercase tracking-[0.3em] leading-none mb-1 italic">Verified Subject Name</p>
+                        <p className="text-5xl font-black text-white italic tracking-tighter uppercase leading-none underline decoration-hospital-secondary/20 underline-offset-8">{appointment?.name || 'SYNCING...'}</p>
+                     </div>
+                     <div className="grid grid-cols-2 gap-12 pt-8">
+                        <div>
+                           <p className="text-[9px] font-black text-gray-700 uppercase tracking-[0.3em] mb-3 italic">Age / Gender Profile</p>
+                           <p className="font-black text-xl text-white italic">{appointment?.age}Y / {appointment?.gender}</p>
+                        </div>
+                        <div>
+                           <p className="text-[9px] font-black text-gray-700 uppercase tracking-[0.3em] mb-3 italic">Autonomous Contact</p>
+                           <p className="font-black text-xl text-white font-mono tracking-tight italic">{appointment?.phone}</p>
+                        </div>
+                     </div>
+                  </div>
 
-        <div className="absolute -bottom-1 left-0 flex justify-around w-full">
-           {[...Array(15)].map((_, i) => (
-             <div key={i} className="w-4 h-4 bg-[#f1f5f9] rounded-full -mb-2"></div>
-           ))}
-        </div>
-      </motion.div>
+                  <div className="text-center lg:text-right space-y-6 w-full lg:w-auto">
+                     <div className="p-8 bg-white/5 rounded-[40px] border border-white/5 flex flex-col items-center lg:items-end shadow-inner">
+                        <p className="text-[10px] font-black text-gray-700 uppercase tracking-[0.4em] mb-4 leading-none italic">Institutional Schedule</p>
+                        <p className="text-3xl font-black text-white italic leading-none">{appointment?.appointmentDate}</p>
+                     </div>
+                     <div className="flex items-center justify-center lg:justify-end gap-3 text-red-500/40 text-[9px] font-black uppercase tracking-[0.3em] italic">
+                        <Clock size={12} /> Expiring in 24 Clinical Hours
+                     </div>
+                  </div>
+               </div>
 
-      <footer className="mt-12 text-center space-y-4">
-         <p className="text-gray-400 font-bold flex items-center gap-2">
-            <Heart size={16} fill="currentColor" className="text-hospital-secondary" /> SRI KAMALA HOSPITAL MANAGEMENT SYSTEM
-         </p>
-         <button onClick={() => window.print()} className="bg-hospital-dark text-white px-10 py-4 rounded-full font-black shadow-xl hover:scale-110 active:scale-95 transition-all">
-            PRINT RECEIPT
-         </button>
-      </footer>
-    </div>
-  );
+               <div className="mb-20">
+                  <h3 className="text-[11px] font-black uppercase tracking-[0.5em] text-gray-700 mb-10 italic border-b border-white/5 pb-6">CLINICAL SERVICE NODE</h3>
+                  <div className="flex flex-col md:flex-row items-center justify-between p-10 bg-white/5 border border-white/10 rounded-[50px] shadow-4xl backdrop-blur-3xl group">
+                     <div className="flex items-center gap-8">
+                        <div className="w-20 h-20 bg-hospital-primary/10 border border-white/10 rounded-[28px] flex items-center justify-center text-hospital-primary shadow-inner group-hover:scale-110 transition-transform">
+                           <ShieldCheck size={32} />
+                        </div>
+                        <div>
+                           <p className="text-[10px] font-black text-gray-700 uppercase tracking-[0.4em] mb-3 leading-none italic">Assigned Clinical Specialization</p>
+                           <p className="text-3xl font-black text-white uppercase font-['Noto_Sans_Telugu'] tracking-tighter italic">{appointment?.department}</p>
+                        </div>
+                     </div>
+                     <div className="text-center lg:text-right mt-10 md:mt-0">
+                        <p className="text-[10px] font-black text-gray-700 uppercase tracking-[0.4em] mb-3 leading-none italic">Authorized Service Fee</p>
+                        <p className="text-6xl font-black text-white tabular-nums tracking-tighter glow-text">₹{appointment?.reason?.match(/₹(\d+)/)?.[1] || '100.00'}</p>
+                     </div>
+                  </div>
+               </div>
+
+               <div className="flex flex-col lg:flex-row justify-between items-end gap-16">
+                  <div className="max-w-md space-y-8">
+                     <div className="flex items-center gap-6 text-gray-600 bg-black/40 p-6 rounded-[35px] border border-white/5 shadow-inner">
+                        <FileText size={24} className="text-hospital-secondary opacity-40" />
+                        <div className="space-y-1">
+                           <p className="text-[11px] font-black uppercase tracking-[0.4em] leading-none italic">OFFICIAL DIGITAL PASS V4</p>
+                           <p className="text-[9px] text-gray-800 font-black uppercase tracking-[0.2em]">{receiptId}</p>
+                        </div>
+                     </div>
+                     <p className="text-[10px] font-bold text-gray-600 italic leading-relaxed font-serif uppercase tracking-widest">Presenter must synchronize this digital pass at the clinical reception node upon arrival. Priority queue follows neural token sequence orchestration.</p>
+                  </div>
+
+                  <div className="flex flex-col items-center gap-6 relative group">
+                     <div className="w-32 h-32 bg-white/5 border border-white/10 rounded-[35px] p-6 flex items-center justify-center shadow-4xl relative overflow-hidden active:scale-95 transition-all">
+                        <div className="absolute inset-0 bg-hospital-primary opacity-0 group-hover:opacity-10 transition-opacity"></div>
+                        <div className="w-full h-full bg-hospital-primary/20 rounded-2xl flex items-center justify-center group-hover:rotate-45 transition-transform duration-1000">
+                           <Cpu size={40} className="text-hospital-primary shadow-neon-primary" />
+                        </div>
+                     </div>
+                     <p className="text-[10px] font-black uppercase tracking-[0.6em] text-hospital-secondary text-center italic">Institutional Stamp <br /><span className="text-[8px] opacity-40">Verified by core</span></p>
+                  </div>
+               </div>
+            </div>
+
+            <div className="bg-white/5 p-8 text-center border-t border-white/5 flex items-center justify-center gap-6">
+               <div className="flex items-center gap-3 text-[10px] font-black text-gray-700 uppercase tracking-[0.6em] italic">
+                  <Globe size={14} /> SRH-NODE-PRIMARY.NET
+               </div>
+               <div className="h-1 w-1 bg-gray-800 rounded-full"></div>
+               <div className="flex items-center gap-3 text-[10px] font-black text-gray-700 uppercase tracking-[0.6em] italic">
+                  <Activity size={14} /> CLINICAL TELEMETRY ACTIVE
+               </div>
+            </div>
+
+            {/* Decorative Ticket Cuts */}
+            <div className="absolute top-1/2 left-0 w-8 h-16 bg-[#050505] rounded-r-full -translate-x-1/2 border-r border-white/10 hidden lg:block"></div>
+            <div className="absolute top-1/2 right-0 w-8 h-16 bg-[#050505] rounded-l-full translate-x-1/2 border-l border-white/10 hidden lg:block"></div>
+
+         </motion.div>
+
+         <footer className="mt-20 text-center space-y-8 relative z-10 w-full">
+            <div className="flex items-center justify-center gap-4 text-gray-700">
+               <div className="h-px w-20 bg-white/5"></div>
+               <p className="text-[11px] font-black flex items-center gap-4 uppercase tracking-[0.4em] italic leading-none">
+                  <Heart size={20} className="text-hospital-secondary animate-pulse" fill="currentColor" /> SRI KAMALA INSTITUTIONAL OPS
+               </p>
+               <div className="h-px w-20 bg-white/5"></div>
+            </div>
+            <div className="flex justify-center gap-6">
+               <button onClick={() => navigate('/')} className="px-12 py-6 bg-white/5 text-white border border-white/10 rounded-full font-black text-[10px] tracking-[0.5em] shadow-4xl hover:bg-white/10 active:scale-90 transition-all uppercase italic">CLOSE TERMINAL</button>
+               <button onClick={() => window.print()} className="px-12 py-6 bg-white text-black rounded-full font-black text-[10px] tracking-[0.5em] shadow-4xl hover:bg-hospital-primary active:scale-90 transition-all uppercase italic">PRESERVE HARDCOPY</button>
+            </div>
+            <p className="text-[8px] font-black text-gray-800 uppercase tracking-[0.8em] italic">Authorized Access Only // HIPAA SECURE SESSION ID: {receiptId}</p>
+         </footer>
+      </div>
+   );
 };
 
 export default Receipt;

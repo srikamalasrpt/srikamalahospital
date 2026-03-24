@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { LayoutDashboard, Users, Calendar, CheckCircle, Clock, Search, LogOut, ChevronRight, Download, Pill, Activity, Plus, Trash2, Settings, Globe, Lock, Key, Sparkles, Filter, MoreVertical, FileText, UserPlus, Phone, MapPin } from 'lucide-react';
+import { LayoutDashboard, Users, Calendar, CheckCircle, Clock, Search, LogOut, ChevronRight, Download, Pill, Activity, Plus, Trash2, Settings, Globe, Lock, Key, Sparkles, Filter, MoreVertical, FileText, UserPlus, Phone, MapPin, Cpu, ShieldCheck, Zap, Dna, Microscope, Syringe, Scissors } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { updateConfig, getConfig, adminLogin, fetchPharmacyProducts, getAppointments, updateAppointment, discoverMedicines, savePatientClinicalNote, getPatientClinicalHistory } from '../utils/api';
 
@@ -11,7 +11,7 @@ const AdminDashboard = () => {
     // Core Data
     const [appointments, setAppointments] = useState([]);
     const [products, setProducts] = useState([]);
-    const [patients, setPatients] = useState([]); // Unique patients merged by phone/name
+    const [patients, setPatients] = useState([]); 
     const [activeTab, setActiveTab] = useState('overview');
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
@@ -19,7 +19,7 @@ const AdminDashboard = () => {
 
     // UI States
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-    const [activePatient, setActivePatient] = useState(null); // To view detailed history
+    const [activePatient, setActivePatient] = useState(null); 
     const [aiKeyword, setAiKeyword] = useState('');
     const [aiSuggestions, setAiSuggestions] = useState([]);
     const [aiNote, setAiNote] = useState('');
@@ -50,7 +50,6 @@ const AdminDashboard = () => {
                 const raw = aptResp.data.appointments;
                 setAppointments(raw);
                 
-                // Merge Unique Patients Logic
                 const patientMap = {};
                 raw.forEach(a => {
                     const key = `${a.name.toLowerCase()}_${a.phone}`;
@@ -183,161 +182,191 @@ const AdminDashboard = () => {
     };
 
     if (!isAuthenticated) return (
-        <div className="min-h-screen bg-hospital-dark flex flex-col items-center justify-center p-6 text-white relative overflow-hidden">
-            <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="relative z-10 w-full max-w-sm bg-white/5 backdrop-blur-2xl p-10 rounded-[50px] border border-white/20 shadow-4xl text-center">
-                <div className="w-20 h-20 mx-auto bg-hospital-primary rounded-3xl flex items-center justify-center shadow-xl mb-8 group cursor-pointer hover:rotate-12 transition-transform">
-                    <Lock size={32} className="text-white" />
+        <div className="min-h-screen bg-[#050505] flex flex-col items-center justify-center p-6 text-white relative overflow-hidden">
+             {/* Background Decor */}
+             <div className="fixed inset-0 z-0 pointer-events-none opacity-20 overflow-hidden">
+                <div className="absolute top-[10%] right-[10%] w-[600px] h-[600px] bg-hospital-primary/10 rounded-full blur-[140px] animate-pulse-soft"></div>
+                <div className="absolute bottom-[20%] left-[10%] w-[500px] h-[500px] bg-hospital-secondary/5 rounded-full blur-[120px] animate-pulse-soft" style={{ animationDelay: '3s' }}></div>
+            </div>
+
+            <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="relative z-10 w-full max-w-md bg-[#0a0a0a] border border-white/10 p-12 rounded-[60px] shadow-4xl text-center backdrop-blur-3xl group">
+                <div className="w-24 h-24 mx-auto bg-white/5 border border-white/10 text-hospital-primary rounded-[35px] flex items-center justify-center shadow-4xl mb-12 group-hover:rotate-12 transition-transform">
+                    <Lock size={40} className="shadow-neon-primary" />
                 </div>
-                <h2 className="text-3xl font-black mb-2 tracking-tight">K-OS Admin</h2>
-                <p className="text-[10px] font-black text-gray-400 tracking-[0.4em] uppercase mb-8 opacity-40">Sri Kamala Operating System</p>
-                <form onSubmit={handleLogin} className="space-y-4">
-                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Secure Handshake Key"
-                        className="w-full bg-white/5 border border-white/10 p-4 rounded-xl text-white outline-none focus:border-hospital-primary/50 transition-all font-mono tracking-widest text-center" />
-                    {loginError && <p className="text-red-400 text-[10px] font-bold uppercase tracking-widest">{loginError}</p>}
-                    <button className="w-full bg-hospital-primary text-white py-4 rounded-2xl font-black tracking-widest hover:bg-white hover:text-hospital-dark transition-all">AUTHENTICATE</button>
+                <h2 className="text-4xl font-black mb-2 tracking-tighter italic uppercase text-white">K-OS <span className="text-hospital-secondary">HQ</span></h2>
+                <p className="text-[10px] font-black text-gray-500 tracking-[0.6em] uppercase mb-12 italic opacity-60 leading-none">Institutional Security Node</p>
+                <form onSubmit={handleLogin} className="space-y-6">
+                    <div className="relative">
+                        <Key size={18} className="absolute left-6 top-1/2 -translate-y-1/2 text-hospital-primary/50" />
+                        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Handshake Code"
+                            className="w-full bg-white/5 border border-white/10 p-6 pl-16 rounded-[28px] text-white outline-none focus:border-hospital-primary/40 transition-all font-mono tracking-widest text-center text-sm shadow-inner" />
+                    </div>
+                    {loginError && <p className="text-red-500 text-[10px] font-black uppercase tracking-[0.4em] italic">{loginError}</p>}
+                    <button className="w-full bg-white text-black py-6 rounded-[28px] font-black text-[11px] uppercase tracking-[0.6em] hover:bg-hospital-primary transition-all active:scale-95 shadow-4xl italic">Init Handshake</button>
                 </form>
             </motion.div>
         </div>
     );
 
     return (
-        <div className="min-h-screen bg-[#f8fafc] flex font-sans text-hospital-dark overflow-hidden">
-            {/* Navigation Rail */}
-            <aside className={`bg-hospital-dark text-white flex flex-col transition-all duration-500 overflow-hidden ${isSidebarOpen ? 'w-80' : 'w-24'} relative z-30`}>
-                <div className="p-8 flex items-center gap-4 border-b border-white/5 h-24">
-                    <div className="w-12 h-12 bg-hospital-primary rounded-2xl shadow-xl flex items-center justify-center shrink-0"><LayoutDashboard size={24} /></div>
-                    {isSidebarOpen && <h1 className="text-xl font-black tracking-tighter uppercase whitespace-nowrap">SRI KAMALA <span className="text-hospital-primary">HQ</span></h1>}
+        <div className="min-h-screen bg-[#050505] flex font-sans text-white overflow-hidden relative">
+            
+            {/* Nav Rail */}
+            <aside className={`bg-[#0a0a0a] border-r border-white/5 flex flex-col transition-all duration-700 overflow-hidden ${isSidebarOpen ? 'w-80' : 'w-24'} relative z-30 backdrop-blur-3xl`}>
+                <div className="p-10 flex items-center justify-center lg:justify-start gap-5 border-b border-white/5 h-28 italic">
+                    <div className="w-14 h-14 bg-white/5 border border-white/10 rounded-2xl shadow-4xl flex items-center justify-center shrink-0 hover:rotate-12 transition-transform text-hospital-secondary"><LayoutDashboard size={26} /></div>
+                    {isSidebarOpen && <h1 className="text-2xl font-black tracking-tighter uppercase whitespace-nowrap italic text-white leading-none">SRK-HQ <span className="text-hospital-primary">4.0</span></h1>}
                 </div>
 
-                <nav className="p-6 space-y-3 flex-1 overflow-y-auto">
+                <nav className="p-8 space-y-4 flex-1 overflow-y-auto scrollbar-hide">
                     {[
-                        { id: 'overview', icon: <Activity size={20}/>, label: 'Analytics' },
-                        { id: 'appointments', icon: <Calendar size={20}/>, label: 'Booking Queue' },
-                        { id: 'patients', icon: <Users size={20}/>, label: 'Patient Master' },
-                        { id: 'medicines', icon: <Pill size={20}/>, label: 'Medicine Stocks' },
-                        { id: 'settings', icon: <Settings size={20}/>, label: 'Cloud Config' }
+                        { id: 'overview', icon: <Activity size={22}/>, label: 'Analytics' },
+                        { id: 'appointments', icon: <Calendar size={22}/>, label: 'Live Queue' },
+                        { id: 'patients', icon: <Users size={22}/>, label: 'Master DB' },
+                        { id: 'medicines', icon: <Pill size={22}/>, label: 'Inventory' },
+                        { id: 'settings', icon: <Settings size={22}/>, label: 'Cloud Config' }
                     ].map(item => (
                         <button key={item.id} onClick={() => setActiveTab(item.id)}
-                            className={`w-full flex items-center gap-5 p-4 rounded-2xl font-black text-xs uppercase tracking-widest transition-all ${activeTab === item.id ? 'bg-hospital-primary text-white shadow-2xl shadow-hospital-primary/20' : 'text-white/40 hover:text-white hover:bg-white/5'}`}>
-                            <div className="shrink-0">{item.icon}</div>
+                            className={`w-full flex items-center gap-6 p-5 rounded-[28px] font-black text-[11px] uppercase tracking-[0.4em] transition-all border group italic ${activeTab === item.id ? 'bg-white text-black border-white shadow-4xl' : 'text-gray-500 border-white/5 hover:border-white/20 hover:text-white bg-white/5'}`}>
+                            <div className={`shrink-0 ${activeTab === item.id ? 'text-hospital-secondary' : 'group-hover:text-hospital-primary transition-colors'}`}>{item.icon}</div>
                             {isSidebarOpen && <span>{item.label}</span>}
                         </button>
                     ))}
                 </nav>
 
-                <div className="p-6 border-t border-white/5">
-                    <button onClick={() => setIsAuthenticated(false)} className="w-full flex items-center gap-5 p-4 rounded-2xl text-red-400 hover:bg-red-500/10 font-bold transition-all">
-                        <LogOut size={20} />
-                        {isSidebarOpen && <span className="uppercase text-[10px] tracking-widest">Seal Session</span>}
+                <div className="p-8 border-t border-white/5">
+                    <button onClick={() => setIsAuthenticated(false)} className="w-full flex items-center justify-center lg:justify-start gap-6 p-5 rounded-[28px] text-red-500 hover:bg-red-500/10 font-black transition-all bg-white/5 border border-white/10 active:scale-95 italic">
+                        <LogOut size={22} />
+                        {isSidebarOpen && <span className="uppercase text-[11px] tracking-[0.4em]">Seal Node</span>}
                     </button>
                 </div>
             </aside>
 
             {/* Main Area */}
-            <main className="flex-1 flex flex-col h-screen relative bg-white lg:rounded-l-[60px] shadow-inner overflow-hidden">
-                <header className="h-24 px-12 flex justify-between items-center border-b border-gray-50 shrink-0">
-                    <div className="flex items-center gap-4">
-                        <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="p-2 hover:bg-gray-100 rounded-xl transition-colors"><MoreVertical size={20}/></button>
-                        <h2 className="text-2xl font-black tracking-tight capitalize">{activeTab} Console</h2>
+            <main className="flex-1 flex flex-col h-screen relative bg-[#050505] overflow-hidden">
+                
+                <header className="h-28 px-12 flex justify-between items-center border-b border-white/5 shrink-0 relative z-20 backdrop-blur-3xl bg-black/20">
+                    <div className="flex items-center gap-8">
+                        <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="w-12 h-12 flex items-center justify-center bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-colors text-white/40"><MoreVertical size={22}/></button>
+                        <h2 className="text-3xl font-black tracking-tighter uppercase italic text-white leading-none"><span className="text-hospital-primary">{activeTab}</span> Console</h2>
                     </div>
-                    <div className="flex items-center gap-6">
-                        <div className="relative group">
-                            <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-hospital-primary transition-colors" />
-                            <input value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} type="text" placeholder="Search Master DB..."
-                                className="bg-gray-50 border-none pl-12 pr-6 py-3 rounded-full text-xs font-bold outline-none ring-2 ring-transparent focus:ring-hospital-primary/10 transition-all w-64 md:w-96" />
+                    <div className="flex items-center gap-10">
+                        <div className="relative group hidden lg:block">
+                            <Search size={20} className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-700 group-focus-within:text-hospital-primary transition-colors" />
+                            <input value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} type="text" placeholder="Scan Global Node Data..."
+                                className="bg-white/5 border border-white/10 pl-16 pr-8 py-4 rounded-[28px] text-xs font-black italic outline-none focus:border-hospital-primary/30 transition-all w-80 lg:w-[450px] shadow-inner text-white placeholder:text-gray-800" />
                         </div>
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-6 group">
                             <div className="text-right hidden sm:block">
-                                <p className="text-[10px] font-black uppercase text-gray-400 leading-none mb-1">Authenticated As</p>
-                                <p className="text-sm font-black text-hospital-dark">Hospital Director</p>
+                                <p className="text-[10px] font-black uppercase text-gray-700 leading-none mb-2 italic">Node Status: <span className="text-green-500">Live</span></p>
+                                <p className="text-sm font-black text-white italic underline decoration-hospital-secondary/20 uppercase tracking-tighter">Chief Director</p>
                             </div>
-                            <div className="w-12 h-12 bg-hospital-mint rounded-2xl border-2 border-white shadow-xl flex items-center justify-center text-hospital-primary"><Sparkles size={20}/></div>
+                            <div className="w-16 h-16 bg-white/5 border border-white/10 rounded-[24px] shadow-4xl flex items-center justify-center text-hospital-secondary group-hover:scale-110 group-hover:rotate-12 transition-all"><Cpu size={30}/></div>
                         </div>
                     </div>
                 </header>
 
-                <div className="flex-1 overflow-y-auto p-12 bg-gray-50/50">
+                <div className="flex-1 overflow-y-auto p-12 lg:p-16 scrollbar-hide relative z-10">
                     <AnimatePresence mode="wait">
                         {activeTab === 'overview' && (
-                            <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -20, opacity: 0 }} className="space-y-12">
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                            <motion.div key="overview" initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -20, opacity: 0 }} className="space-y-16">
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
                                     {[
-                                        { l: 'Today Load', v: appointments.length, i: <Clock/>, c: 'text-blue-600', bg: 'bg-blue-50' },
-                                        { l: 'Patient Count', v: patients.length, i: <Users/>, c: 'text-purple-600', bg: 'bg-purple-50' },
-                                        { l: 'Stock Count', v: products.length, i: <Pill/>, c: 'text-orange-600', bg: 'bg-orange-50' },
-                                        { l: 'Revenue Est', v: `₹${appointments.length * 200}`, i: <Sparkles/>, c: 'text-green-600', bg: 'bg-green-50' }
+                                        { l: 'Load Factor', v: appointments.length, i: <Clock/>, c: 'text-hospital-primary', bg: 'bg-hospital-primary' },
+                                        { l: 'Patient Master', v: patients.length, i: <Users/>, c: 'text-hospital-secondary', bg: 'bg-hospital-secondary' },
+                                        { l: 'Pharma Inventory', v: products.length, i: <Pill/>, c: 'text-white', bg: 'bg-white' },
+                                        { l: 'Revenue Node', v: `₹${appointments.length * 200}`, i: <Zap/>, c: 'text-hospital-primary', bg: 'bg-hospital-primary' }
                                     ].map((stat, i) => (
-                                        <div key={i} className="bg-white p-8 rounded-[40px] shadow-sm border border-gray-100/50 hover:shadow-xl transition-all">
-                                            <div className="flex items-start justify-between mb-4">
-                                                <div className={`w-14 h-14 ${stat.bg} ${stat.c} rounded-2xl flex items-center justify-center shadow-inner`}>{stat.i}</div>
-                                                <ChevronRight size={16} className="text-gray-300" />
+                                        <div key={i} className="bg-[#0a0a0a] p-10 rounded-[50px] shadow-4xl border border-white/10 hover:border-white/20 transition-all relative overflow-hidden group">
+                                            <div className="absolute -top-10 -right-10 opacity-[0.03] group-hover:scale-110 transition-transform duration-1000 rotate-12">{stat.i}</div>
+                                            <div className="flex items-start justify-between mb-8">
+                                                <div className={`w-16 h-16 bg-white/5 border border-white/10 text-white rounded-[24px] flex items-center justify-center shadow-inner group-hover:rotate-12 transition-transform`}>{stat.i}</div>
+                                                <div className="w-1.5 h-1.5 rounded-full bg-hospital-primary animate-ping"></div>
                                             </div>
-                                            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">{stat.l}</p>
-                                            <h3 className="text-4xl font-black text-hospital-dark tracking-tighter">{stat.v}</h3>
+                                            <p className="text-[10px] font-black uppercase tracking-[0.5em] text-gray-500 mb-2 italic leading-none">{stat.l}</p>
+                                            <h3 className="text-5xl font-black text-white tracking-tighter italic glow-text">{stat.v}</h3>
                                         </div>
                                     ))}
                                 </div>
-                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                                    <div className="bg-hospital-dark p-12 rounded-[50px] shadow-4xl text-white relative overflow-hidden h-96">
-                                        <div className="absolute top-0 right-0 p-12 text-white/5 opacity-20"><Activity size={200} /></div>
-                                        <h3 className="text-2xl font-black mb-2">Hospital Health Index</h3>
-                                        <p className="text-xs font-bold text-hospital-primary tracking-widest uppercase mb-12">System Live & Synchronized</p>
-                                        <div className="space-y-8 relative z-10">
-                                            <div className="space-y-3">
-                                                <div className="flex justify-between text-[10px] font-black uppercase tracking-widest"><span>Supabase Uptime</span><span>99.9%</span></div>
-                                                <div className="h-1.5 bg-white/10 rounded-full overflow-hidden"><div className="w-[99.9%] h-full bg-hospital-primary"></div></div>
+                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                                    <div className="bg-[#0a0a0a] p-14 rounded-[65px] shadow-4xl border border-white/10 relative overflow-hidden h-[450px] group backdrop-blur-3xl">
+                                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white opacity-[0.02] group-hover:scale-[1.2] transition-transform duration-[3s]"><Activity size={400} strokeWidth={1} /></div>
+                                        <div className="relative z-10 h-full flex flex-col justify-between">
+                                            <div>
+                                               <h3 className="text-4xl font-black mb-3 italic tracking-tighter uppercase leading-none">Global Health IQ</h3>
+                                               <p className="text-[10px] font-black text-hospital-primary tracking-[0.6em] uppercase italic">Real-Time Core Orchestration</p>
                                             </div>
-                                            <div className="space-y-3">
-                                                <div className="flex justify-between text-[10px] font-black uppercase tracking-widest"><span>Queue Efficiency</span><span>87/100</span></div>
-                                                <div className="h-1.5 bg-white/10 rounded-full overflow-hidden"><div className="w-[87%] h-full bg-hospital-mint"></div></div>
+                                            <div className="space-y-10">
+                                                <div className="space-y-4">
+                                                    <div className="flex justify-between text-[11px] font-black uppercase tracking-[0.4em] italic text-gray-700"><span>Neural Lattice Sync</span><span className="text-hospital-secondary">99.8%</span></div>
+                                                    <div className="h-2 bg-white/5 rounded-full overflow-hidden border border-white/5"><motion.div initial={{width:0}} animate={{width:'99.8%'}} transition={{duration:2}} className="h-full bg-hospital-secondary shadow-neon-secondary"></motion.div></div>
+                                                </div>
+                                                <div className="space-y-4">
+                                                    <div className="flex justify-between text-[11px] font-black uppercase tracking-[0.4em] italic text-gray-700"><span>IOPS Efficiency</span><span className="text-hospital-primary">94.2%</span></div>
+                                                    <div className="h-2 bg-white/5 rounded-full overflow-hidden border border-white/5"><motion.div initial={{width:0}} animate={{width:'94.2%'}} transition={{duration:2, delay:0.2}} className="h-full bg-hospital-primary shadow-neon-primary"></motion.div></div>
+                                                </div>
                                             </div>
+                                            <p className="text-[9px] font-black text-gray-800 uppercase tracking-[0.8em] italic">AUTONOMOUS CLOUD ANALYTICS ACTIVE</p>
                                         </div>
                                     </div>
-                                    <div className="bg-white p-12 rounded-[50px] shadow-sm border border-gray-100 flex flex-col justify-center items-center text-center">
-                                       <div className="w-24 h-24 bg-hospital-primary/10 rounded-full flex items-center justify-center text-hospital-primary mb-6"><Users size={40}/></div>
-                                       <h3 className="text-xl font-black text-hospital-dark mb-4">Active Staff Presence</h3>
-                                       <div className="flex -space-x-4 mb-6">
-                                          {[...Array(5)].map((_, i) => <div key={i} className="w-12 h-12 rounded-2xl bg-gray-200 border-4 border-white"></div>)}
-                                          <div className="w-12 h-12 rounded-2xl bg-hospital-secondary text-white flex items-center justify-center text-xs font-black">+12</div>
+                                    <div className="bg-[#0a0a0a] p-14 rounded-[65px] shadow-4xl border border-white/10 flex flex-col justify-center items-center text-center relative overflow-hidden group">
+                                       <div className="absolute -bottom-20 -left-20 text-white opacity-[0.02] -rotate-12 group-hover:scale-110 transition-transform duration-[3s]"><Users size={350} strokeWidth={1} /></div>
+                                       <div className="w-32 h-32 bg-white/5 border border-white/10 rounded-[45px] flex items-center justify-center text-hospital-secondary mb-10 shadow-4xl group-hover:rotate-[360deg] transition-all duration-1000"><Users size={54}/></div>
+                                       <h3 className="text-3xl font-black text-white italic tracking-tighter uppercase mb-6">STAFF TELEMETRY</h3>
+                                       <div className="flex -space-x-6 mb-10 h-16">
+                                          {[...Array(5)].map((_, i) => <div key={i} className="w-16 h-16 rounded-[24px] bg-[#111] border-4 border-[#0a0a0a] shadow-4xl flex items-center justify-center text-[10px] font-black text-white italic uppercase grayscale hover:grayscale-0 transition-all">S-{i}</div>)}
+                                          <div className="w-16 h-16 rounded-[24px] bg-hospital-primary text-black flex items-center justify-center text-xs font-black shadow-neon-primary italic">+14</div>
                                        </div>
-                                       <button className="text-[10px] font-black uppercase tracking-widest text-hospital-primary hover:underline">View Roster Matrix</button>
+                                       <button className="text-[11px] font-black uppercase tracking-[0.6em] text-hospital-primary hover:text-white transition-colors italic leading-none border-b border-hospital-primary/30 pb-2">View Specialized Matrix</button>
                                     </div>
                                 </div>
                             </motion.div>
                         )}
 
                         {activeTab === 'appointments' && (
-                            <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="space-y-8">
-                                <div className="bg-white rounded-[50px] shadow-sm border border-gray-100 p-8">
-                                    <h3 className="text-xl font-black mb-8 flex items-center gap-3">Live Booking Stream <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div></h3>
-                                    <div className="overflow-x-auto">
-                                        <table className="w-full text-left">
+                            <motion.div key="appointments" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-12">
+                                <div className="bg-[#0a0a0a] rounded-[60px] shadow-4xl border border-white/10 p-12 lg:p-16 relative overflow-hidden backdrop-blur-3xl">
+                                    <div className="absolute top-0 right-0 p-12 opacity-[0.02] text-white rotate-12 pointer-events-none scale-150"><Calendar size={300} strokeWidth={1}/></div>
+                                    <div className="flex items-center justify-between mb-16 relative z-10">
+                                        <div>
+                                            <h3 className="text-4xl font-black italic tracking-tighter uppercase leading-none">Booking Stream</h3>
+                                            <p className="text-[10px] font-black text-hospital-secondary tracking-[0.6em] uppercase italic mt-3 flex items-center gap-4">Active Queue Surveillance <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse shadow-neon-secondary"></div></p>
+                                        </div>
+                                        <button className="px-10 py-5 bg-white/5 border border-white/10 rounded-full text-[11px] font-black uppercase tracking-[0.4em] italic hover:bg-white/10 active:scale-95 transition-all">Download Audit CSV</button>
+                                    </div>
+                                    <div className="overflow-x-auto relative z-10 scrollbar-hide">
+                                        <table className="w-full text-left min-w-[900px]">
                                             <thead>
-                                                <tr className="border-b border-gray-50">
-                                                    <th className="py-6 px-4 text-[10px] font-black uppercase tracking-widest text-gray-400">Token ID</th>
-                                                    <th className="py-6 px-4 text-[10px] font-black uppercase tracking-widest text-gray-400">Patient Identification</th>
-                                                    <th className="py-6 px-4 text-[10px] font-black uppercase tracking-widest text-gray-400">Sector</th>
-                                                    <th className="py-6 px-4 text-[10px] font-black uppercase tracking-widest text-gray-400 text-right">Verification</th>
+                                                <tr className="border-b border-white/5">
+                                                    <th className="py-8 px-6 text-[11px] font-black uppercase tracking-[0.6em] text-gray-700 italic">Token Trace</th>
+                                                    <th className="py-8 px-6 text-[11px] font-black uppercase tracking-[0.6em] text-gray-700 italic">Patient Profile</th>
+                                                    <th className="py-8 px-6 text-[11px] font-black uppercase tracking-[0.6em] text-gray-700 italic">Service Node</th>
+                                                    <th className="py-8 px-6 text-[11px] font-black uppercase tracking-[0.6em] text-gray-700 italic text-right">Verification</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {appointments.filter(a => a.name.toLowerCase().includes(searchTerm.toLowerCase())).map((apt, i) => (
-                                                    <tr key={apt._id || i} className="group hover:bg-gray-50 transition-colors">
-                                                        <td className="py-6 px-4 font-mono font-black text-sm text-hospital-primary">{apt.token}</td>
-                                                        <td className="py-6 px-4">
-                                                            <p className="font-black text-hospital-dark">{apt.name}</p>
-                                                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{apt.phone} | {apt.age}y</p>
+                                                    <motion.tr initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} key={apt._id || i} className="group hover:bg-white/5 transition-all cursor-default border-b border-white/5 last:border-none">
+                                                        <td className="py-10 px-6 font-mono font-black text-lg text-hospital-primary italic glow-text group-hover:scale-105 transition-transform origin-left">{apt.token}</td>
+                                                        <td className="py-10 px-6">
+                                                            <div className="flex items-center gap-5">
+                                                                <div className="w-14 h-14 bg-[#111] border border-white/5 rounded-2xl flex items-center justify-center text-white font-black italic shadow-inner group-hover:border-hospital-primary/40 transition-colors">P-{i}</div>
+                                                                <div>
+                                                                    <p className="font-black text-xl italic tracking-tighter uppercase leading-none mb-2">{apt.name}</p>
+                                                                    <p className="text-[10px] font-black text-gray-700 uppercase tracking-[0.4em] italic">{apt.phone} // {apt.age}y // {apt.gender}</p>
+                                                                </div>
+                                                            </div>
                                                         </td>
-                                                        <td className="py-6 px-4">
-                                                            <span className="px-3 py-1 bg-hospital-mint/30 text-hospital-primary text-[9px] font-black uppercase rounded-lg tracking-widest">{apt.department}</span>
+                                                        <td className="py-10 px-6">
+                                                            <span className={`px-6 py-2 bg-white/5 border border-white/5 text-white text-[10px] font-black uppercase tracking-[0.4em] rounded-full italic group-hover:border-hospital-secondary transition-colors`}>{apt.department}</span>
                                                         </td>
-                                                        <td className="py-6 px-4 text-right">
+                                                        <td className="py-10 px-6 text-right">
                                                             <button onClick={() => updateAptStatus(apt._id, 'Paid')}
-                                                                className={`px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border-2 transition-all ${apt.paymentStatus === 'Paid' ? 'bg-green-100 border-green-100 text-green-600' : 'bg-white border-gray-50 text-gray-400 hover:border-hospital-primary hover:text-hospital-secondary'}`}>
-                                                                {apt.paymentStatus === 'Paid' ? 'Verified ✓' : 'Verify Entry'}
+                                                                className={`px-10 py-4 rounded-[30px] text-[10px] font-black uppercase tracking-[0.6em] border transition-all active:scale-90 italic ${apt.paymentStatus === 'Paid' ? 'bg-green-500/20 border-green-500/30 text-green-400 shadow-neon-mint' : 'bg-transparent border-white/10 text-gray-700 hover:border-hospital-primary hover:text-white hover:bg-white/5'}`}>
+                                                                {apt.paymentStatus === 'Paid' ? 'VERIFIED ✓' : 'INIT VERIFY'}
                                                             </button>
                                                         </td>
-                                                    </tr>
+                                                    </motion.tr>
                                                 ))}
                                             </tbody>
                                         </table>
@@ -347,188 +376,254 @@ const AdminDashboard = () => {
                         )}
 
                         {activeTab === 'patients' && (
-                            <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="space-y-8">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                    <div className="bg-white rounded-[50px] shadow-sm border border-gray-100 p-12 overflow-y-auto h-[70vh]">
-                                        <h3 className="text-xl font-black mb-10 flex items-center justify-between">Patient Master File <div className="text-[10px] font-black bg-gray-100 px-3 py-1 rounded-full uppercase text-gray-400">{patients.length} Unique Records</div></h3>
-                                        <div className="space-y-4">
-                                            {patients.filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase())).map((p, i) => (
+                            <motion.div key="patients" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="flex flex-col lg:flex-row gap-16 h-full min-h-[800px]">
+                                <div className="lg:w-1/3 space-y-10">
+                                   <div className="bg-[#0a0a0a] rounded-[55px] border border-white/10 p-10 shadow-4xl h-[750px] flex flex-col backdrop-blur-3xl overflow-hidden relative">
+                                        <div className="absolute bottom-0 left-0 w-full h-1 bg-hospital-secondary opacity-20"></div>
+                                        <div className="mb-12 flex items-center justify-between">
+                                            <h3 className="text-3xl font-black italic tracking-tighter uppercase leading-none">Subjects</h3>
+                                            <div className="px-4 py-2 bg-white/5 border border-white/10 rounded-full text-[9px] font-black text-gray-700 uppercase tracking-[0.3em] italic">{patients.length} Master Nodes</div>
+                                        </div>
+                                        <div className="space-y-4 overflow-y-auto pr-4 scrollbar-hide flex-1">
+                                            {patients.filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase()) || p.phone.includes(searchTerm)).map((p, i) => (
                                                 <button key={i} onClick={() => { setActivePatient(p); loadClinicalHistory(p); }}
-                                                    className={`w-full flex items-center justify-between p-6 rounded-[32px] border transition-all ${activePatient?.name === p.name ? 'border-hospital-primary bg-hospital-primary/5 shadow-lg' : 'border-gray-50 hover:border-hospital-primary/20 bg-white'}`}>
-                                                    <div className="flex items-center gap-5 text-left">
-                                                        <div className="w-14 h-14 bg-gray-100 rounded-2xl flex items-center justify-center text-gray-400 shadow-inner"><UserPlus size={24}/></div>
+                                                    className={`w-full flex items-center justify-between p-8 rounded-[40px] border transition-all relative overflow-hidden group/item active:scale-95 ${activePatient?.name === p.name ? 'border-hospital-primary/30 bg-hospital-primary/5 shadow-4xl' : 'border-white/5 hover:border-white/20 bg-white/5'}`}>
+                                                    <div className="flex items-center gap-6 text-left relative z-10">
+                                                        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-white italic font-black text-xs transition-transform group-hover/item:rotate-12 ${activePatient?.name === p.name ? 'bg-hospital-primary' : 'bg-[#111] shadow-inner'}`}>S</div>
                                                         <div>
-                                                            <h4 className="font-black text-hospital-dark">{p.name}</h4>
-                                                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{p.phone}</p>
+                                                            <h4 className="font-black text-lg italic tracking-tighter leading-none mb-2 uppercase group-hover/item:text-hospital-primary transition-colors">{p.name}</h4>
+                                                            <p className="text-[10px] font-black text-gray-700 uppercase tracking-[0.4em] italic">{p.phone}</p>
                                                         </div>
                                                     </div>
-                                                    <div className="text-right">
-                                                        <p className="text-xl font-black text-hospital-dark leading-none">{p.visits.length}</p>
-                                                        <p className="text-[8px] font-black uppercase text-gray-300 tracking-widest">Visits</p>
+                                                    <div className="text-right relative z-10">
+                                                        <p className="text-2xl font-black text-white leading-none italic glow-text">{p.visits.length}</p>
+                                                        <p className="text-[9px] font-black uppercase text-gray-700 tracking-[0.2em] italic">Logs</p>
                                                     </div>
-                                                </button>
+                                                </motion.button>
                                             ))}
                                         </div>
-                                    </div>
-                                    <div className="bg-hospital-dark rounded-[50px] shadow-4xl p-12 text-white flex flex-col items-center justify-center text-center relative overflow-hidden h-[70vh]">
-                                        <AnimatePresence mode="wait">
-                                            {activePatient ? (
-                                                <motion.div key={activePatient.name} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="w-full text-left space-y-12">
-                                                    <div className="flex justify-between items-start w-full">
-                                                        <div className="space-y-2">
-                                                            <h3 className="text-4xl font-black tracking-tighter">{activePatient.name}</h3>
-                                                            <p className="text-hospital-primary font-black uppercase text-xs tracking-widest">{activePatient.token}</p>
-                                                            <div className="flex gap-4 mt-6">
-                                                                <div className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs font-black uppercase tracking-widest">{activePatient.age}y</div>
-                                                                <div className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs font-black uppercase tracking-widest">{activePatient.gender}</div>
-                                                            </div>
+                                   </div>
+                                </div>
+                                
+                                <div className="lg:w-2/3 bg-[#0a0a0a] rounded-[60px] shadow-4xl border border-white/10 p-12 lg:p-20 relative overflow-hidden backdrop-blur-3xl h-[750px] flex flex-col">
+                                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.02] text-white rotate-45 pointer-events-none scale-150"><Dna size={500} strokeWidth={1}/></div>
+                                    <AnimatePresence mode="wait">
+                                        {activePatient ? (
+                                            <motion.div key={activePatient.name} initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} className="h-full flex flex-col relative z-10">
+                                                <div className="flex flex-col md:flex-row justify-between items-start gap-12 mb-16">
+                                                    <div className="space-y-4">
+                                                        <div className="flex items-center gap-4">
+                                                            <h3 className="text-5xl lg:text-6xl font-black italic tracking-tighter uppercase leading-none text-white">{activePatient.name}</h3>
+                                                            {auditResult && <div className="px-6 py-2 bg-hospital-primary text-black text-[10px] font-black uppercase tracking-[0.4em] rounded-full shadow-neon-primary italic animate-pulse">AI AUDIT ACTIVE</div>}
                                                         </div>
-                                                        <div className="w-24 h-24 bg-white/5 rounded-[40px] border border-white/10 flex items-center justify-center text-hospital-primary"><Sparkles size={40}/></div>
+                                                        <p className="text-hospital-primary font-black uppercase text-[12px] tracking-[0.8em] italic leading-none">{activePatient.token} // Institutional Identifier</p>
+                                                        <div className="flex gap-6 mt-8">
+                                                            <div className="px-6 py-3 bg-white/5 border border-white/10 rounded-2xl text-[11px] font-black uppercase tracking-[0.4em] italic text-white/60 shadow-inner">Age: {activePatient.age}Y</div>
+                                                            <div className="px-6 py-3 bg-white/5 border border-white/10 rounded-2xl text-[11px] font-black uppercase tracking-[0.4em] italic text-white/60 shadow-inner">Gender: {activePatient.gender}</div>
+                                                        </div>
                                                     </div>
-                                                    
-                                                    <div className="space-y-6">
-                                                        <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-hospital-primary pb-2 border-b border-white/10 flex justify-between">
-                                                            <span>Clinical History Matrix</span>
-                                                            {auditResult && <span className="text-hospital-mint flex items-center gap-1 animate-pulse"><Sparkles size={10}/> AI INSIGHT ATTACHED</span>}
+                                                    <div className="w-32 h-32 bg-white/5 border border-white/10 rounded-[50px] flex items-center justify-center text-hospital-secondary shadow-4xl relative overflow-hidden group">
+                                                         <div className="absolute inset-0 bg-hospital-secondary opacity-0 group-hover:opacity-10 transition-opacity"></div>
+                                                         <Sparkles size={54} className="group-hover:rotate-[360deg] transition-all duration-1000"/>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div className="flex-1 overflow-y-auto pr-8 scrollbar-hide space-y-16">
+                                                     <div className="space-y-10">
+                                                        <h4 className="text-[11px] font-black uppercase tracking-[0.6em] text-hospital-primary italic flex items-center gap-6 leading-none">
+                                                            <Activity size={20}/>
+                                                            CASE FILE TELEMETRY MATRIX
+                                                            <div className="h-px flex-1 bg-white/5"></div>
                                                         </h4>
                                                         {auditResult && (
-                                                            <div className="p-4 bg-hospital-secondary/5 rounded-2xl border border-hospital-secondary/20 space-y-3">
-                                                                <p className="text-[9px] font-black text-hospital-secondary uppercase tracking-widest">AI Pre-Screening Result</p>
-                                                                <p className="text-xs font-bold text-white/80">{auditResult.condition?.en}</p>
-                                                                <div className="flex flex-wrap gap-2">
-                                                                    {auditResult.precautions?.map((p, i) => <span key={i} className="text-[8px] bg-white/5 px-2 py-1 rounded-md text-white/50">{p.en}</span>)}
+                                                            <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="p-10 bg-hospital-secondary/10 border border-hospital-secondary/30 rounded-[45px] shadow-4xl relative overflow-hidden group">
+                                                                <div className="absolute -top-10 -right-10 text-hospital-secondary opacity-[0.05] rotate-12 group-hover:scale-110 transition-transform"><Brain size={150}/></div>
+                                                                <p className="text-[11px] font-black text-hospital-secondary uppercase tracking-[0.6em] mb-4 italic flex items-center gap-3">Autonomous Pre-Screening Result <div className="h-px flex-1 bg-hospital-secondary/20"></div></p>
+                                                                <p className="text-2xl font-black text-white italic leading-tight mb-8">"{auditResult.condition?.en || 'Pattern Analysis Negative'}"</p>
+                                                                <div className="flex flex-wrap gap-4">
+                                                                    {auditResult.precautions?.map((p, i) => <span key={i} className="text-[9px] bg-black/40 border border-white/5 px-6 py-2 rounded-full text-white/50 italic font-black uppercase tracking-widest">{p.en}</span>)}
                                                                 </div>
-                                                                <button onClick={() => setAuditResult(null)} className="text-[8px] text-white/20 hover:text-white transition-colors">Clear Result</button>
-                                                            </div>
+                                                                <button onClick={() => setAuditResult(null)} className="mt-8 text-[9px] font-black text-white/20 hover:text-white transition-colors uppercase tracking-[0.4em] italic">Flush Decision Node</button>
+                                                            </motion.div>
                                                         )}
-                                                        <div className="space-y-4 h-64 overflow-y-auto pr-4 scrollbar-hide">
+                                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                                             {activePatient.visits.map((v, i) => (
-                                                                <div key={i} className="p-6 bg-white/5 rounded-3xl border border-white/10 flex items-center justify-between group hover:bg-white/10 transition-all">
-                                                                    <div className="flex items-center gap-4 flex-1">
-                                                                        <div className="w-10 h-10 bg-hospital-primary/20 rounded-xl flex items-center justify-center text-hospital-primary overflow-hidden">
-                                                                            {v.image ? <img src={v.image} className="w-full h-full object-cover" /> : <Activity size={18}/>}
+                                                                <div key={i} className="p-8 bg-white/5 rounded-[40px] border border-white/5 flex flex-col gap-8 group hover:border-hospital-primary/20 transition-all relative overflow-hidden">
+                                                                    <div className="absolute -bottom-10 -right-10 opacity-[0.02] text-white rotate-12 transition-transform group-hover:scale-110 group-hover:rotate-45 duration-700">
+                                                                         {v.image ? <Microscope size={150}/> : <Activity size={150}/>}
+                                                                    </div>
+                                                                    <div className="flex items-center justify-between relative z-10">
+                                                                        <div className="flex items-center gap-5">
+                                                                            <div className="w-16 h-16 bg-[#111] border border-white/5 rounded-[22px] flex items-center justify-center text-hospital-primary shadow-4xl overflow-hidden group-hover:scale-105 transition-transform">
+                                                                                {v.image ? <img src={v.image} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" /> : <Activity size={24}/>}
+                                                                            </div>
+                                                                            <div>
+                                                                                <p className="font-black text-lg italic uppercase leading-none mb-2">{v.department}</p>
+                                                                                <p className="text-[9px] font-black text-gray-700 uppercase tracking-[0.4em] italic">{v.appointmentDate}</p>
+                                                                            </div>
                                                                         </div>
-                                                                        <div>
-                                                                            <p className="font-black text-sm">{v.department}</p>
-                                                                            <p className="text-[9px] font-bold text-white/30 uppercase tracking-widest">{v.appointmentDate}</p>
+                                                                        <div className="flex flex-col items-end gap-2">
+                                                                             {v.image && (
+                                                                                <button onClick={() => runClinicalAudit(v.image)} disabled={isAnalyzing}
+                                                                                    className="p-3 bg-hospital-secondary text-white rounded-2xl flex items-center justify-center hover:scale-110 active:scale-90 transition-all disabled:opacity-50 shadow-neon-secondary">
+                                                                                    {isAnalyzing ? <RefreshCw size={20} className="animate-spin" /> : <Sparkles size={20}/>}
+                                                                                </button>
+                                                                            )}
+                                                                            <button className="p-3 bg-white/5 border border-white/10 text-white/30 rounded-2xl hover:text-white transition-colors"><Download size={20}/></button>
                                                                         </div>
                                                                     </div>
-                                                                    {v.image && (
-                                                                        <button onClick={() => runClinicalAudit(v.image)} disabled={isAnalyzing}
-                                                                            className="px-3 py-1 bg-hospital-secondary text-white text-[9px] font-black uppercase tracking-widest rounded-lg flex items-center gap-2 hover:scale-105 transition-all disabled:opacity-50">
-                                                                            {isAnalyzing ? <div className="w-2 h-2 rounded-full bg-white animate-ping"></div> : <Sparkles size={12}/>}  Audit
-                                                                        </button>
-                                                                    )}
-                                                                    <button className="p-2 opacity-0 group-hover:opacity-100 transition-opacity text-hospital-secondary"><Download size={16}/></button>
                                                                 </div>
                                                             ))}
                                                         </div>
-                                                    </div>
+                                                     </div>
 
-                                                    <div className="space-y-4">
-                                                        <div className="grid grid-cols-2 gap-3">
-                                                            <select value={clinicalType} onChange={(e) => setClinicalType(e.target.value)} className="bg-white/10 border border-white/10 rounded-2xl p-3 text-xs font-bold outline-none">
-                                                                <option>General OP</option>
-                                                                <option>Diagnostics</option>
-                                                                <option>Follow-up</option>
-                                                            </select>
-                                                            <input value={clinicalNotes} onChange={(e) => setClinicalNotes(e.target.value)} placeholder="Clinical notes / findings"
-                                                                className="bg-white/10 border border-white/10 rounded-2xl p-3 text-xs font-bold outline-none placeholder:text-white/40" />
-                                                        </div>
-                                                        <div className="space-y-2 max-h-28 overflow-y-auto">
-                                                            {selectedMedicines.map((med) => (
-                                                                <div key={med.name} className="flex items-center gap-3">
-                                                                    <p className="text-xs font-bold flex-1">{med.name}</p>
-                                                                    <input type="number" min="1" value={med.qty} onChange={(e) => updateMedicineQty(med.name, e.target.value)} className="w-16 bg-white/10 border border-white/10 rounded-lg p-1 text-xs" />
-                                                                    <button onClick={() => removeMedicine(med.name)} className="text-red-300"><Trash2 size={14} /></button>
+                                                     <div className="space-y-10 pt-10 border-t border-white/5">
+                                                        <h4 className="text-[11px] font-black uppercase tracking-[0.6em] text-hospital-secondary italic flex items-center gap-6 leading-none">
+                                                            <Edit3 size={20}/>
+                                                            ACTIVE CASE NOTES & PHARMA
+                                                            <div className="h-px flex-1 bg-white/5"></div>
+                                                        </h4>
+                                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                                                            <div className="space-y-6">
+                                                                <div className="space-y-3">
+                                                                    <label className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-700 ml-6 italic">Diagnosis Cluster</label>
+                                                                    <select value={clinicalType} onChange={(e) => setClinicalType(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-[28px] p-6 text-[11px] font-black text-white italic uppercase tracking-[0.3em] outline-none appearance-none cursor-pointer focus:border-hospital-secondary/30 transition-colors">
+                                                                        <option className="bg-[#050505]">General OP Node</option>
+                                                                        <option className="bg-[#050505]">Diagnostics Node</option>
+                                                                        <option className="bg-[#050505]">Cardiac Protocol</option>
+                                                                        <option className="bg-[#050505]">Surgical Review</option>
+                                                                    </select>
                                                                 </div>
-                                                            ))}
-                                                        </div>
-                                                        <button onClick={saveClinicalEntry} className="w-full bg-white text-hospital-dark py-4 rounded-3xl font-black text-xs uppercase tracking-widest shadow-2xl hover:bg-hospital-primary hover:text-white transition-all">Save Clinical Prescription</button>
-                                                        <div className="text-left">
-                                                            <p className="text-[10px] uppercase tracking-widest text-white/40 mb-2">Saved Clinical History</p>
-                                                            <div className="space-y-2 max-h-28 overflow-y-auto">
-                                                                {patientClinicalHistory.map((entry, idx) => (
-                                                                    <div key={idx} className="p-3 bg-white/5 rounded-xl border border-white/10 text-[10px]">
-                                                                        <p className="font-black">{entry.diagnosisType} | {entry.token}</p>
-                                                                        <p className="opacity-70">{entry.notes || 'No notes'}</p>
+                                                                <div className="space-y-3">
+                                                                    <label className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-700 ml-6 italic">Core Findings Log</label>
+                                                                    <textarea value={clinicalNotes} onChange={(e) => setClinicalNotes(e.target.value)} placeholder="Type clinical findings (molecular review required)..."
+                                                                        className="w-full bg-white/5 border border-white/10 rounded-[35px] p-8 text-sm font-serif italic text-white outline-none placeholder:text-gray-800 transition-all h-40 focus:border-hospital-secondary/30" />
+                                                                </div>
+                                                            </div>
+                                                            <div className="space-y-6">
+                                                                <div className="space-y-3 h-full flex flex-col">
+                                                                    <label className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-700 ml-6 italic">Active Prescription (Pharma Node)</label>
+                                                                    <div className="flex-1 bg-white/5 border border-white/10 rounded-[35px] p-8 space-y-4 overflow-y-auto scrollbar-hide min-h-[200px]">
+                                                                        {selectedMedicines.length === 0 ? (
+                                                                            <div className="h-full flex flex-col items-center justify-center opacity-[0.03] space-y-4">
+                                                                                <Pill size={60}/>
+                                                                                <p className="text-[10px] font-black uppercase tracking-[0.4em]">Awaiting Molecular Selection</p>
+                                                                            </div>
+                                                                        ) : selectedMedicines.map((med) => (
+                                                                            <motion.div initial={{ x: -10, opacity: 0 }} animate={{ x: 0, opacity: 1 }} key={med.name} className="flex items-center gap-6 p-4 bg-white/5 border border-white/5 rounded-2xl group/med hover:bg-white/10 transition-colors">
+                                                                                <p className="text-xs font-black italic uppercase leading-none flex-1 text-white">{med.name}</p>
+                                                                                <div className="flex items-center gap-4">
+                                                                                    <input type="number" min="1" value={med.qty} onChange={(e) => updateMedicineQty(med.name, e.target.value)} className="w-16 bg-black/40 border border-white/10 rounded-xl p-2 text-[11px] font-black text-center text-hospital-secondary italic" />
+                                                                                    <button onClick={() => removeMedicine(med.name)} className="text-red-500/30 hover:text-red-500 transition-colors active:scale-90"><Trash2 size={18} /></button>
+                                                                                </div>
+                                                                            </motion.div>
+                                                                        ))}
                                                                     </div>
-                                                                ))}
+                                                                </div>
                                                             </div>
                                                         </div>
+                                                        <button onClick={saveClinicalEntry} className="w-full py-8 bg-white text-black rounded-[40px] font-black text-[12px] uppercase tracking-[0.6em] shadow-4xl hover:bg-hospital-secondary transition-all active:scale-95 italic group/btn relative overflow-hidden">
+                                                            <span className="relative z-10 flex items-center justify-center gap-6"><Zap size={22}/> Synchronize Clinical Record</span>
+                                                            <div className="absolute inset-x-0 bottom-0 top-0 bg-hospital-secondary opacity-0 group-hover/btn:opacity-100 transition-opacity"></div>
+                                                        </button>
                                                     </div>
-                                                </motion.div>
-                                            ) : (
-                                                <div className="space-y-6">
-                                                    <div className="w-32 h-32 mx-auto bg-white/5 rounded-[50px] border border-white/10 flex items-center justify-center text-white/10"><FileText size={60}/></div>
-                                                    <p className="text-xs uppercase font-black tracking-[0.4em] text-white/20">Select a patient for history insight</p>
                                                 </div>
-                                            )}
-                                        </AnimatePresence>
-                                        <div className="absolute top-0 right-0 p-8 text-white/5 pointer-events-none"><Sparkles size={200}/></div>
-                                    </div>
+                                            </motion.div>
+                                        ) : (
+                                            <div className="flex-1 flex flex-col items-center justify-center text-center space-y-12">
+                                                <div className="w-56 h-56 bg-white/5 border border-white/5 rounded-[65px] flex items-center justify-center text-white/5 shadow-inner relative group">
+                                                    <div className="absolute inset-0 bg-hospital-primary opacity-5 rounded-[65px] group-hover:opacity-10 transition-opacity animate-pulse"></div>
+                                                    <FileText size={120} strokeWidth={1} className="relative z-10"/>
+                                                </div>
+                                                <div className="space-y-4">
+                                                    <p className="text-[14px] font-black uppercase tracking-[1em] text-white/20 italic">Awaiting Subject Selection</p>
+                                                    <p className="text-[9px] font-black text-gray-800 uppercase tracking-[0.6em] italic">Access Hospital Master Data Matrix</p>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </AnimatePresence>
                                 </div>
                             </motion.div>
                         )}
 
                         {activeTab === 'medicines' && (
-                            <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="space-y-12">
-                                <div className="bg-hospital-dark p-16 rounded-[60px] text-white relative overflow-hidden">
-                                     <div className="absolute top-0 right-0 w-96 h-96 bg-hospital-secondary opacity-5 rounded-full blur-[100px]"></div>
-                                     <h3 className="text-3xl font-black mb-4 relative z-10">AI Medicine Discovery</h3>
-                                     <p className="text-xs font-black text-hospital-primary tracking-[0.3em] uppercase mb-12 relative z-10">Clinical Stock Intelligent Selection</p>
-                                     <div className="relative z-10 max-w-2xl">
-                                        <div className="relative mb-8">
-                                            <Sparkles size={18} className="absolute left-6 top-1/2 -translate-y-1/2 text-hospital-primary" />
-                                            <input value={aiKeyword} onChange={(e) => handleAiSearch(e.target.value)} type="text" placeholder="Type clinical keyword (e.g. 'injection', 'paracetamol')..."
-                                                className="w-full bg-white/5 border-2 border-white/10 focus:border-hospital-primary p-6 pl-14 rounded-3xl text-lg font-bold outline-none transition-all placeholder:text-white/20" />
+                            <motion.div key="medicines" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="space-y-16">
+                                <div className="bg-[#0a0a0a] p-16 lg:p-24 rounded-[75px] shadow-4xl border border-white/10 relative overflow-hidden backdrop-blur-3xl group">
+                                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-hospital-secondary opacity-[0.01] pointer-events-none group-hover:scale-110 transition-transform duration-[3s]"></div>
+                                     <div className="absolute -top-20 -right-20 w-[600px] h-[600px] bg-hospital-secondary opacity-[0.03] rounded-full blur-[140px] animate-pulse-soft"></div>
+                                     
+                                     <div className="max-w-4xl relative z-10 space-y-16">
+                                        <div className="space-y-4">
+                                            <h3 className="text-6xl font-black italic tracking-tighter uppercase leading-none">AI Pharma Discovery</h3>
+                                            <p className="text-[11px] font-black text-hospital-secondary tracking-[0.8em] uppercase italic leading-none pl-2">Clinical Stock Predictive Intelligence</p>
                                         </div>
-                                        <p className="text-[10px] font-black uppercase tracking-widest text-hospital-mint mb-4">Matches Found: {aiMatchCount}</p>
-                                        <AnimatePresence>
-                                            {aiSuggestions.length > 0 && (
-                                                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-                                                    className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                                    {aiSuggestions.map((med, i) => (
-                                                        <div key={i} className="p-6 bg-white/10 backdrop-blur-md rounded-3xl border border-white/10 flex items-center justify-between group hover:bg-hospital-primary transition-all cursor-pointer">
-                                                            <div className="flex items-center gap-4">
-                                                                <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center text-hospital-primary group-hover:bg-white group-hover:text-hospital-primary transition-colors"><Pill size={18}/></div>
-                                                                <p className="font-black text-sm">{med}</p>
-                                                            </div>
-                                                            <button onClick={() => addMedicineToPrescription(med)} className="text-white/30 group-hover:text-white"><Plus size={18}/></button>
-                                                        </div>
-                                                    ))}
-                                                </motion.div>
-                                            )}
-                                        </AnimatePresence>
-                                        {aiNote && <p className="mt-8 text-[10px] font-black uppercase tracking-widest text-hospital-mint italic opacity-60">AI: {aiNote}</p>}
-                                        {selectedMedicines.length > 0 && (
-                                            <div className="mt-6 p-5 bg-white/5 rounded-2xl border border-white/10">
-                                                <p className="text-[10px] uppercase tracking-widest font-black text-white/60 mb-3">Prescription Builder</p>
-                                                <div className="space-y-2">
-                                                    {selectedMedicines.map((med) => (
-                                                        <div key={med.name} className="flex items-center justify-between text-xs">
-                                                            <span>{med.name}</span>
-                                                            <span className="font-black">Qty: {med.qty}</span>
-                                                        </div>
-                                                    ))}
+                                        
+                                        <div className="space-y-10">
+                                            <div className="relative group">
+                                                <div className="absolute -inset-1 bg-gradient-to-r from-hospital-primary via-hospital-secondary to-white opacity-0 group-focus-within:opacity-20 blur-xl transition-all rounded-[40px]"></div>
+                                                <div className="relative bg-[#050505]/40 border-2 border-white/5 focus-within:border-hospital-primary/30 p-8 pl-20 rounded-[40px] shadow-4xl backdrop-blur-3xl transition-all">
+                                                    <Sparkles size={28} className="absolute left-8 top-1/2 -translate-y-1/2 text-hospital-primary animate-pulse shadow-neon-primary" />
+                                                    <input value={aiKeyword} onChange={(e) => handleAiSearch(e.target.value)} type="text" placeholder="Scan Molecular Registry (e.g. 'injection', 'statin')..."
+                                                        className="w-full bg-transparent text-3xl font-black outline-none italic placeholder:text-gray-900 transition-all text-white tracking-tight" />
                                                 </div>
                                             </div>
-                                        )}
-                                    </div>
+
+                                            <div className="flex items-center gap-6 px-4">
+                                                <div className="h-px flex-1 bg-white/5"></div>
+                                                <p className="text-[10px] font-black uppercase tracking-[0.6em] text-hospital-primary italic">Live Cluster Match Index: {aiMatchCount}</p>
+                                                <div className="h-px flex-1 bg-white/5"></div>
+                                            </div>
+
+                                            <AnimatePresence>
+                                                {aiSuggestions.length > 0 && (
+                                                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95 }}
+                                                        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                                        {aiSuggestions.map((med, i) => (
+                                                            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.05 }}
+                                                                key={i} className="p-10 bg-white/5 border border-white/5 hover:border-hospital-primary/40 rounded-[45px] flex items-center justify-between group/card hover:bg-white/10 transition-all cursor-pointer shadow-4xl active:scale-95">
+                                                                <div className="flex items-center gap-6">
+                                                                    <div className="w-16 h-16 bg-[#111] border border-white/5 rounded-[22px] flex items-center justify-center text-hospital-secondary group-card:rotate-12 transition-transform shadow-inner text-4xl font-serif italic font-black">P</div>
+                                                                    <div>
+                                                                        <p className="font-black text-xl italic tracking-tighter uppercase leading-none group-card:text-white transition-colors">{med}</p>
+                                                                        <p className="text-[8px] font-black text-gray-700 uppercase tracking-widest mt-2 italic leading-none">Pharma ID: LOG-{i*1024}</p>
+                                                                    </div>
+                                                                </div>
+                                                                <button onClick={() => addMedicineToPrescription(med)} className="p-4 bg-white/5 border border-white/10 rounded-2xl text-white/20 group-card:text-hospital-primary group-card:bg-white/10 transition-all hover:scale-110"><Plus size={24}/></button>
+                                                            </motion.div>
+                                                        ))}
+                                                    </motion.div>
+                                                )}
+                                            </AnimatePresence>
+
+                                            {aiNote && (
+                                                <div className="p-8 bg-black/40 border border-white/5 rounded-[35px] italic text-sm text-hospital-primary/50 leading-loose flex items-start gap-6 group">
+                                                    <Brain size={24} className="shrink-0 mt-1 group-hover:rotate-12 transition-transform" />
+                                                    <span className="font-serif italic">"Autonomous Observation: {aiNote}"</span>
+                                                </div>
+                                            )}
+                                        </div>
+                                     </div>
                                 </div>
                                 
-                                <div className="bg-white rounded-[50px] shadow-sm border border-gray-100 p-12">
-                                     <h3 className="text-xl font-black mb-10">Pharmacy Inventory Master</h3>
-                                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                                <div className="bg-[#0a0a0a] rounded-[75px] shadow-4xl border border-white/10 p-16 lg:p-24 space-y-16 backdrop-blur-3xl relative overflow-hidden">
+                                     <div className="absolute top-0 left-0 p-16 text-white opacity-[0.02] pointer-events-none -rotate-12"><Pill size={300}/></div>
+                                     <div className="flex items-center justify-between relative z-10">
+                                         <h3 className="text-4xl font-black italic tracking-tighter uppercase leading-none">Inventory Master</h3>
+                                         <div className="flex gap-4">
+                                            <button className="px-10 py-5 bg-white text-black rounded-full text-[11px] font-black uppercase tracking-[0.4em] italic hover:bg-hospital-primary transition-all active:scale-95 shadow-4xl">Add Compound</button>
+                                         </div>
+                                     </div>
+                                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-12 relative z-10">
                                          {products.map((p, i) => (
-                                             <div key={i} className="p-8 bg-gray-50 rounded-[40px] border border-gray-100 hover:shadow-xl transition-all group">
-                                                 <div className="flex justify-between items-start mb-6">
-                                                     <div className="w-16 h-16 bg-white rounded-3xl shadow-sm flex items-center justify-center text-hospital-secondary group-hover:scale-110 transition-transform"><Pill size={32}/></div>
-                                                     <div className="px-3 py-1 bg-white border border-gray-100 rounded-full text-[8px] font-black uppercase tracking-widest">{p.category}</div>
+                                             <div key={i} className="p-10 bg-white/5 rounded-[50px] border border-white/5 hover:border-white/10 hover:bg-white/10 transition-all group relative overflow-hidden shadow-4xl">
+                                                 <div className="absolute -top-10 -right-10 opacity-[0.03] group-hover:scale-125 transition-transform duration-[2s]"><Pill size={150}/></div>
+                                                 <div className="flex justify-between items-start mb-10">
+                                                     <div className="w-20 h-20 bg-[#111] border border-white/5 rounded-[30px] shadow-inner flex items-center justify-center text-hospital-secondary group-hover:rotate-12 transition-transform italic text-5xl font-serif">M</div>
+                                                     <div className="px-6 py-2 bg-white/5 border border-white/10 rounded-full text-[9px] font-black uppercase tracking-[0.3em] italic text-gray-500">{p.category}</div>
                                                  </div>
-                                                 <h4 className="text-lg font-black text-hospital-dark mb-1">{p.name}</h4>
-                                                 <p className="text-2xl font-black text-hospital-primary mb-6">₹{p.price}</p>
-                                                 <button className="w-full py-4 bg-hospital-dark text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-hospital-primary transition-colors">Adjust Stock</button>
+                                                 <h4 className="text-2xl font-black text-white italic tracking-tighter uppercase mb-2 leading-none">{p.name}</h4>
+                                                 <p className="text-4xl font-black text-hospital-primary mb-10 glow-text italic">₹{p.price}</p>
+                                                 <button className="w-full py-6 bg-transparent border border-white/10 text-white/30 rounded-[28px] text-[10px] font-black uppercase tracking-[0.5em] hover:bg-white hover:text-black hover:border-white transition-all italic active:scale-95">Adjust Stock Node</button>
                                              </div>
                                          ))}
                                      </div>
@@ -537,57 +632,103 @@ const AdminDashboard = () => {
                         )}
 
                         {activeTab === 'settings' && (
-                            <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="max-w-4xl space-y-12 pb-20">
-                                <div className="bg-white p-12 rounded-[60px] shadow-sm border border-gray-100">
-                                    <h3 className="text-2xl font-black mb-10 flex items-center gap-4"><Settings size={28} className="text-hospital-secondary"/> Platform Configuration</h3>
+                            <motion.div key="settings" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="max-w-5xl space-y-16 pb-24 mx-auto">
+                                <div className="bg-[#0a0a0a] p-16 lg:p-24 rounded-[75px] shadow-4xl border border-white/10 backdrop-blur-3xl relative overflow-hidden group">
+                                    <div className="absolute top-0 right-0 p-16 opacity-[0.02] text-white rotate-12 transition-transform duration-[3s] group-hover:rotate-45"><Settings size={300} strokeWidth={1}/></div>
+                                    <div className="space-y-4 mb-20">
+                                        <h3 className="text-6xl font-black italic tracking-tighter uppercase leading-none">Cloud Config</h3>
+                                        <p className="text-[11px] font-black text-hospital-primary tracking-[0.8em] uppercase italic leading-none pl-2">Authorized Global Node Control</p>
+                                    </div>
                                     
-                                    <div className="space-y-12">
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                            <div className="space-y-3">
-                                                <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-4 leading-none">Hospital Primary Phone</label>
-                                                <div className="relative">
-                                                    <Phone size={18} className="absolute left-6 top-1/2 -translate-y-1/2 text-hospital-primary" />
+                                    <div className="space-y-16">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                                            <div className="space-y-5">
+                                                <label className="text-[11px] font-black uppercase tracking-[0.5em] text-gray-700 ml-10 italic">Institutional Primary Hotline</label>
+                                                <div className="relative group/input">
+                                                    <div className="absolute -inset-0.5 bg-hospital-primary opacity-0 group-focus-within/input:opacity-10 blur-xl transition-all rounded-[35px]"></div>
+                                                    <Phone size={22} className="absolute left-8 top-1/2 -translate-y-1/2 text-hospital-primary/50 group-focus-within/input:text-hospital-primary transition-colors" />
                                                     <input value={config.hospitalPhone} onChange={(e) => setConfig({...config, hospitalPhone: e.target.value})} type="text"
-                                                        className="w-full bg-gray-50 border-none p-5 pl-16 rounded-3xl font-black text-sm outline-none focus:ring-2 ring-hospital-primary/10 transition-all" />
+                                                        className="w-full bg-[#050505] border border-white/10 p-8 pl-20 rounded-[35px] font-black text-lg outline-none focus:border-hospital-primary/40 transition-all text-white shadow-inner italic" />
                                                 </div>
                                             </div>
-                                            <div className="space-y-3">
-                                                <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-4 leading-none">Lab/Diagnostics Phone</label>
-                                                <div className="relative">
-                                                    <Sparkles size={18} className="absolute left-6 top-1/2 -translate-y-1/2 text-hospital-primary" />
+                                            <div className="space-y-5">
+                                                <label className="text-[11px] font-black uppercase tracking-[0.5em] text-gray-700 ml-10 italic">Diagnostics Laboratory Link</label>
+                                                <div className="relative group/input">
+                                                    <div className="absolute -inset-0.5 bg-hospital-secondary opacity-0 group-focus-within/input:opacity-10 blur-xl transition-all rounded-[35px]"></div>
+                                                    <Sparkles size={22} className="absolute left-8 top-1/2 -translate-y-1/2 text-hospital-secondary/50 group-focus-within/input:text-hospital-secondary transition-colors" />
                                                     <input value={config.diagnosticsPhone} onChange={(e) => setConfig({...config, diagnosticsPhone: e.target.value})} type="text"
-                                                        className="w-full bg-gray-50 border-none p-5 pl-16 rounded-3xl font-black text-sm outline-none focus:ring-2 ring-hospital-primary/10 transition-all" />
+                                                        className="w-full bg-[#050505] border border-white/10 p-8 pl-20 rounded-[35px] font-black text-lg outline-none focus:border-hospital-secondary/40 transition-all text-white shadow-inner italic" />
                                                 </div>
                                             </div>
                                         </div>
                                         
-                                        <div className="p-10 bg-[#fefefe] rounded-[40px] border-2 border-gray-50 shadow-sm flex items-center justify-between">
-                                            <div className="flex items-center gap-6">
-                                                <div className="w-16 h-16 bg-hospital-mint flex items-center justify-center text-hospital-primary rounded-3xl shadow-inner"><Globe size={28}/></div>
+                                        <div className="p-12 bg-white/5 rounded-[50px] border border-white/10 shadow-4xl flex flex-col md:flex-row items-center justify-between gap-10 hover:border-white/20 transition-all">
+                                            <div className="flex items-center gap-10">
+                                                <div className="w-24 h-24 bg-white/5 border border-white/10 flex items-center justify-center text-hospital-primary rounded-[35px] shadow-4xl relative overflow-hidden group/ico">
+                                                    <div className="absolute inset-x-0 bottom-0 top-0 bg-hospital-primary opacity-0 group-hover/ico:opacity-10 transition-opacity"></div>
+                                                    <Globe size={40} className="group-hover:rotate-[360deg] transition-all duration-1000" />
+                                                </div>
                                                 <div>
-                                                    <p className="font-black text-hospital-dark text-lg">Landing Page Core Services</p>
-                                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">Live Visibility Toggle</p>
+                                                    <p className="font-black text-white text-3xl italic tracking-tighter leading-none mb-3">CORE SERVICE ACCESSIBILITY</p>
+                                                    <p className="text-[11px] font-black text-gray-700 uppercase tracking-[0.4em] mt-1 italic">Real-Time Visibility Matrix Synchronization</p>
                                                 </div>
                                             </div>
                                             <button onClick={async () => {
                                                 const payload = { ...config, showCoreServices: !config.showCoreServices };
                                                 await updateConfig(payload);
                                                 setConfig(payload);
-                                            }} className={`w-20 h-10 rounded-full p-1 transition-colors relative ${config.showCoreServices ? 'bg-hospital-primary' : 'bg-gray-200'}`}>
-                                                <div className={`w-8 h-8 bg-white rounded-full shadow-xl transition-all absolute top-1 ${config.showCoreServices ? 'right-1' : 'left-1'}`}></div>
+                                            }} className={`w-28 h-14 rounded-full p-2 transition-all relative shadow-4xl ${config.showCoreServices ? 'bg-hospital-primary shadow-neon-primary' : 'bg-[#111]'}`}>
+                                                <motion.div animate={{ x: config.showCoreServices ? 56 : 0 }} className="w-10 h-10 bg-black rounded-full shadow-4xl flex items-center justify-center">
+                                                    <Zap size={14} className={config.showCoreServices ? 'text-hospital-primary' : 'text-gray-900'} />
+                                                </motion.div>
                                             </button>
+                                        </div>
+
+                                        <div className="p-12 bg-white/5 border border-white/5 rounded-[45px] space-y-6">
+                                            <div className="flex items-center gap-4 text-white/20">
+                                                <ShieldCheck size={20}/>
+                                                <p className="text-[10px] font-black uppercase tracking-[0.5em] italic">Security Protocol Level: Institutional Max</p>
+                                            </div>
+                                            <p className="text-xs font-serif italic text-white/30 leading-relaxed uppercase tracking-widest text-center">Config Changes Are Distributed Across All Regional Edge Nodes Globally within 100ms.</p>
                                         </div>
                                     </div>
                                     
-                                    <button onClick={() => updateConfig(config)} className="mt-12 w-full bg-hospital-dark text-white p-7 rounded-[32px] font-black text-xs uppercase tracking-[0.4em] shadow-4xl hover:bg-hospital-primary transition-all">PUBLISH CLOUD CONFIG CHANGES</button>
+                                    <button onClick={() => updateConfig(config)} className="mt-20 w-full bg-white text-black py-10 rounded-[45px] font-black text-[13px] uppercase tracking-[0.8em] shadow-4xl hover:bg-hospital-primary transition-all active:scale-95 italic group/publish relative overflow-hidden">
+                                        <span className="relative z-10 flex items-center justify-center gap-6">PUBLISH ARCHITECTURE CHANGES</span>
+                                        <div className="absolute inset-x-0 bottom-0 top-0 bg-hospital-primary opacity-0 group-hover/publish:opacity-100 transition-opacity"></div>
+                                    </button>
+                                </div>
+                                <div className="text-center italic mt-16 pb-12">
+                                     <p className="text-[10px] font-black text-gray-800 uppercase tracking-[1em] mb-4">Sri Kamala Operating System v4.0.2</p>
+                                     <div className="flex justify-center gap-8 text-[9px] font-black text-gray-700 uppercase tracking-[0.4em]">
+                                        <span>Latency: 14ms</span>
+                                        <div className="w-1 h-1 bg-gray-900 rounded-full mt-1"></div>
+                                        <span>Encryption: AES-256</span>
+                                        <div className="w-1 h-1 bg-gray-900 rounded-full mt-1"></div>
+                                        <span>Core: Autonomous</span>
+                                     </div>
                                 </div>
                             </motion.div>
                         )}
                     </AnimatePresence>
                 </div>
             </main>
+            
+            {/* Ambient Background elements */}
+            <div className="fixed top-[20%] left-[-10%] opacity-[0.02] text-white rotate-12 pointer-events-none scale-150"><Scissors size={400} strokeWidth={1}/></div>
+             <div className="fixed bottom-[20%] right-[-10%] opacity-[0.02] text-hospital-secondary -rotate-12 pointer-events-none scale-150"><Syringe size={400} strokeWidth={1}/></div>
+
         </div>
     );
 };
+
+// Sub-components to keep clean
+const Edit3 = (props) => (
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-edit-3"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+);
+
+const RefreshCw = (props) => (
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-refresh-cw"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>
+);
 
 export default AdminDashboard;

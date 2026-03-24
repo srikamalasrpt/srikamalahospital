@@ -1,5 +1,5 @@
 import React from 'react';
-import { Stethoscope, FlaskConical, ShoppingBag, ListChecks, Search, Ambulance, ChevronRight, Activity, Plus, Sparkles, Brain, Heart, Microscope } from 'lucide-react';
+import { Stethoscope, FlaskConical, ShoppingBag, ListChecks, Search, Ambulance, ChevronRight, Activity, Plus, Sparkles, Brain, Heart, Microscope, Droplets, Scissors, Syringe } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
@@ -8,115 +8,117 @@ const FeatureGrid = () => {
     { 
         title: 'Clinical Diagnostics', 
         telugu: 'జనరల్ కన్సల్టేషన్', 
-        description: 'Elite panel GP access with real-time biometric sync.', 
-        icon: <Stethoscope size={24} />, 
+        description: 'Elite panel GP access with real-time biometric synchronization and triage.', 
+        icon: <Stethoscope size={26} />, 
         link: '/book', 
-        color: 'text-emerald-500', 
-        bg: 'bg-emerald-500/5' 
+        color: 'text-emerald-400', 
+        bg: 'bg-emerald-400/10' 
     },
     { 
         title: 'AI Neural Core', 
         telugu: 'AI రోగ నిర్ధారణ', 
-        description: 'Predictive health modeling and autonomous triage.', 
-        icon: <Brain size={24} />, 
+        description: 'Predictive health modeling and autonomous patient triage algorithms.', 
+        icon: <Brain size={26} />, 
         link: '/ai-health', 
-        color: 'text-indigo-500', 
-        bg: 'bg-indigo-500/5' 
+        color: 'text-indigo-400', 
+        bg: 'bg-indigo-400/10' 
     },
     { 
-        title: 'Pathology Lab', 
+        title: 'Pathology Center', 
         telugu: 'పాథాలజీ ల్యాబ్', 
-        description: 'Molecular precision laboratory with automated reports.', 
-        icon: <Microscope size={24} />, 
+        description: 'Molecular precision laboratory with automated digital report delivery.', 
+        icon: <Microscope size={26} />, 
         link: '/diagnosis', 
-        color: 'text-rose-500', 
-        bg: 'bg-rose-500/5' 
+        color: 'text-rose-400', 
+        bg: 'bg-rose-400/10' 
     },
     { 
-        title: 'Smart Pharmacy', 
+        title: 'Smart Apothecary', 
         telugu: 'అంతర్గత ఫార్మసీ', 
-        description: 'Verified clinical apothecary with inventory tracking.', 
-        icon: <ShoppingBag size={24} />, 
+        description: 'Verified clinical medication hub with real-time inventory tracking.', 
+        icon: <ShoppingBag size={26} />, 
         link: '/medical-shop', 
-        color: 'text-blue-500', 
-        bg: 'bg-blue-500/5' 
+        color: 'text-blue-400', 
+        bg: 'bg-blue-400/10' 
     },
     { 
-        title: 'Cardiac Monitoring', 
+        title: 'Cardiac Analytics', 
         telugu: 'గుండె ఆరోగ్యం', 
-        description: 'Continuous cardiovascular risk assessment suite.', 
-        icon: <Heart size={24} />, 
+        description: 'Continuous cardiovascular risk assessment and monitoring suite.', 
+        icon: <Heart size={26} />, 
         link: '/ai-health', 
-        color: 'text-red-500', 
-        bg: 'bg-red-500/5' 
+        color: 'text-red-400', 
+        bg: 'bg-red-400/10' 
     },
     { 
-        title: 'Emergency Response', 
+        title: 'Trauma Response', 
         telugu: 'అత్యవసర విభాగం', 
-        description: 'Level-1 critical care available 24/7/365.', 
-        icon: <Sparkles size={24} />, 
+        description: 'Level-1 critical care infrastructure available 24/7/365.', 
+        icon: <Sparkles size={26} />, 
         link: '/doctors', 
-        color: 'text-amber-500', 
-        bg: 'bg-amber-500/5' 
+        color: 'text-amber-400', 
+        bg: 'bg-amber-400/10' 
     },
   ];
 
   return (
-    <section id="services" className="py-32 px-6 md:px-12 bg-[#fafafa] relative overflow-hidden">
+    <section id="services" className="py-32 px-6 md:px-12 bg-black relative overflow-hidden">
       
-      {/* Background Decorative Mesh */}
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-hospital-primary/5 rounded-full blur-[120px] pointer-events-none"></div>
+      {/* Background Decorative Mesh - High Tech Dark Style */}
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-hospital-primary/5 rounded-full blur-[140px] pointer-events-none animate-pulse-soft"></div>
+      <div className="absolute -bottom-40 -left-40 w-[600px] h-[600px] bg-hospital-secondary/5 rounded-full blur-[140px] pointer-events-none animate-pulse-soft" style={{ animationDelay: '3s' }}></div>
 
-      <div className="container mx-auto max-w-7xl relative">
+      <div className="container mx-auto max-w-7xl relative z-10">
         
-        <div className="flex flex-col md:flex-row items-end justify-between mb-20 gap-8">
+        <div className="flex flex-col md:flex-row items-end justify-between mb-24 gap-8">
             <div className="max-w-2xl">
-               <div className="flex items-center gap-4 mb-8">
-                  <div className="w-12 h-12 rounded-2xl bg-hospital-dark flex items-center justify-center text-white shadow-xl shadow-hospital-dark/20"><Activity size={24} /></div>
+               <div className="flex items-center gap-5 mb-10">
+                  <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-hospital-primary shadow-2xl shadow-hospital-primary/10 animate-float-badge"><Activity size={28} /></div>
                   <div>
-                    <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-hospital-secondary">Advanced Healthcare Ecosystem</h4>
-                    <p className="text-[8px] font-bold text-gray-300 uppercase tracking-[0.2em] mt-1 italic">World-Class Infrastructure Matrix</p>
+                    <h4 className="text-[11px] font-black uppercase tracking-[0.5em] text-hospital-secondary">Advanced Healthcare Ecosystem v3.0</h4>
+                    <p className="text-[9px] font-bold text-gray-500 uppercase tracking-[0.3em] mt-1 italic">World-Class Global Infrastructure Matrix</p>
                   </div>
                </div>
-               <h2 className="text-4xl lg:text-7xl font-black text-hospital-dark mb-4 leading-none tracking-tighter transition-all font-['Noto_Sans_Telugu']">ముఖ్యమైన <span className="text-hospital-secondary italic font-['Playfair_Display']">సేవలు</span></h2>
-               <p className="text-[10px] uppercase font-bold text-gray-400 tracking-[0.6em] mb-8">Precision Integrated Solutions</p>
+               <h2 className="text-4xl lg:text-8xl font-black text-white mb-6 leading-none tracking-tighter transition-all font-['Noto_Sans_Telugu']">ముఖ్యమైన <span className="text-hospital-secondary italic">సేవలు</span></h2>
+               <p className="text-[11px] uppercase font-bold text-gray-600 tracking-[0.8em] mb-12">Precision Integrated Clinical Solutions</p>
             </div>
-            <button className="px-10 py-5 rounded-[24px] bg-white border border-gray-100 text-hospital-dark hover:bg-hospital-primary hover:text-white hover:border-transparent text-[10px] font-black uppercase tracking-widest shadow-xl transition-all">
-               ACTIVATE FULL CATALOG <ChevronRight size={14} className="inline ml-2" />
+            <button className="group px-12 py-6 rounded-[30px] bg-white/5 border border-white/10 text-white hover:bg-hospital-primary hover:text-black hover:border-transparent text-[11px] font-black uppercase tracking-[0.5em] shadow-4xl transition-all backdrop-blur-3xl overflow-hidden relative">
+               <span className="relative z-10 flex items-center gap-3">ACTIVATE FULL CATALOG <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" /></span>
+               <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-100 transition-opacity -z-0"></div>
             </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
           {items.map((item, i) => (
             <motion.div key={i} 
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.1, duration: 0.8 }}
-                whileHover={{ y: -10 }}
-                className={`group p-12 rounded-[50px] bg-white border border-gray-50 shadow-2xl shadow-hospital-dark/5 transition-all duration-700 relative overflow-hidden h-[400px] flex flex-col`}>
+                transition={{ delay: i * 0.1, duration: 1 }}
+                whileHover={{ y: -15 }}
+                className={`group p-14 rounded-[60px] bg-white/5 border border-white/10 shadow-4xl transition-all duration-1000 relative overflow-hidden h-[450px] flex flex-col hover:border-white/20 active:scale-95`}>
                 
-                {/* Accent Orb */}
-                <div className={`absolute -top-10 -right-10 w-32 h-32 rounded-full blur-[60px] opacity-10 transition-transform duration-700 group-hover:scale-150 ${item.bg}`}></div>
+                {/* Dynamic Liquid Accent */}
+                <div className={`absolute -top-16 -right-16 w-40 h-40 rounded-full blur-[80px] opacity-10 transition-all duration-1000 group-hover:scale-150 group-hover:opacity-30 ${item.bg}`}></div>
 
-                <div className="flex justify-between items-start mb-10">
-                   <div className={`w-16 h-16 rounded-[24px] flex items-center justify-center transition-all duration-700 group-hover:bg-hospital-dark group-hover:text-white ${item.bg} ${item.color} border border-current/10 shadow-inner group-hover:shadow-neon-primary`}>
+                <div className="flex justify-between items-start mb-12">
+                   <div className={`w-20 h-20 rounded-[30px] flex items-center justify-center transition-all duration-1000 group-hover:scale-110 group-hover:bg-hospital-dark group-hover:border-hospital-primary/30 ${item.bg} ${item.color} border border-white/5 shadow-2xl backdrop-blur-3xl`}>
                       {item.icon}
                    </div>
-                   <div className="p-3 rounded-2xl bg-gray-50 text-gray-200 group-hover:text-hospital-secondary transition-all">
-                      <Plus size={18} />
+                   <div className="p-4 rounded-2xl bg-white/5 text-gray-700 group-hover:text-hospital-secondary transition-all group-hover:rotate-180 duration-700">
+                      <Plus size={20} />
                    </div>
                 </div>
 
                 <div className="flex-1">
-                    <h3 className="text-2xl font-black text-hospital-dark mb-2 tracking-tight font-['Noto_Sans_Telugu'] group-hover:text-hospital-primary transition-colors">{item.telugu}</h3>
-                    <p className="text-[9px] font-black uppercase tracking-[0.4em] text-gray-300 mb-6 italic leading-none">{item.title}</p>
-                    <p className="text-xs font-medium text-gray-500 leading-relaxed opacity-60 group-hover:opacity-100 transition-opacity duration-500">{item.description}</p>
+                    <h3 className="text-3xl font-black text-white mb-3 tracking-tighter font-['Noto_Sans_Telugu'] group-hover:text-hospital-primary transition-colors">{item.telugu}</h3>
+                    <p className="text-[10px] font-black uppercase tracking-[0.5em] text-gray-500 mb-8 italic leading-none">{item.title}</p>
+                    <p className="text-xs font-medium text-gray-400 leading-relaxed opacity-60 group-hover:opacity-100 transition-opacity duration-700 font-serif lowercase italic">"{item.description}"</p>
                 </div>
                 
-                <div className="mt-auto pt-8 border-t border-gray-50 opacity-0 group-hover:opacity-100 transition-all duration-500">
-                    <Link to={item.link} className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-hospital-dark hover:text-hospital-primary">
-                        Deploy Service <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform text-hospital-secondary" />
+                <div className="mt-auto pt-10 border-t border-white/5 opacity-0 group-hover:opacity-100 transition-all duration-700">
+                    <Link to={item.link} className="flex items-center gap-4 text-[11px] font-black uppercase tracking-[0.4em] text-white hover:text-hospital-primary">
+                        Deploy Service <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform text-hospital-secondary" />
                     </Link>
                 </div>
 
@@ -124,6 +126,11 @@ const FeatureGrid = () => {
           ))}
         </div>
       </div>
+
+       {/* Local Clinical Decor */}
+       <div className="absolute top-1/2 right-[-5%] opacity-[0.03] text-white"><Scissors size={180} /></div>
+       <div className="absolute bottom-0 left-[-5%] opacity-[0.03] text-white"><Syringe size={180} /></div>
+
     </section>
   );
 };

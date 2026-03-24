@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { ShieldCheck, FileText, HelpCircle, Phone, Home } from 'lucide-react';
+import { ShieldCheck, FileText, HelpCircle, Phone, Home, ArrowLeft, Activity, Zap, Sparkles, Scissors, Syringe } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const PAGE_DATA = {
   about: {
@@ -133,20 +134,6 @@ const PAGE_DATA = {
       },
     ],
   },
-  sitemap: {
-    title: 'Website Sitemap',
-    subtitle: 'Quick access to major pages',
-    icon: Home,
-    sections: [
-      { heading: 'Home', content: '/' },
-      { heading: 'Booking', content: '/book' },
-      { heading: 'Doctors', content: '/doctors' },
-      { heading: 'Reviews', content: '/reviews' },
-      { heading: 'Diagnosis', content: '/diagnosis' },
-      { heading: 'Medical Shop', content: '/medical-shop' },
-      { heading: 'AI Health', content: '/ai-health' },
-    ],
-  },
 };
 
 const SiteInfoPage = () => {
@@ -155,35 +142,70 @@ const SiteInfoPage = () => {
   const Icon = page.icon;
 
   return (
-    <section className="min-h-screen bg-[#f8fafc] pt-32 pb-20 px-6">
-      <div className="container mx-auto max-w-5xl">
-        <div className="bg-white rounded-[36px] border border-gray-100 shadow-sm p-8 md:p-12">
-          <div className="flex items-center gap-4 mb-6">
-            <div className="w-12 h-12 rounded-2xl bg-hospital-primary/10 text-hospital-primary flex items-center justify-center">
-              <Icon size={22} />
+    <section className="min-h-screen bg-[#050505] pt-32 pb-24 px-6 relative overflow-hidden">
+
+      {/* Background Decor */}
+      <div className="fixed inset-0 z-0 pointer-events-none opacity-20 overflow-hidden">
+        <div className="absolute top-[10%] left-[10%] w-[600px] h-[600px] bg-hospital-primary/10 rounded-full blur-[140px] animate-pulse-soft"></div>
+        <div className="absolute bottom-[20%] right-[10%] w-[500px] h-[500px] bg-hospital-secondary/5 rounded-full blur-[120px] animate-pulse-soft" style={{ animationDelay: '3s' }}></div>
+      </div>
+
+      <div className="container mx-auto max-w-5xl relative z-10">
+        <Link to="/" className="inline-flex items-center gap-4 text-white font-black mb-12 hover:text-hospital-primary transition-all group active:scale-95">
+          <div className="p-3 bg-white/5 rounded-2xl border border-white/10 group-hover:-translate-x-2 transition-transform shadow-4xl backdrop-blur-3xl">
+            <ArrowLeft size={18} />
+          </div>
+          <span className="text-[11px] font-black uppercase tracking-[0.4em] italic leading-none">Institutional Root</span>
+        </Link>
+
+        <motion.div
+          initial={{ y: 50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          className="bg-[#0a0a0a] rounded-[60px] border border-white/10 shadow-4xl p-10 md:p-16 relative overflow-hidden backdrop-blur-3xl">
+
+          <div className="absolute top-0 right-0 p-16 opacity-[0.03] rotate-12 text-white"><Icon size={250} /></div>
+
+          <div className="flex items-center gap-6 mb-16 relative z-10">
+            <div className="w-16 h-16 rounded-[28px] bg-white/5 border border-white/10 text-hospital-primary flex items-center justify-center shadow-4xl hover:scale-110 transition-transform">
+              <Icon size={28} />
             </div>
             <div>
-              <h1 className="text-3xl font-black text-hospital-dark">{page.title}</h1>
-              <p className="text-xs uppercase tracking-[0.2em] font-bold text-gray-400 mt-1">{page.subtitle}</p>
+              <h1 className="text-4xl md:text-5xl font-black text-white italic tracking-tighter uppercase leading-none">{page.title}</h1>
+              <div className="flex items-center gap-3 mt-4">
+                <div className="h-1 w-10 bg-hospital-primary rounded-full"></div>
+                <p className="text-[10px] uppercase tracking-[0.4em] font-black text-gray-600 italic leading-none">{page.subtitle}</p>
+              </div>
             </div>
           </div>
 
-          <div className="space-y-6">
-            {page.sections.map((section) => (
-              <div key={section.heading} className="p-6 rounded-2xl bg-gray-50 border border-gray-100">
-                <h3 className="text-sm font-black text-hospital-dark mb-2">{section.heading}</h3>
-                <p className="text-sm text-gray-600 font-medium">{section.content}</p>
-              </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-8 relative z-10">
+            {page.sections.map((section, idx) => (
+              <motion.div
+                key={section.heading}
+                initial={{ x: -20, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ delay: idx * 0.1 }}
+                className="p-10 rounded-[40px] bg-white/5 border border-white/5 hover:border-white/10 group transition-all relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-6 opacity-[0.02] group-hover:scale-110 transition-transform"><Activity size={80} /></div>
+                <h3 className="text-[11px] font-black uppercase tracking-[0.5em] text-hospital-secondary mb-6 italic leading-none border-l-2 border-hospital-secondary pl-4">{section.heading}</h3>
+                <p className="text-xl font-black text-white italic leading-relaxed font-serif opacity-80">"{section.content}"</p>
+                <div className="mt-8 flex gap-2">
+                  {[1, 2, 3].map(i => <div key={i} className="w-1.5 h-1.5 rounded-full bg-white/5"></div>)}
+                </div>
+              </motion.div>
             ))}
           </div>
 
-          <div className="mt-8">
-            <Link to="/" className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-hospital-dark text-white text-xs font-black uppercase tracking-widest hover:bg-hospital-primary transition-colors">
-              Back To Home
-            </Link>
+          <div className="mt-16 pt-12 border-t border-white/5 italic text-center">
+            <p className="text-[9px] font-black text-gray-800 uppercase tracking-[0.8em]">Secure Information Node Sri Kamala Hospitals © 2026</p>
           </div>
-        </div>
+        </motion.div>
       </div>
+
+      {/* Local Ambient Decor */}
+      <div className="absolute top-[30%] left-[-10%] opacity-[0.02] text-white rotate-12 pointer-events-none scale-150"><Scissors size={300} strokeWidth={1} /></div>
+      <div className="absolute bottom-[30%] right-[-10%] opacity-[0.02] text-hospital-secondary -rotate-12 pointer-events-none scale-150"><Syringe size={300} strokeWidth={1} /></div>
+
     </section>
   );
 };

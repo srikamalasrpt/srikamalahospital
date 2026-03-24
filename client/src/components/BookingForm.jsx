@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, User, Phone, Clipboard, Heart, Send, CheckCircle2, ChevronRight, Activity, Clock } from 'lucide-react';
+import { Calendar, User, Phone, Clipboard, Heart, Send, CheckCircle2, ChevronRight, Activity, Clock, ShieldCheck, Zap, Plus, Scissors, Syringe, Droplets } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { bookAppointment } from '../utils/api';
 
@@ -70,58 +70,74 @@ const BookingForm = () => {
   };
 
   return (
-    <section id="booking" className="py-20 px-6 flex items-center justify-center bg-white relative">
+    <section id="booking" className="py-24 px-6 flex items-center justify-center bg-black relative overflow-hidden">
+      
+      {/* Background Decor Matrices */}
+      <div className="fixed inset-0 z-0 pointer-events-none opacity-20 overflow-hidden">
+        <div className="absolute top-[10%] left-[10%] w-[600px] h-[600px] bg-hospital-primary/10 rounded-full blur-[140px] animate-pulse-soft"></div>
+        <div className="absolute bottom-[20%] right-[10%] w-[500px] h-[500px] bg-hospital-secondary/5 rounded-full blur-[120px] animate-pulse-soft" style={{ animationDelay: '3s' }}></div>
+      </div>
+
       <div className="container mx-auto max-w-7xl relative z-10">
+        
+        {/* Token Animation Card */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          className="mb-10 p-6 bg-gradient-to-r from-hospital-dark to-hospital-primary rounded-[30px] text-white flex items-center justify-between"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="mb-14 p-8 bg-white/5 backdrop-blur-3xl border border-white/10 rounded-[40px] text-white flex flex-col md:flex-row items-center justify-between gap-8 group overflow-hidden relative"
         >
-          <div>
-            <p className="text-[10px] uppercase tracking-[0.3em] font-black opacity-70">3D Booking Animation</p>
-            <p className="text-sm font-bold">Token animation is active while confirming OP booking.</p>
+          <div className="absolute top-0 right-0 p-10 opacity-[0.05] group-hover:rotate-12 transition-transform duration-1000"><Zap size={120} /></div>
+          <div className="relative z-10 text-center md:text-left">
+            <p className="text-[11px] font-black uppercase tracking-[0.5em] text-hospital-primary mb-2 italic">Active Booking Node v3.0</p>
+            <p className="text-xl font-black text-white leading-tight">Digital token orchestration is active during session validation.</p>
           </div>
-          <motion.div animate={{ rotateY: 360 }} transition={{ repeat: Infinity, duration: 4, ease: 'linear' }} className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
-            <Heart size={18} />
+          <motion.div animate={{ rotateY: 360, rotateZ: 5 }} transition={{ repeat: Infinity, duration: 6, ease: 'linear' }} className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center text-hospital-secondary shadow-4xl border border-white/10">
+            <Heart size={28} className="animate-pulse" />
           </motion.div>
         </motion.div>
-        <div className="flex flex-col lg:flex-row gap-16 items-center">
+
+        <div className="flex flex-col lg:flex-row gap-20 items-center">
             
-            <div className="lg:w-1/2 space-y-8">
-                <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-xl bg-hospital-secondary flex items-center justify-center text-white shadow-lg"><Calendar size={16} /></div>
-                    <h4 className="text-[9px] font-black uppercase tracking-[0.4em] text-hospital-primary">Appointment Portal</h4>
+            <div className="lg:w-1/2 space-y-12">
+                <div className="flex items-center gap-4 justify-center lg:justify-start">
+                    <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-hospital-secondary shadow-4xl"><Calendar size={24} /></div>
+                    <div>
+                        <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-hospital-primary leading-none">Global Consultation Registry</h4>
+                        <p className="text-[8px] font-bold text-gray-500 uppercase tracking-[0.2em] mt-1 italic">Verified Institutional Booking Infrastructure</p>
+                    </div>
                 </div>
-                <h2 className="text-4xl lg:text-5xl font-black text-hospital-dark leading-none font-['Noto_Sans_Telugu']">
-                  త్వరిత <span className="text-hospital-secondary italic underline decoration-hospital-secondary/20 underline-offset-8">అపాయింట్‌మెంట్</span> <br/>బుకింగ్.
+
+                <h2 className="text-5xl lg:text-8xl font-black text-white leading-[0.85] tracking-tighter font-['Noto_Sans_Telugu'] mb-8">
+                  త్వరిత <span className="text-hospital-secondary italic font-serif">అపాయింట్‌మెంట్</span> <br/>బుకింగ్.
                 </h2>
-                <p className="text-[10px] uppercase font-bold text-gray-300 tracking-widest">Fastest Consultation Booking Engine</p>
+                <p className="text-[11px] uppercase font-bold text-gray-500 tracking-[0.8em] mt-4 mb-10 italic">SRI KAMALA PRECISION SCHEDULING UNIT</p>
                 
-                <div className="space-y-4">
+                <div className="space-y-6">
                    {[
-                     { icon: <Clock size={16}/>, title: 'తక్కువ సమయం', en: 'Zero Wait Policy', text: 'Confirm your slot in under 60 seconds.' },
-                     { icon: <Activity size={16}/>, title: 'లైవ్ ట్రాకింగ్', en: 'Live Queue Tracking', text: 'Monitor your turn through our digital portal.' }
+                     { icon: <Clock size={20}/>, title: 'తక్కువ సమయం', en: 'RAPID SLOT DEPLOYMENT', text: 'Confirm clinical access in under 60 seconds with institutional bypass.' },
+                     { icon: <Activity size={20}/>, title: 'లైవ్ ట్రాకింగ్', en: 'LIVE QUEUE TELEMETRY', text: 'Monitor surgical and clinical queue priority via secure digital matrix.' }
                    ].map((item, i) => (
-                      <div key={i} className="flex gap-4 items-start p-6 rounded-[32px] bg-gray-50 border border-gray-100 hover:shadow-lg transition-all">
-                         <div className="w-10 h-10 bg-white rounded-2xl flex items-center justify-center text-hospital-primary shadow-sm shrink-0">{item.icon}</div>
+                      <div key={i} className="flex gap-6 items-start p-8 rounded-[40px] bg-white/5 border border-white/5 hover:border-white/10 hover:bg-white/10 transition-all group backdrop-blur-3xl active:scale-95 cursor-pointer">
+                         <div className="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center text-hospital-primary border border-white/10 shadow-inner group-hover:scale-110 transition-transform">{item.icon}</div>
                          <div>
-                            <h4 className="font-black text-lg text-hospital-dark leading-none font-['Noto_Sans_Telugu'] mb-1">{item.title}</h4>
-                            <p className="text-[8px] font-black text-gray-400 uppercase tracking-widest mb-1">{item.en}</p>
-                            <p className="text-[11px] font-medium text-gray-400">{item.text}</p>
+                            <h4 className="font-black text-2xl text-white leading-none font-['Noto_Sans_Telugu'] mb-2">{item.title}</h4>
+                            <p className="text-[10px] font-black text-hospital-secondary uppercase tracking-[0.3em] mb-2 italic opacity-70">{item.en}</p>
+                            <p className="text-[14px] font-medium text-gray-500 leading-relaxed font-serif italic">"{item.text}"</p>
                          </div>
                       </div>
                    ))}
                 </div>
                  
-                 <div className="mt-8 bg-hospital-secondary text-white p-8 rounded-[32px] shadow-2xl relative overflow-hidden group">
-                     <div className="absolute top-0 right-0 p-4 text-white/5 opacity-40 group-hover:rotate-12 transition-transform"><Activity size={100}/></div>
-                     <p className="text-[8px] font-black uppercase tracking-[0.3em] mb-3 text-hospital-primary">AI Auto-Pilot</p>
-                     <h4 className="text-sm font-black mb-4">Unsure which doctor to select?</h4>
-                     <div className="flex flex-col gap-3 relative z-10">
+                 <div className="mt-12 bg-[#0a0a0a] border border-white/10 text-white p-12 rounded-[50px] shadow-4xl relative overflow-hidden group backdrop-blur-3xl">
+                     <div className="absolute top-0 right-0 p-8 text-hospital-primary opacity-10 group-hover:scale-125 transition-transform duration-1000"><Activity size={120}/></div>
+                     <p className="text-[10px] font-black uppercase tracking-[0.5em] mb-4 text-hospital-primary opacity-70 italic">AI Clinical Auto-Pilot v3.1</p>
+                     <h4 className="text-sm font-black mb-6 uppercase tracking-widest text-white/80 italic leading-none">Autonomous Department Pathfinding</h4>
+                     <div className="flex flex-col gap-5 relative z-10">
                          <input value={aiInput} onChange={e => setAiInput(e.target.value)} type="text" placeholder="Describe symptoms (e.g. chest pain, skin rash)..." 
-                            className="bg-white/10 border-none p-4 rounded-2xl text-[10px] text-white outline-none focus:ring-2 ring-white/50 font-bold" />
-                         <button type="button" onClick={handleAiPrefill} disabled={isAiLoading} className="bg-hospital-dark w-full p-4 rounded-xl flex items-center justify-center font-black text-[9px] uppercase tracking-widest hover:scale-105 active:scale-95 transition-all disabled:opacity-50 gap-2">
-                            {isAiLoading ? "Analyzing Symptoms..." : <><Activity size={14} className="text-hospital-secondary pulse-animation"/> Auto-Select Department</>}
+                            className="bg-white/5 border border-white/10 p-6 rounded-3xl text-[12px] text-white outline-none focus:ring-2 ring-hospital-primary/30 transition-all font-bold placeholder:text-gray-600" />
+                         <button type="button" onClick={handleAiPrefill} disabled={isAiLoading} className="group/ai bg-white text-black w-full p-6 rounded-[30px] flex items-center justify-center font-black text-[11px] uppercase tracking-[0.4em] hover:bg-hospital-primary transition-all disabled:opacity-50 gap-3 shadow-4xl relative overflow-hidden">
+                            <span className="relative z-10 flex items-center gap-2 italic">{isAiLoading ? "Processing Case Node..." : <><Activity size={18} className="text-black group-hover/ai:animate-pulse"/> Deploy Logic Path</>}</span>
+                            <div className="absolute inset-0 bg-hospital-primary opacity-0 group-hover/ai:opacity-100 transition-opacity"></div>
                          </button>
                      </div>
                  </div>
@@ -131,73 +147,73 @@ const BookingForm = () => {
                 <motion.form 
                     initial={{ perspective: 1000, rotateY: 5, opacity: 0 }}
                     whileInView={{ rotateY: 0, opacity: 1 }}
-                    whileHover={{ rotateY: -1, rotateX: 1, boxShadow: "0 50px 100px -20px rgba(0,0,0,0.2)" }}
-                    transition={{ type: 'spring', stiffness: 100 }}
+                    whileHover={{ rotateY: -1, rotateX: 1 }}
+                    transition={{ type: 'spring', stiffness: 100, duration: 1 }}
                     onSubmit={handleSubmit} 
-                    className="bg-white border-2 border-gray-50 p-8 lg:p-12 rounded-[50px] shadow-2xl relative overflow-hidden group">
+                    className="bg-white/5 backdrop-blur-3xl border border-white/10 p-10 lg:p-14 rounded-[60px] shadow-4xl relative overflow-hidden group">
                     
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-hospital-primary/5 rounded-bl-full pointer-events-none"></div>
+                    <div className="absolute top-0 right-0 w-40 h-40 bg-hospital-primary/10 rounded-bl-full pointer-events-none group-hover:scale-110 transition-transform duration-1000"></div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                        <div className="space-y-2">
-                            <label className="text-[10px] font-black uppercase tracking-widest text-[#1e293b]/40 ml-1 font-['Noto_Sans_Telugu'] text-xs">పేరు (Patient Name)</label>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                        <div className="space-y-3">
+                            <label className="text-[11px] font-black uppercase tracking-[0.3em] text-gray-500 ml-2 font-['Noto_Sans_Telugu'] text-xs opacity-60 italic">పేరు (Patient Name)</label>
                             <div className="relative">
-                                <User size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-hospital-primary transition-colors" />
-                                <input required type="text" placeholder="Full Name" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})}
-                                    className="w-full bg-gray-50 border-2 border-transparent focus:border-hospital-primary/20 focus:bg-white p-3.5 pl-11 rounded-xl transition-all outline-none text-sm font-bold" />
+                                <User size={20} className="absolute left-5 top-1/2 -translate-y-1/2 text-hospital-primary/40 group-focus-within:text-hospital-primary transition-colors z-10" />
+                                <input required type="text" placeholder="Institutional Payload ID..." value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})}
+                                    className="w-full bg-white/5 border border-white/10 focus:border-hospital-primary/30 p-5 pl-14 rounded-2xl transition-all outline-none text-base font-bold text-white placeholder:text-gray-700" />
                             </div>
                         </div>
 
-                        <div className="space-y-2">
-                            <label className="text-[10px] font-black uppercase tracking-widest text-[#1e293b]/40 ml-1 font-['Noto_Sans_Telugu'] text-xs">ఫోన్ నంబర్ (Phone Number)</label>
+                        <div className="space-y-3">
+                            <label className="text-[11px] font-black uppercase tracking-[0.3em] text-gray-500 ml-2 font-['Noto_Sans_Telugu'] text-xs opacity-60 italic">ఫోన్ నంబర్ (Phone Number)</label>
                             <div className="relative">
-                                <Phone size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-hospital-primary transition-colors" />
-                                <input required type="tel" placeholder="+91 0000 0000" value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                                    className="w-full bg-gray-50 border-2 border-transparent focus:border-hospital-primary/20 focus:bg-white p-3.5 pl-11 rounded-xl transition-all outline-none text-sm font-bold" />
+                                <Phone size={20} className="absolute left-5 top-1/2 -translate-y-1/2 text-hospital-primary/40 group-focus-within:text-hospital-secondary transition-colors z-10" />
+                                <input required type="tel" placeholder="+91 0000 0000..." value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                                    className="w-full bg-white/5 border border-white/10 focus:border-hospital-secondary/30 p-5 pl-14 rounded-2xl transition-all outline-none text-base font-bold text-white placeholder:text-gray-700" />
                             </div>
                         </div>
 
-                        <div className="space-y-2">
-                            <label className="text-[10px] font-black uppercase tracking-widest text-[#1e293b]/40 ml-1 font-['Noto_Sans_Telugu'] text-xs">వయస్సు (Age)</label>
-                            <input required type="number" placeholder="Age" value={formData.age} onChange={(e) => setFormData({...formData, age: e.target.value})}
-                                    className="w-full bg-gray-50 border-2 border-transparent focus:border-hospital-primary/20 focus:bg-white p-3.5 rounded-xl transition-all outline-none text-sm font-bold" />
+                        <div className="space-y-3">
+                            <label className="text-[11px] font-black uppercase tracking-[0.3em] text-gray-500 ml-2 font-['Noto_Sans_Telugu'] text-xs opacity-60 italic">వయస్సు (Age)</label>
+                            <input required type="number" placeholder="Cycle Count..." value={formData.age} onChange={(e) => setFormData({...formData, age: e.target.value})}
+                                    className="w-full bg-white/5 border border-white/10 focus:border-hospital-primary/30 p-5 rounded-2xl transition-all outline-none text-base font-bold text-white placeholder:text-gray-700" />
                         </div>
-                        <div className="space-y-2">
-                            <label className="text-[10px] font-black uppercase tracking-widest text-[#1e293b]/40 ml-1 font-['Noto_Sans_Telugu'] text-xs">లింగం (Gender)</label>
+                        <div className="space-y-3">
+                            <label className="text-[11px] font-black uppercase tracking-[0.3em] text-gray-500 ml-2 font-['Noto_Sans_Telugu'] text-xs opacity-60 italic">లింగం (Gender)</label>
                             <select value={formData.gender} onChange={(e) => setFormData({...formData, gender: e.target.value})}
-                                    className="w-full bg-gray-50 border-2 border-transparent focus:border-hospital-primary/20 focus:bg-white p-3.5 rounded-xl transition-all outline-none text-sm font-bold">
-                                <option>మగ (Male)</option><option>ఆడ (Female)</option><option>ఇతర (Other)</option>
+                                    className="w-full bg-white/5 border border-white/10 focus:border-hospital-primary/30 p-5 rounded-2xl transition-all outline-none text-base font-bold text-white cursor-pointer appearance-none">
+                                <option className="bg-[#050505]">మగ (Male)</option><option className="bg-[#050505]">ఆడ (Female)</option><option className="bg-[#050505]">ఇతర (Other)</option>
                             </select>
                         </div>
                     </div>
 
-                    <div className="space-y-2 mb-6">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-[#1e293b]/40 ml-1 font-['Noto_Sans_Telugu'] text-xs">విభాగం (Specialization)</label>
+                    <div className="space-y-3 mb-8">
+                        <label className="text-[11px] font-black uppercase tracking-[0.3em] text-gray-500 ml-2 font-['Noto_Sans_Telugu'] text-xs opacity-60 italic">విభాగం (Specialization)</label>
                         <select value={formData.department} onChange={(e) => setFormData({...formData, department: e.target.value})}
-                                className="w-full bg-gray-50 border-2 border-transparent focus:border-hospital-primary/20 focus:bg-white p-3.5 rounded-xl transition-all outline-none text-sm font-bold text-hospital-dark">
-                            {departments.map(d => <option key={d.en} value={`${d.en} (${d.te})`}>{d.te} ({d.en})</option>)}
+                                className="w-full bg-white/5 border border-white/10 focus:border-hospital-primary/30 p-5 rounded-2xl transition-all outline-none text-base font-bold text-white cursor-pointer appearance-none">
+                            {departments.map(d => <option key={d.en} value={`${d.en} (${d.te})`} className="bg-[#050505]">{d.te} ({d.en})</option>)}
                         </select>
                     </div>
 
                     {formData.reason && (
-                        <div className="space-y-2 mb-6 p-4 bg-hospital-primary/5 border border-hospital-primary/20 rounded-2xl">
-                            <label className="text-[10px] font-black uppercase tracking-widest text-hospital-primary ml-1 text-xs">AI Clinical Reason</label>
-                            <p className="font-bold text-sm text-hospital-dark pl-1">{formData.reason}</p>
-                        </div>
+                      <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="space-y-3 mb-8 p-6 bg-hospital-primary/5 border border-hospital-primary/20 rounded-3xl backdrop-blur-3xl font-serif italic">
+                          <label className="text-[10px] font-black uppercase tracking-[0.5em] text-hospital-primary ml-1 text-xs leading-none">AI CLINICAL LOGIC REASON</label>
+                          <p className="font-bold text-sm text-white pl-1 mt-2">"{formData.reason}"</p>
+                      </motion.div>
                     )}
 
-                    <div className="space-y-2 mb-8">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-hospital-secondary sm:ml-1 font-['Noto_Sans_Telugu'] text-xs flex items-center gap-2">
-                           <Activity size={14}/> <span>వైద్య చిత్రం (Clinical Image - Optional)</span>
+                    <div className="space-y-4 mb-10">
+                        <label className="text-[11px] font-black uppercase tracking-[0.4em] text-hospital-secondary ml-2 font-['Noto_Sans_Telugu'] text-xs flex items-center gap-3 italic">
+                           <Activity size={18}/> <span>వైద్య చిత్రం (Clinical Case Photo - Optional)</span>
                         </label>
                         <div className="relative group">
-                           <div className={`w-full h-32 rounded-[32px] border-2 border-dashed transition-all flex flex-col items-center justify-center gap-3 bg-gray-50/50 cursor-pointer overflow-hidden ${formData.image ? 'border-green-400 bg-green-50/10' : 'border-gray-100 hover:border-hospital-primary/30'}`}>
+                           <div className={`w-full h-40 rounded-[40px] border border-white/10 border-dashed transition-all duration-700 flex flex-col items-center justify-center gap-4 bg-white/5 cursor-pointer overflow-hidden ${formData.image ? 'border-hospital-primary' : 'hover:border-hospital-primary/40 hover:bg-white/10'}`}>
                               {formData.image ? (
-                                 <img src={formData.image} className="w-full h-full object-cover opacity-80" alt="Clinical Preview" />
+                                 <motion.img initial={{ opacity: 0 }} animate={{ opacity: 1 }} src={formData.image} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000" alt="Clinical imagery Node" />
                               ) : (
                                  <>
-                                    <div className="w-10 h-10 bg-white rounded-2xl flex items-center justify-center text-gray-300 shadow-sm"><Activity size={20}/></div>
-                                    <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Tap to Upload Case Photo</p>
+                                    <div className="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center text-gray-700 border border-white/10 shadow-4xl group-hover:scale-110 transition-transform"><Plus size={28}/></div>
+                                    <p className="text-[10px] font-black text-gray-500 uppercase tracking-[0.4em] italic group-hover:text-white transition-colors">INITIATE CASE FILE UPLOAD</p>
                                  </>
                               )}
                               <input type="file" accept="image/*" onChange={(e) => {
@@ -212,13 +228,13 @@ const BookingForm = () => {
                         </div>
                     </div>
 
-                    <div className="space-y-2 mb-8">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-[#1e293b]/40 ml-1 font-['Noto_Sans_Telugu'] text-xs">చెల్లింపు విధానం (Payment)</label>
-                        <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-4 mb-12">
+                        <label className="text-[11px] font-black uppercase tracking-[0.4em] text-gray-500 ml-2 font-['Noto_Sans_Telugu'] text-xs opacity-60 italic">చెల్లింపు విధానం (Payment Protocol)</label>
+                        <div className="grid grid-cols-2 gap-5">
                            {['Online', 'ఆసుపత్రిలో'].map(m => (
                                <button key={m} type="button" onClick={() => setFormData({...formData, paymentMethod: m})}
-                                  className={`p-3 rounded-xl font-black text-[9px] uppercase tracking-widest border-2 transition-all ${formData.paymentMethod === m ? 'border-hospital-primary bg-hospital-primary/5 text-hospital-primary' : 'border-gray-50 text-gray-300 hover:border-gray-100'}`}>
-                                  {m === 'Online' ? 'UPI / Cards' : 'At Counter'}
+                                  className={`p-5 rounded-2xl font-black text-[10px] uppercase tracking-[0.5em] border transition-all active:scale-95 ${formData.paymentMethod === m ? 'border-hospital-primary bg-hospital-primary text-black shadow-neon-primary' : 'border-white/10 text-gray-600 hover:border-white/20 hover:text-white'}`}>
+                                  {m === 'Online' ? 'Secure Link' : 'Node Entry'}
                                </button>
                            ))}
                         </div>
@@ -228,13 +244,23 @@ const BookingForm = () => {
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         type="submit" disabled={isSubmitting}
-                        className="w-full bg-hospital-dark text-white p-6 rounded-[32px] font-black text-xs uppercase tracking-[0.2em] shadow-xl hover:bg-hospital-primary transition-all disabled:opacity-50 flex items-center justify-center gap-3 border-none">
-                        {isSubmitting ? '...' : <><span className="font-['Noto_Sans_Telugu'] text-xl tracking-normal">బుకింగ్ ఖరారు చేయండి</span> <span className="opacity-40">/ CONFIRM</span></>} 
+                        className="group/final w-full bg-white text-black p-8 rounded-[35px] font-black text-xs uppercase tracking-[0.5em] shadow-4xl hover:bg-hospital-primary transition-all disabled:opacity-50 flex items-center justify-center gap-4 border-none relative overflow-hidden">
+                        <span className="relative z-10 flex items-center gap-3 italic">
+                          {isSubmitting ? "Orchestrating Case..." : <><span className="font-['Noto_Sans_Telugu'] text-2xl tracking-tight leading-none">బుకింగ్ ఖరారు చేయండి</span> <ShieldCheck size={28} className="group-hover/final:animate-pulse"/></>}
+                        </span>
+                        <div className="absolute inset-0 bg-hospital-primary opacity-0 group-hover/final:opacity-100 transition-opacity"></div>
                     </motion.button>
                 </motion.form>
+                <div className="mt-8 text-center text-[9px] font-black text-gray-700 uppercase tracking-[0.6em] italic">Institutional Triage Protocol v3.0 // Authorized Access Only</div>
             </div>
         </div>
       </div>
+
+       {/* Local Background Decor */}
+       <div className="absolute top-1/2 left-[-5%] opacity-[0.02] text-white rotate-12 pointer-events-none"><Scissors size={200} /></div>
+       <div className="absolute bottom-1/4 right-[5%] opacity-[0.02] text-hospital-secondary -rotate-12 pointer-events-none"><Syringe size={180} /></div>
+       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 opacity-[0.01] text-white pointer-events-none"><Plus size={400} /></div>
+
     </section>
   );
 };

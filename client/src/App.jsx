@@ -14,6 +14,7 @@ import ReviewsPage from './pages/ReviewsPage';
 import AIHealthPage from './pages/AIHealthPage';
 import SiteInfoPage from './pages/SiteInfoPage';
 import CustomCursor from './components/CustomCursor';
+import BackgroundIcons from './components/BackgroundIcons';
 
 const ScrollToTop = () => {
     const { pathname } = useLocation();
@@ -28,9 +29,10 @@ const Layout = ({ children }) => {
     const isAdmin = pathname === '/6665';
 
     return (
-        <div className="relative selection:bg-hospital-primary/30 selection:text-hospital-dark overflow-x-hidden min-h-screen">
+        <div className="relative selection:bg-hospital-primary selection:text-black overflow-x-hidden min-h-screen bg-[#050505] scan-effect">
             <ScrollToTop />
             <CustomCursor />
+            <BackgroundIcons />
             
             {!isAdmin && <Navbar />}
             
