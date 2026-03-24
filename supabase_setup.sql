@@ -46,8 +46,12 @@ ALTER TABLE public.labtests ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.products ENABLE ROW LEVEL SECURITY;
 
 -- Allow anyone to insert appointments
+DROP POLICY IF EXISTS "Public Insert Appointments" ON public.appointments;
 CREATE POLICY "Public Insert Appointments" ON public.appointments FOR INSERT WITH CHECK (true);
+
 -- Allow public read for tests and products
+DROP POLICY IF EXISTS "Public Read Tests" ON public.labtests;
 CREATE POLICY "Public Read Tests" ON public.labtests FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "Public Read Products" ON public.products;
 CREATE POLICY "Public Read Products" ON public.products FOR SELECT USING (true);
--- Allow admin with service role (which the server uses) to do anything else.
