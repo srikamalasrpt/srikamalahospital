@@ -61,38 +61,20 @@ const CustomCursor = () => {
 
     return (
         <div className="fixed inset-0 pointer-events-none z-[1000] overflow-hidden hidden lg:block">
-            {/* Soft Ambient Follower - The 'Fluid' Part */}
+            
+            {/* Minimal Precision Ring */}
             <motion.div
-                className="absolute w-[400px] h-[400px] rounded-full bg-hospital-primary opacity-[0.03] blur-[120px]"
-                style={{
-                    x: followerX,
-                    y: followerY,
-                    translateX: '-50%',
-                    translateY: '-50%',
-                }}
-            />
-
-            {/* Magnetic Ring */}
-            <motion.div
-                className="absolute w-8 h-8 rounded-full border border-white/20 flex items-center justify-center backdrop-blur-[2px]"
+                className="absolute w-6 h-6 rounded-full border border-slate-900/10 flex items-center justify-center"
                 style={{
                     x: cursorX,
                     y: cursorY,
                     translateX: '-50%',
                     translateY: '-50%',
-                    scale: isHovered ? 2.5 : 1,
-                    backgroundColor: isHovered ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0)',
-                    borderColor: isHovered ? 'rgba(0, 204, 204, 0.3)' : 'rgba(255, 255, 255, 0.2)',
+                    scale: isHovered ? 1.5 : 1,
+                    borderColor: isHovered ? 'var(--hospital-primary)' : 'rgba(0, 0, 0, 0.1)',
                 }}
             >
-                {/* Internal Crosshair */}
-                <motion.div 
-                    animate={{ rotate: isHovered ? 90 : 0 }}
-                    className="w-full h-full relative"
-                >
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-px h-1.5 bg-white/40"></div>
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-px w-1.5 bg-white/40"></div>
-                </motion.div>
+                <div className="w-1 h-1 bg-hospital-primary rounded-full opacity-20"></div>
             </motion.div>
 
             {/* Core Syringe Focal Point */}
@@ -104,7 +86,7 @@ const CustomCursor = () => {
                     translateX: '-10%',
                     translateY: '-90%',
                     rotate: rotation,
-                    scale: isHovered ? 0.9 : 0.6,
+                    scale: isHovered ? 0.8 : 0.5,
                 }}
             >
                 <div className="relative">
