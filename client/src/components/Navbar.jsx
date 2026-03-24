@@ -27,18 +27,18 @@ const Navbar = () => {
     const isMainPage = location.pathname === '/';
 
     return (
-        <nav className={`fixed top-0 left-0 right-0 z-[500] transition-all duration-500 ${scrolled ? 'py-4' : 'py-8'}`}>
+        <nav className={`fixed top-0 left-0 right-0 z-[500] transition-all duration-500 ${scrolled ? 'py-2' : 'py-3'}`}>
             <div className="container mx-auto px-6 max-w-7xl">
-                <div className={`relative liquid-glass rounded-[40px] px-8 py-4 flex items-center justify-between border border-black/5 shadow-xl backdrop-blur-3xl transition-all ${scrolled ? 'bg-white/95 border-hospital-primary/10' : 'bg-white/40'}`}>
+                <div className={`relative liquid-glass rounded-[40px] px-8 py-2.5 flex items-center justify-between border border-black/5 shadow-xl backdrop-blur-3xl transition-all ${scrolled ? 'bg-white/95 border-hospital-primary/10' : 'bg-white/40'}`}>
                     
                     {/* Logo Cluster */}
-                    <Link to="/" className="flex items-center gap-4 group">
-                        <div className="w-11 h-11 bg-white p-2 rounded-2xl border border-black/5 group-hover:scale-110 group-hover:rotate-6 transition-all shadow-xl relative overflow-hidden">
+                    <Link to="/" className="flex items-center gap-3 group">
+                        <div className="w-10 h-10 bg-white p-2 rounded-xl border border-black/5 group-hover:scale-110 group-hover:rotate-6 transition-all shadow-xl relative overflow-hidden">
                              <img src="/logo.png" alt="Sri Kamala" className="w-full h-full object-contain relative z-10" />
                         </div>
                         <div className="hidden sm:block">
-                            <h1 className="text-xl font-black text-slate-900 leading-none font-['Noto_Sans_Telugu'] tracking-tighter group-hover:text-hospital-primary transition-colors">శ్రీ కమల <span className="text-hospital-secondary italic">హాస్పిటల్</span></h1>
-                            <p className="text-[8px] font-black uppercase tracking-[0.4em] text-slate-400 mt-1.5 opacity-60">Integrated Clinical Hub</p>
+                            <h1 className="text-lg font-black text-slate-900 leading-none font-['Noto_Sans_Telugu'] tracking-tighter group-hover:text-hospital-primary transition-colors">శ్రీ కమల <span className="text-hospital-secondary italic">హాస్పిటల్</span></h1>
+                            <p className="text-[7px] font-black uppercase tracking-[0.4em] text-slate-400 mt-1 opacity-60">Integrated Clinical Hub</p>
                         </div>
                     </Link>
 
