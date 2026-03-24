@@ -634,8 +634,13 @@ IMPORTANT:
                     res.json({ success: true, appointment: bookingData, token: finalToken });
                 }
             } catch (err) {
-                console.error("Booking Error:", err);
-                res.status(500).json({ success: false, message: "Clinic system busy. Please try again." });
+                console.error("Booking Clinical Error:", err);
+                res.status(500).json({ 
+                    success: false, 
+                    message: "Clinic system busy.", 
+                    clinical_debug: err.message,
+                    stack: process.env.NODE_ENV === 'development' ? err.stack : undefined 
+                });
             }
         });
 
