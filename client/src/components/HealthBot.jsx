@@ -213,7 +213,7 @@ const HealthBot = () => {
                         initial={{ opacity: 0, scale: 0.9, y: 20 }} 
                         animate={{ opacity: 1, scale: 1, y: 0 }} 
                         exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                        className="w-[90vw] md:w-[380px] h-[80vh] md:h-[620px] bg-white rounded-[40px] shadow-4xl flex flex-col overflow-hidden border border-black/5 backdrop-blur-3xl relative">
+                        className="w-[90vw] md:w-[320px] h-[70vh] md:h-[500px] bg-white rounded-[32px] shadow-4xl flex flex-col overflow-hidden border border-black/5 backdrop-blur-3xl relative">
                         
                         {/* Transparent Logo Background Decor */}
                         <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none select-none">
@@ -221,8 +221,8 @@ const HealthBot = () => {
                         </div>
 
                         {/* High Fidelity Header */}
-                        <div className="p-6 bg-slate-50 text-slate-900 border-b border-black/5 relative z-10 flex items-center justify-between">
-                            <div className="flex items-center gap-4">
+                        <div className="p-4 px-6 bg-slate-50 text-slate-900 border-b border-black/5 relative z-10 flex items-center justify-between">
+                            <div className="flex items-center gap-3">
                                 <div className="w-10 h-10 p-1.5 bg-white border border-black/5 rounded-xl relative shadow-md">
                                      <img src="/logo.png" className="w-full h-full object-contain relative z-10" />
                                 </div>
@@ -282,8 +282,8 @@ const HealthBot = () => {
                         </div>
 
                         {/* Input Core */}
-                        <div className="p-6 bg-slate-50 border-t border-black/5 space-y-4 relative z-10 text-left">
-                            <form onSubmit={(e) => { e.preventDefault(); handleSend(); }} className="flex items-center gap-4">
+                        <div className="p-5 bg-slate-50 border-t border-black/5 space-y-3 relative z-10 text-left">
+                            <form onSubmit={(e) => { e.preventDefault(); handleSend(); }} className="flex items-center gap-3">
                                 <div className="flex-1 relative group">
                                     <input type="text" placeholder={bookingState.active ? "Fill indexing..." : "Query Kamala..."} value={input} onChange={(e) => setInput(e.target.value)}
                                         className="w-full bg-white border border-black/10 focus:border-hospital-primary px-5 py-4 rounded-[24px] outline-none text-[12px] font-bold transition-all text-slate-900 placeholder:text-slate-200 shadow-inner italic" />
