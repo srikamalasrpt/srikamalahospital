@@ -116,10 +116,10 @@ const BookingForm = () => {
                     </div>
                 </div>
 
-                <h2 className="text-5xl lg:text-8xl font-black text-white leading-[0.85] tracking-tighter font-['Noto_Sans_Telugu'] mb-8">
+                <h2 className="text-3xl lg:text-6xl font-black text-white leading-[0.85] tracking-tighter font-['Noto_Sans_Telugu'] mb-6">
                   త్వరిత <span className="text-hospital-secondary italic font-serif">అపాయింట్‌మెంట్</span> <br/>బుకింగ్.
                 </h2>
-                <p className="text-[11px] uppercase font-bold text-gray-500 tracking-[0.8em] mt-4 mb-10 italic">SRI KAMALA PRECISION SCHEDULING UNIT</p>
+                <p className="text-[9px] uppercase font-bold text-gray-700 tracking-[0.8em] mt-2 mb-8 italic">SRI KAMALA PRECISION SCHEDULING UNIT</p>
                 
                 <div className="space-y-6">
                    {[
@@ -137,15 +137,15 @@ const BookingForm = () => {
                    ))}
                 </div>
                  
-                 <div className="mt-12 bg-[#0a0a0a] border border-white/10 text-white p-12 rounded-[50px] shadow-4xl relative overflow-hidden group backdrop-blur-3xl">
-                     <div className="absolute top-0 right-0 p-8 text-hospital-primary opacity-10 group-hover:scale-125 transition-transform duration-1000"><Activity size={120}/></div>
-                     <p className="text-[10px] font-black uppercase tracking-[0.5em] mb-4 text-hospital-primary opacity-70 italic">AI Clinical Auto-Pilot v3.1</p>
-                     <h4 className="text-sm font-black mb-6 uppercase tracking-widest text-white/80 italic leading-none">Autonomous Department Pathfinding</h4>
-                     <div className="flex flex-col gap-5 relative z-10">
+                 <div className="mt-10 bg-[#0a0a0a] border border-white/10 text-white p-10 rounded-[40px] shadow-4xl relative overflow-hidden group backdrop-blur-3xl">
+                     <div className="absolute top-0 right-0 p-6 text-hospital-primary opacity-10 group-hover:scale-125 transition-transform duration-1000"><Activity size={100}/></div>
+                     <p className="text-[9px] font-black uppercase tracking-[0.5em] mb-3 text-hospital-primary opacity-70 italic">AI Clinical Auto-Pilot v3.6</p>
+                     <h4 className="text-[11px] font-black mb-5 uppercase tracking-widest text-white/60 italic leading-none">Autonomous Department Pathfinding</h4>
+                     <div className="flex flex-col gap-4 relative z-10">
                          <input value={aiInput} onChange={e => setAiInput(e.target.value)} type="text" placeholder="Describe symptoms (e.g. chest pain, skin rash)..." 
-                            className="bg-white/5 border border-white/10 p-6 rounded-3xl text-[12px] text-white outline-none focus:ring-2 ring-hospital-primary/30 transition-all font-bold placeholder:text-gray-600" />
-                         <button type="button" onClick={handleAiPrefill} disabled={isAiLoading} className="group/ai bg-white text-black w-full p-6 rounded-[30px] flex items-center justify-center font-black text-[11px] uppercase tracking-[0.4em] hover:bg-hospital-primary transition-all disabled:opacity-50 gap-3 shadow-4xl relative overflow-hidden">
-                            <span className="relative z-10 flex items-center gap-2 italic">{isAiLoading ? "Processing Case Node..." : <><Activity size={18} className="text-black group-hover/ai:animate-pulse"/> Deploy Logic Path</>}</span>
+                            className="bg-white/5 border border-white/10 p-5 rounded-2xl text-[11px] text-white outline-none focus:ring-2 ring-hospital-primary/30 transition-all font-bold placeholder:text-gray-700" />
+                         <button type="button" onClick={handleAiPrefill} disabled={isAiLoading} className="animated-button group/ai bg-white text-black w-full p-5 rounded-[26px] flex items-center justify-center font-black text-[10px] uppercase tracking-[0.4em] hover:bg-hospital-primary transition-all disabled:opacity-50 gap-3 shadow-4xl relative overflow-hidden">
+                            <span className="relative z-10 flex items-center gap-2 italic">{isAiLoading ? "Processing Case Node..." : <><Activity size={16} className="text-black group-hover/ai:animate-pulse"/> Deploy Logic Path</>}</span>
                             <div className="absolute inset-0 bg-hospital-primary opacity-0 group-hover/ai:opacity-100 transition-opacity"></div>
                          </button>
                      </div>
@@ -253,9 +253,9 @@ const BookingForm = () => {
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         type="submit" disabled={isSubmitting}
-                        className="group/final w-full bg-white text-black p-8 rounded-[35px] font-black text-xs uppercase tracking-[0.5em] shadow-4xl hover:bg-hospital-primary transition-all disabled:opacity-50 flex items-center justify-center gap-4 border-none relative overflow-hidden">
+                        className="animated-button group/final w-full bg-white text-black p-6 rounded-[28px] font-black text-[11px] uppercase tracking-[0.4em] shadow-4xl hover:bg-hospital-primary transition-all disabled:opacity-50 flex items-center justify-center gap-4 border-none relative overflow-hidden">
                         <span className="relative z-10 flex items-center gap-3 italic">
-                          {isSubmitting ? "Orchestrating Case..." : <><span className="font-['Noto_Sans_Telugu'] text-2xl tracking-tight leading-none">బుకింగ్ ఖరారు చేయండి</span> <ShieldCheck size={28} className="group-hover/final:animate-pulse"/></>}
+                          {isSubmitting ? "Orchestrating Case..." : <><span className="font-['Noto_Sans_Telugu'] text-xl tracking-tight leading-none">బుకింగ్ ఖరారు చేయండి</span> <ShieldCheck size={24} className="group-hover/final:animate-pulse"/></>}
                         </span>
                         <div className="absolute inset-0 bg-hospital-primary opacity-0 group-hover/final:opacity-100 transition-opacity"></div>
                     </motion.button>

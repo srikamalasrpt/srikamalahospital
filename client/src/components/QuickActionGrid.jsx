@@ -62,8 +62,8 @@ const QuickActionGrid = () => {
                     >
                         <Orbit size={28} className="animate-spin-slow" />
                     </motion.div>
-                    <h2 className="text-4xl lg:text-7xl font-black text-white tracking-tighter mb-6 font-['Noto_Sans_Telugu']">కార్యాచరణ <span className="text-hospital-primary italic">మాడ్యూల్స్</span></h2>
-                    <p className="text-[11px] font-black uppercase tracking-[0.5em] text-gray-400 opacity-60">Integrated Clinical Infrastructure Gateway v2.0</p>
+                    <h2 className="text-3xl lg:text-5xl font-black text-white tracking-tighter mb-4 font-['Noto_Sans_Telugu']">కార్యాచరణ <span className="text-hospital-primary italic">మాడ్యూల్స్</span></h2>
+                    <p className="text-[9px] font-black uppercase tracking-[0.5em] text-gray-500 opacity-60 italic">Integrated Clinical Infrastructure Gateway v3.1</p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">

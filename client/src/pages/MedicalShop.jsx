@@ -112,16 +112,16 @@ CRITICAL RULE: You MUST format your response as:
 
         <div className="flex flex-col lg:flex-row items-center justify-between mb-20 gap-12">
           <div className="max-w-xl text-center lg:text-left">
-            <div className="flex items-center gap-4 mb-10 justify-center lg:justify-start">
-              <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-hospital-secondary shadow-4xl"><Pill size={28} /></div>
+            <div className="flex items-center gap-4 mb-8 justify-center lg:justify-start">
+              <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-hospital-secondary shadow-4xl"><Pill size={22} /></div>
               <div>
-                <h4 className="text-[11px] font-black uppercase tracking-[0.5em] text-hospital-primary">In-House Clinical Apothecary</h4>
-                <p className="text-[8px] font-bold text-gray-500 uppercase tracking-[0.2em] mt-1 italic">Verified Medication Protocol Unit</p>
+                <h4 className="text-[9px] font-black uppercase tracking-[0.5em] text-hospital-primary">In-House Clinical Apothecary</h4>
+                <p className="text-[7px] font-bold text-gray-700 uppercase tracking-[0.2em] mt-1 italic">Verified Medication Protocol Unit</p>
               </div>
             </div>
-            <h2 className="text-4xl lg:text-8xl font-black text-white leading-[0.85] tracking-tighter font-['Noto_Sans_Telugu'] mb-8">మెడికల్ <span className="text-hospital-secondary italic font-serif">షాప్</span> <br />మరియు మందులు.</h2>
-            <p className="text-[11px] uppercase font-bold text-gray-500 tracking-[0.8em] mt-4 mb-10">SRI KAMALA PHARMA INTELLIGENCE CORE</p>
-            <p className="text-sm font-medium text-gray-500 font-serif italic max-w-sm">"Deploying verified pharmaceutical logistics with integrated AI consultation for secure medical distribution."</p>
+            <h2 className="text-3xl lg:text-6xl font-black text-white leading-[0.85] tracking-tighter font-['Noto_Sans_Telugu'] mb-4">మెడికల్ <span className="text-hospital-secondary italic font-serif">షాప్</span> <br />మరియు మందులు.</h2>
+            <p className="text-[9px] uppercase font-bold text-gray-700 tracking-[0.8em] mt-2 mb-8 italic">SRI KAMALA PHARMA INTELLIGENCE CORE</p>
+            <p className="text-xs font-medium text-gray-600 font-serif italic max-w-sm">"Deploying verified pharmaceutical logistics with integrated AI consultation for secure medical distribution."</p>
           </div>
 
           <div className="flex flex-col gap-8 w-full lg:w-[500px]">

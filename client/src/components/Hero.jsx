@@ -26,48 +26,48 @@ const Hero = () => {
                     <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/60">Advanced Clinical Excellence Center</span>
                 </motion.div>
 
-                <div className="max-w-5xl mx-auto mb-16 space-y-6">
+                <div className="max-w-5xl mx-auto mb-16 space-y-4">
                     <motion.div 
                         initial={{ y: 30, opacity: 0 }} 
                         animate={{ y: 0, opacity: 1 }} 
                         transition={{ delay: 0.2, duration: 0.8 }}
                     >
-                        <h1 className="text-6xl lg:text-9xl font-black text-white tracking-tighter leading-[0.9] flex flex-col items-center">
+                        <h1 className="text-5xl lg:text-8xl font-black text-white tracking-tighter leading-[0.9] flex flex-col items-center">
                             <span className="font-['Playfair_Display'] italic text-hospital-primary">Scientific</span>
                             <span className="bg-gradient-to-r from-white to-gray-500 bg-clip-text text-transparent">Pioneering.</span>
                         </h1>
                     </motion.div>
-
+ 
                     <motion.div 
                         initial={{ y: 30, opacity: 0 }} 
                         animate={{ y: 0, opacity: 1 }} 
                         transition={{ delay: 0.4, duration: 0.8 }}
-                        className="flex flex-col items-center justify-center gap-2"
+                        className="flex flex-col items-center justify-center gap-1"
                     >
-                        <p className="font-['Noto_Sans_Telugu'] text-4xl lg:text-5xl font-black text-hospital-secondary leading-tight italic glow-text">ప్రాణాలను రక్షించడం మా బాధ్యత</p>
-                        <p className="text-[10px] font-black uppercase tracking-[0.6em] text-gray-500">Preserving Humanity through Precision Medicine</p>
+                        <p className="font-['Noto_Sans_Telugu'] text-3xl lg:text-4xl font-black text-hospital-secondary leading-tight italic glow-text">ప్రాణాలను రక్షించడం మా బాధ్యత</p>
+                        <p className="text-[9px] font-black uppercase tracking-[0.6em] text-gray-600">Preserving Humanity through Precision Medicine</p>
                     </motion.div>
                 </div>
-
+ 
                 <motion.div 
                     initial={{ scale: 0.9, opacity: 0 }} 
                     animate={{ scale: 1, opacity: 1 }} 
                     transition={{ delay: 0.6, duration: 1 }}
-                    className="flex flex-col sm:flex-row items-center justify-center gap-8"
+                    className="flex flex-col sm:flex-row items-center justify-center gap-6"
                 >
-                    <Link to="/book" className="group relative px-12 py-6 bg-white text-black rounded-[32px] font-black text-xs uppercase tracking-[0.4em] shadow-2xl overflow-hidden hover:scale-105 transition-all">
+                    <Link to="/book" className="animated-button group relative px-10 py-5 bg-white text-black rounded-[28px] font-black text-[10px] uppercase tracking-[0.4em] shadow-4xl overflow-hidden active:scale-95 transition-all">
                         <div className="absolute inset-0 bg-gradient-to-r from-hospital-primary to-hospital-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-                        <span className="relative z-10 font-['Noto_Sans_Telugu'] text-xl mr-3 group-hover:text-white transition-colors">బుకింగ్ చేయండి</span>
+                        <span className="relative z-10 font-['Noto_Sans_Telugu'] text-lg mr-3 group-hover:text-white transition-colors">బుకింగ్ చేయండి</span>
                         <span className="relative z-10 opacity-40 group-hover:opacity-100 group-hover:text-white transition-colors">/ RESERVE</span>
                     </Link>
-
-                    <Link to="/ai-health" className="group relative px-10 py-6 bg-white/5 backdrop-blur-3xl text-white rounded-[32px] font-black text-xs uppercase tracking-[0.4em] border border-white/10 shadow-xl overflow-hidden hover:scale-105 transition-all">
-                        <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-125 group-hover:rotate-12 transition-transform duration-700"><Sparkles size={60} /></div>
+ 
+                    <Link to="/ai-health" className="animated-button group relative px-8 py-5 bg-white/5 backdrop-blur-3xl text-white rounded-[28px] font-black text-[10px] uppercase tracking-[0.4em] border border-white/10 shadow-xl overflow-hidden active:scale-95 transition-all">
+                        <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:scale-125 group-hover:rotate-12 transition-transform duration-700"><Sparkles size={50} /></div>
                         <div className="flex items-center gap-4 relative z-10">
-                            <div className="w-10 h-10 bg-hospital-primary/20 rounded-2xl flex items-center justify-center text-hospital-primary shadow-inner"><Cpu size={18} /></div>
+                            <div className="w-9 h-9 bg-hospital-primary/20 rounded-xl flex items-center justify-center text-hospital-primary shadow-inner"><Cpu size={16} /></div>
                             <div className="text-left leading-none">
-                                <span className="font-['Noto_Sans_Telugu'] text-lg block">AI హెల్త్ స్క్రీన్</span>
-                                <span className="text-[8px] opacity-40 uppercase tracking-widest">DIAGNOSTIC CORE</span>
+                                <span className="font-['Noto_Sans_Telugu'] text-base block">AI హెల్త్ స్క్రీన్</span>
+                                <span className="text-[7px] opacity-40 uppercase tracking-widest">DIAGNOSTIC CORE</span>
                             </div>
                         </div>
                     </Link>

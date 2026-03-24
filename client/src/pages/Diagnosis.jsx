@@ -161,15 +161,15 @@ CRITICAL RULE: You MUST format your precise response as:
         <div className="flex flex-col lg:flex-row items-center justify-between mb-20 gap-10">
           <div className="max-w-xl text-center lg:text-left">
             <div className="flex items-center gap-4 mb-10 justify-center lg:justify-start">
-              <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-hospital-primary shadow-4xl"><Flask size={24} /></div>
-              <div>
-                <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-hospital-secondary leading-none">Advanced Laboratory Services</h4>
-                <p className="text-[8px] font-bold text-gray-500 uppercase tracking-[0.2em] mt-1">WHO-Certified Diagnostic Center</p>
-              </div>
+            <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-hospital-primary shadow-4xl"><Flask size={20} /></div>
+            <div>
+              <h4 className="text-[9px] font-black uppercase tracking-[0.4em] text-hospital-secondary leading-none">Advanced Laboratory Services</h4>
+              <p className="text-[7px] font-bold text-gray-700 uppercase tracking-[0.2em] mt-1 italic">WHO-Certified Diagnostic Center</p>
             </div>
-            <h2 className="text-5xl lg:text-8xl font-black text-white leading-[0.85] tracking-tighter font-['Noto_Sans_Telugu'] mb-6">పరిపూర్ణ <span className="text-hospital-secondary italic font-serif">ల్యాబ్</span> <br />పరీక్షలు.</h2>
-            <p className="text-[11px] uppercase font-bold text-gray-400 tracking-[0.6em] mt-4 mb-10">Suryapet Elite Clinical Diagnostic Operations</p>
-            <p className="text-sm font-medium text-gray-500 font-serif italic max-w-sm">"Deploying precision molecular insights with automated digital verification for immediate clinical action."</p>
+          </div>
+          <h2 className="text-3xl lg:text-6xl font-black text-white leading-[0.85] tracking-tighter font-['Noto_Sans_Telugu'] mb-4">పరిపూర్ణ <span className="text-hospital-secondary italic font-serif">ల్యాబ్</span> <br />పరీక్షలు.</h2>
+          <p className="text-[9px] uppercase font-bold text-gray-700 tracking-[0.6em] mt-2 mb-8 italic">Suryapet Elite Clinical Diagnostic Operations</p>
+          <p className="text-xs font-medium text-gray-600 font-serif italic max-w-sm">"Deploying precision molecular insights with automated digital verification for immediate clinical action."</p>
           </div>
 
           <div className="flex flex-col gap-8 w-full md:w-[500px]">

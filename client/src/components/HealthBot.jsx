@@ -174,12 +174,12 @@ const HealthBot = () => {
                     <motion.button initial={{ scale: 0, rotate: -90 }} animate={{ scale: 1, rotate: 0 }} exit={{ scale: 0, rotate: 90 }}
                         whileHover={{ scale: 1.15, rotate: 15 }}
                         onClick={() => setIsOpen(true)}
-                        className="w-16 h-16 bg-[#050505] text-hospital-primary rounded-[24px] shadow-4xl flex items-center justify-center group border border-hospital-primary/20 overflow-hidden relative backdrop-blur-3xl">
-                        <Activity size={24} className="relative z-10 group-hover:scale-110 transition-transform shadow-neon-primary" />
+                        className="animated-button w-14 h-14 bg-[#050505] text-hospital-primary rounded-[20px] shadow-4xl flex items-center justify-center group border border-hospital-primary/20 overflow-hidden relative backdrop-blur-3xl">
+                        <Activity size={22} className="relative z-10 group-hover:scale-110 transition-transform shadow-neon-primary" />
                         <div className="absolute inset-0 bg-hospital-primary opacity-0 group-hover:opacity-5 transition-opacity"></div>
                     </motion.button>
-                     <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="absolute right-20 top-1/2 -translate-y-1/2 px-6 py-3 bg-white/5 border border-white/10 rounded-2xl backdrop-blur-3xl hidden md:block pointer-events-none">
-                        <p className="text-[9px] font-black uppercase tracking-[0.4em] whitespace-nowrap text-white italic">Kamala AI Dispatch</p>
+                     <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="absolute right-16 top-1/2 -translate-y-1/2 px-5 py-2.5 bg-white/5 border border-white/10 rounded-xl backdrop-blur-3xl hidden md:block pointer-events-none">
+                        <p className="text-[7px] font-black uppercase tracking-[0.4em] whitespace-nowrap text-white italic">Kamala AI Dispatch</p>
                     </motion.div>
                   </div>
                 )}
@@ -225,31 +225,31 @@ const HealthBot = () => {
                         </div>
 
                         {/* Messaging Stream */}
-                        <div ref={scrollRef} className="flex-1 overflow-y-auto p-8 space-y-10 relative z-10 scrollbar-hide">
+                        <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 space-y-8 relative z-10 scrollbar-hide">
                             {messages.map((m, i) => (
-                                <motion.div key={m.id} initial={{ x: m.sender === 'user' ? 30 : -30, opacity: 0 }} animate={{ x: 0, opacity: 1 }}
-                                    className={`flex items-end gap-5 ${m.sender === 'user' ? 'flex-row-reverse' : ''}`}>
-                                    <div className={`w-10 h-10 flex-shrink-0 rounded-2xl flex items-center justify-center border border-white/10 shadow-2xl bg-[#0a0a0a]`}>
-                                        {m.sender === 'user' ? <User size={16} className="text-gray-500" /> : <img src="/logo.png" className="w-6 h-6 object-contain brightness-0 invert" />}
+                                <motion.div key={m.id} initial={{ x: m.sender === 'user' ? 20 : -20, opacity: 0 }} animate={{ x: 0, opacity: 1 }}
+                                    className={`flex items-end gap-4 ${m.sender === 'user' ? 'flex-row-reverse' : ''}`}>
+                                    <div className={`w-9 h-9 flex-shrink-0 rounded-xl flex items-center justify-center border border-white/10 shadow-2xl bg-[#0a0a0a]`}>
+                                        {m.sender === 'user' ? <User size={14} className="text-gray-500" /> : <img src="/logo.png" className="w-5 h-5 object-contain brightness-0 invert" />}
                                     </div>
-                                    <div className={`max-w-[80%] rounded-[35px] px-8 py-5 text-[14px] shadow-4xl relative ${m.sender === 'user' ? 'bg-white text-black rounded-br-none' : 'bg-white/5 text-white rounded-bl-none border border-white/5'}`}>
+                                    <div className={`max-w-[85%] rounded-[28px] px-6 py-4 text-[12px] shadow-4xl relative ${m.sender === 'user' ? 'bg-white text-black rounded-br-none' : 'bg-white/5 text-white rounded-bl-none border border-white/5'}`}>
                                         <p className={`font-black italic tracking-tight leading-relaxed ${language === 'te' ? "font-['Noto_Sans_Telugu']" : ""}`}>
                                             {m.text}
                                         </p>
                                         
                                         {m.isReceipt && (
-                                            <div className="mt-8 space-y-6 pt-6 border-t border-white/10">
-                                                <div className="grid grid-cols-2 gap-4 text-[10px] font-black uppercase tracking-widest opacity-60 italic">
+                                            <div className="mt-6 space-y-5 pt-5 border-t border-white/10">
+                                                <div className="grid grid-cols-2 gap-3 text-[9px] font-black uppercase tracking-widest opacity-60 italic">
                                                     <div>Subject: {m.receiptData.name}</div>
                                                     <div>Token: {m.receiptData.token}</div>
                                                 </div>
-                                                <button onClick={() => generateReceiptPDF(m.receiptData)} className="w-full py-4 bg-hospital-primary text-black rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-3 hover:scale-105 active:scale-95 transition-all shadow-neon-primary">
-                                                    <Download size={14} /> Download PDF Triage Pass
+                                                <button onClick={() => generateReceiptPDF(m.receiptData)} className="animated-button w-full py-3.5 bg-hospital-primary text-black rounded-xl font-black text-[9px] uppercase tracking-widest flex items-center justify-center gap-3 active:scale-95 transition-all shadow-neon-primary">
+                                                    <Download size={12} /> Download PDF Triage Pass
                                                 </button>
                                             </div>
                                         )}
-
-                                        <p className={`text-[8px] mt-3 font-black uppercase opacity-20 italic absolute ${m.sender === 'user' ? '-left-16 bottom-2' : '-right-16 bottom-2'}`}>{m.time}</p>
+ 
+                                        <p className={`text-[7px] mt-2 font-black uppercase opacity-20 italic absolute ${m.sender === 'user' ? '-left-14 bottom-1.5' : '-right-14 bottom-1.5'}`}>{m.time}</p>
                                     </div>
                                 </motion.div>
                             ))}

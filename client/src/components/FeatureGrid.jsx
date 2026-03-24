@@ -79,11 +79,11 @@ const FeatureGrid = () => {
                     <p className="text-[9px] font-bold text-gray-500 uppercase tracking-[0.3em] mt-1 italic">World-Class Global Infrastructure Matrix</p>
                   </div>
                </div>
-               <h2 className="text-4xl lg:text-8xl font-black text-white mb-6 leading-none tracking-tighter transition-all font-['Noto_Sans_Telugu']">ముఖ్యమైన <span className="text-hospital-secondary italic">సేవలు</span></h2>
-               <p className="text-[11px] uppercase font-bold text-gray-600 tracking-[0.8em] mb-12">Precision Integrated Clinical Solutions</p>
+               <h2 className="text-3xl lg:text-6xl font-black text-white mb-4 leading-none tracking-tighter transition-all font-['Noto_Sans_Telugu']">ముఖ్యమైన <span className="text-hospital-secondary italic">సేవలు</span></h2>
+               <p className="text-[9px] uppercase font-bold text-gray-700 tracking-[0.8em] mb-10">Precision Integrated Clinical Solutions</p>
             </div>
-            <button className="group px-12 py-6 rounded-[30px] bg-white/5 border border-white/10 text-white hover:bg-hospital-primary hover:text-black hover:border-transparent text-[11px] font-black uppercase tracking-[0.5em] shadow-4xl transition-all backdrop-blur-3xl overflow-hidden relative">
-               <span className="relative z-10 flex items-center gap-3">ACTIVATE FULL CATALOG <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" /></span>
+            <button className="animated-button group px-10 py-5 rounded-[24px] bg-white/5 border border-white/10 text-white hover:bg-hospital-primary hover:text-black hover:border-transparent text-[10px] font-black uppercase tracking-[0.5em] shadow-4xl transition-all backdrop-blur-3xl overflow-hidden relative">
+               <span className="relative z-10 flex items-center gap-3">ACTIVATE FULL CATALOG <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" /></span>
                <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-100 transition-opacity -z-0"></div>
             </button>
         </div>

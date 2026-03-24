@@ -44,39 +44,39 @@ const Navbar = () => {
                     </Link>
 
                     {/* Desktop Navigation */}
-                    <div className="hidden lg:flex items-center gap-6">
+                    <div className="hidden lg:flex items-center gap-4">
                         {navItems.map((item) => {
                             const isActive = location.pathname === item.link;
                             return (
                                 <Link 
                                     key={item.name} 
                                     to={item.link} 
-                                    className="group relative flex flex-col items-center"
+                                    className="group relative flex flex-col items-center animated-button"
                                 >
-                                    <div className={`flex flex-col items-center transition-all px-4 py-2 rounded-2xl ${isActive ? 'bg-white/5 border border-white/10' : 'hover:bg-white/5'}`}>
-                                        <span className={`font-['Noto_Sans_Telugu'] text-lg font-black leading-none mb-1 transition-colors ${isActive ? 'text-hospital-primary' : 'text-white/80 group-hover:text-white'}`}>
+                                    <div className={`flex flex-col items-center transition-all px-3 py-1.5 rounded-xl ${isActive ? 'bg-white/5 border border-white/10' : 'hover:bg-white/5'}`}>
+                                        <span className={`font-['Noto_Sans_Telugu'] text-base font-black leading-none mb-1 transition-colors ${isActive ? 'text-hospital-primary' : 'text-white/80 group-hover:text-white'}`}>
                                             {item.telugu}
                                         </span>
-                                        <span className={`text-[8px] font-black uppercase tracking-widest leading-none italic transition-opacity ${isActive ? 'text-hospital-secondary opacity-100' : 'text-gray-600 opacity-40 group-hover:opacity-100'}`}>
+                                        <span className={`text-[7px] font-black uppercase tracking-widest leading-none italic transition-opacity ${isActive ? 'text-hospital-secondary opacity-100' : 'text-gray-600 opacity-40 group-hover:opacity-100'}`}>
                                             {item.name}
                                         </span>
                                     </div>
                                     {isActive && (
                                         <motion.div 
                                             layoutId="nav-underline"
-                                            className="absolute -bottom-2 w-1.5 h-1.5 rounded-full bg-hospital-primary shadow-neon-primary"
+                                            className="absolute -bottom-1.5 w-1 h-1 rounded-full bg-hospital-primary shadow-neon-primary"
                                         />
                                     )}
                                 </Link>
                             )
                         })}
                     </div>
-
+ 
                     {/* Actions & Mobile Trigger */}
-                    <div className="flex items-center gap-4">
-                        <a href="tel:+919948076665" className="hidden md:flex items-center gap-3 px-6 py-3 bg-white/5 border border-white/10 rounded-full text-hospital-secondary hover:bg-hospital-secondary hover:text-black transition-all shadow-4xl group">
-                            <HeartPulse size={18} className="group-hover:animate-pulse" />
-                            <span className="text-[10px] font-black uppercase tracking-widest italic">Emergency Hotlink</span>
+                    <div className="flex items-center gap-3">
+                        <a href="tel:+919948076665" className="animated-button hidden md:flex items-center gap-2 px-5 py-2.5 bg-white/5 border border-white/10 rounded-full text-hospital-secondary hover:bg-hospital-secondary hover:text-black transition-all shadow-4xl group">
+                            <HeartPulse size={14} className="group-hover:animate-pulse" />
+                            <span className="text-[9px] font-black uppercase tracking-widest italic">Emergency Hotlink</span>
                         </a>
                         
                         <button 
