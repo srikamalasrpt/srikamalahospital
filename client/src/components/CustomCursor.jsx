@@ -104,21 +104,24 @@ const CustomCursor = () => {
                     translateX: '-10%',
                     translateY: '-90%',
                     rotate: rotation,
-                    scale: isHovered ? 1.2 : 0.8,
+                    scale: isHovered ? 0.9 : 0.6,
                 }}
             >
-                <div className="relative group/syringe">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="drop-shadow-neon">
-                        <path d="m18 2 4 4" className="opacity-40" />
-                        <path d="m17 7 3-3" className="opacity-40" />
+                <div className="relative">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="drop-shadow-neon">
+                        {/* Needle */}
+                        <path d="M5 19L2 22" strokeWidth="3" className="text-hospital-secondary opacity-80" />
+                        {/* Barrel */}
+                        <rect x="8" y="4" width="6" height="12" rx="1.5" transform="rotate(-45 8 4)" className="fill-white/10" />
+                        {/* Plunger */}
                         <motion.path 
-                            animate={{ y: isHovered ? 2 : 0 }}
-                            d="M19 9 8.7 19.3c-1 1-2.5 1-3.4 0l-.6-.6c-1-1-1-2.5 0-3.4L15 5" 
-                            strokeWidth="2.5"
+                            animate={{ y: isHovered ? 3 : 0 }}
+                            d="M16 4L19 1" 
+                            strokeWidth="3"
                         />
-                        <path d="m9 11 4 4" className="opacity-60" />
-                        <path d="m5 19-3 3" strokeWidth="3" className="text-hospital-secondary" />
-                        <path d="m14 4 6 6" className="opacity-40" />
+                        {/* Indicators */}
+                        <path d="M10 8L13 11" className="opacity-40" />
+                        <path d="M12 6L15 9" className="opacity-40" />
                     </svg>
                     
                     {/* Pulsing Clinical Liquid Drop */}
@@ -126,10 +129,10 @@ const CustomCursor = () => {
                         {isHovered && (
                             <motion.div
                                 initial={{ scale: 0, opacity: 0, y: 0 }}
-                                animate={{ scale: [1, 1.5, 1.2], opacity: [0.8, 1, 0.4], y: 10 }}
+                                animate={{ scale: [1, 1.8, 0], opacity: [1, 0.8, 0], y: 15 }}
                                 exit={{ scale: 0, opacity: 0 }}
-                                transition={{ repeat: Infinity, duration: 1.5 }}
-                                className="absolute bottom-[-15px] left-[2px] w-2 h-2 bg-hospital-secondary rounded-full blur-[2px]"
+                                transition={{ repeat: Infinity, duration: 1.2 }}
+                                className="absolute bottom-[-10px] left-[-2px] w-1.5 h-1.5 bg-hospital-secondary rounded-full blur-[1px]"
                             />
                         )}
                     </AnimatePresence>

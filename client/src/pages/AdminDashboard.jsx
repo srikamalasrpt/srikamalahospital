@@ -182,40 +182,40 @@ const AdminDashboard = () => {
     };
 
     if (!isAuthenticated) return (
-        <div className="min-h-screen bg-[#050505] flex flex-col items-center justify-center p-6 text-white relative overflow-hidden">
+        <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6 text-slate-900 relative overflow-hidden font-['Outfit']">
              {/* Background Decor */}
              <div className="fixed inset-0 z-0 pointer-events-none opacity-20 overflow-hidden">
-                <div className="absolute top-[10%] right-[10%] w-[600px] h-[600px] bg-hospital-primary/10 rounded-full blur-[140px] animate-pulse-soft"></div>
+                <div className="absolute top-[10%] right-[10%] w-[600px] h-[600px] bg-hospital-primary/5 rounded-full blur-[140px] animate-pulse-soft"></div>
                 <div className="absolute bottom-[20%] left-[10%] w-[500px] h-[500px] bg-hospital-secondary/5 rounded-full blur-[120px] animate-pulse-soft" style={{ animationDelay: '3s' }}></div>
             </div>
 
-            <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="relative z-10 w-full max-w-md bg-[#0a0a0a] border border-white/10 p-12 rounded-[60px] shadow-4xl text-center backdrop-blur-3xl group">
-                <div className="w-24 h-24 mx-auto bg-white/5 border border-white/10 text-hospital-primary rounded-[35px] flex items-center justify-center shadow-4xl mb-12 group-hover:rotate-12 transition-transform">
-                    <Lock size={40} className="shadow-neon-primary" />
+            <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="relative z-10 w-full max-w-md bg-white border border-black/5 p-12 rounded-[60px] shadow-4xl text-center backdrop-blur-3xl group">
+                <div className="w-24 h-24 mx-auto bg-slate-50 border border-black/5 text-hospital-primary rounded-[35px] flex items-center justify-center shadow-md mb-12 group-hover:rotate-12 transition-transform">
+                    <Lock size={40} className="shadow-sm" />
                 </div>
-                <h2 className="text-4xl font-black mb-2 tracking-tighter italic uppercase text-white">K-OS <span className="text-hospital-secondary">HQ</span></h2>
-                <p className="text-[10px] font-black text-gray-500 tracking-[0.6em] uppercase mb-12 italic opacity-60 leading-none">Institutional Security Node</p>
+                <h2 className="text-4xl font-black mb-2 tracking-tighter italic uppercase text-slate-900">K-OS <span className="text-hospital-secondary">HQ</span></h2>
+                <p className="text-[10px] font-black text-slate-400 tracking-[0.6em] uppercase mb-12 italic opacity-60 leading-none">Institutional Security Node</p>
                 <form onSubmit={handleLogin} className="space-y-6">
                     <div className="relative">
                         <Key size={18} className="absolute left-6 top-1/2 -translate-y-1/2 text-hospital-primary/50" />
                         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Handshake Code"
-                            className="w-full bg-white/5 border border-white/10 p-6 pl-16 rounded-[28px] text-white outline-none focus:border-hospital-primary/40 transition-all font-mono tracking-widest text-center text-sm shadow-inner" />
+                            className="w-full bg-slate-50 border border-black/5 p-6 pl-16 rounded-[28px] text-slate-900 outline-none focus:border-hospital-primary transition-all font-mono tracking-widest text-center text-sm shadow-inner" />
                     </div>
                     {loginError && <p className="text-red-500 text-[10px] font-black uppercase tracking-[0.4em] italic">{loginError}</p>}
-                    <button className="w-full bg-white text-black py-6 rounded-[28px] font-black text-[11px] uppercase tracking-[0.6em] hover:bg-hospital-primary transition-all active:scale-95 shadow-4xl italic">Init Handshake</button>
+                    <button className="w-full bg-[#0f172a] text-white py-6 rounded-[28px] font-black text-[11px] uppercase tracking-[0.6em] hover:bg-hospital-primary transition-all active:scale-95 shadow-lg italic">Init Handshake</button>
                 </form>
             </motion.div>
         </div>
     );
 
     return (
-        <div className="min-h-screen bg-[#050505] flex font-sans text-white overflow-hidden relative">
+        <div className="min-h-screen bg-slate-50 flex font-['Outfit'] text-slate-900 overflow-hidden relative">
             
             {/* Nav Rail */}
-            <aside className={`bg-[#0a0a0a] border-r border-white/5 flex flex-col transition-all duration-700 overflow-hidden ${isSidebarOpen ? 'w-80' : 'w-24'} relative z-30 backdrop-blur-3xl`}>
-                <div className="p-10 flex items-center justify-center lg:justify-start gap-5 border-b border-white/5 h-28 italic">
-                    <div className="w-14 h-14 bg-white/5 border border-white/10 rounded-2xl shadow-4xl flex items-center justify-center shrink-0 hover:rotate-12 transition-transform text-hospital-secondary"><LayoutDashboard size={26} /></div>
-                    {isSidebarOpen && <h1 className="text-2xl font-black tracking-tighter uppercase whitespace-nowrap italic text-white leading-none">SRK-HQ <span className="text-hospital-primary">4.0</span></h1>}
+            <aside className={`bg-white border-r border-black/5 flex flex-col transition-all duration-700 overflow-hidden ${isSidebarOpen ? 'w-80' : 'w-24'} relative z-30 backdrop-blur-3xl shadow-xl`}>
+                <div className="p-10 flex items-center justify-center lg:justify-start gap-5 border-b border-black/5 h-28 italic">
+                    <div className="w-14 h-14 bg-slate-50 border border-black/5 rounded-2xl shadow-md flex items-center justify-center shrink-0 hover:rotate-12 transition-transform text-hospital-secondary"><LayoutDashboard size={26} /></div>
+                    {isSidebarOpen && <h1 className="text-2xl font-black tracking-tighter uppercase whitespace-nowrap italic text-slate-900 leading-none">SRK-HQ <span className="text-hospital-primary">4.0</span></h1>}
                 </div>
 
                 <nav className="p-8 space-y-4 flex-1 overflow-y-auto scrollbar-hide">
@@ -227,15 +227,15 @@ const AdminDashboard = () => {
                         { id: 'settings', icon: <Settings size={22}/>, label: 'Cloud Config' }
                     ].map(item => (
                         <button key={item.id} onClick={() => setActiveTab(item.id)}
-                            className={`w-full flex items-center gap-6 p-5 rounded-[28px] font-black text-[11px] uppercase tracking-[0.4em] transition-all border group italic ${activeTab === item.id ? 'bg-white text-black border-white shadow-4xl' : 'text-gray-500 border-white/5 hover:border-white/20 hover:text-white bg-white/5'}`}>
+                            className={`w-full flex items-center gap-6 p-5 rounded-[28px] font-black text-[11px] uppercase tracking-[0.4em] transition-all border group italic ${activeTab === item.id ? 'bg-[#0f172a] text-white border-transparent shadow-xl' : 'text-slate-400 border-black/5 hover:border-black/20 hover:text-slate-900 bg-white'}`}>
                             <div className={`shrink-0 ${activeTab === item.id ? 'text-hospital-secondary' : 'group-hover:text-hospital-primary transition-colors'}`}>{item.icon}</div>
                             {isSidebarOpen && <span>{item.label}</span>}
                         </button>
                     ))}
                 </nav>
 
-                <div className="p-8 border-t border-white/5">
-                    <button onClick={() => setIsAuthenticated(false)} className="w-full flex items-center justify-center lg:justify-start gap-6 p-5 rounded-[28px] text-red-500 hover:bg-red-500/10 font-black transition-all bg-white/5 border border-white/10 active:scale-95 italic">
+                <div className="p-8 border-t border-black/5">
+                    <button onClick={() => setIsAuthenticated(false)} className="w-full flex items-center justify-center lg:justify-start gap-6 p-5 rounded-[28px] text-red-500 hover:bg-red-50 transition-all bg-white border border-black/5 active:scale-95 italic">
                         <LogOut size={22} />
                         {isSidebarOpen && <span className="uppercase text-[11px] tracking-[0.4em]">Seal Node</span>}
                     </button>
@@ -243,25 +243,25 @@ const AdminDashboard = () => {
             </aside>
 
             {/* Main Area */}
-            <main className="flex-1 flex flex-col h-screen relative bg-[#050505] overflow-hidden">
+            <main className="flex-1 flex flex-col h-screen relative bg-slate-50 overflow-hidden">
                 
-                <header className="h-28 px-12 flex justify-between items-center border-b border-white/5 shrink-0 relative z-20 backdrop-blur-3xl bg-black/20">
+                <header className="h-28 px-12 flex justify-between items-center border-b border-black/5 shrink-0 relative z-20 backdrop-blur-3xl bg-white/80">
                     <div className="flex items-center gap-8">
-                        <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="w-12 h-12 flex items-center justify-center bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-colors text-white/40"><MoreVertical size={22}/></button>
-                        <h2 className="text-3xl font-black tracking-tighter uppercase italic text-white leading-none"><span className="text-hospital-primary">{activeTab}</span> Console</h2>
+                        <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="w-12 h-12 flex items-center justify-center bg-slate-50 border border-black/5 rounded-2xl hover:bg-slate-100 transition-colors text-slate-400"><MoreVertical size={22}/></button>
+                        <h2 className="text-3xl font-black tracking-tighter uppercase italic text-slate-900 leading-none"><span className="text-hospital-primary">{activeTab}</span> Console</h2>
                     </div>
                     <div className="flex items-center gap-10">
                         <div className="relative group hidden lg:block">
-                            <Search size={20} className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-700 group-focus-within:text-hospital-primary transition-colors" />
+                            <Search size={20} className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-hospital-primary transition-colors" />
                             <input value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} type="text" placeholder="Scan Global Node Data..."
-                                className="bg-white/5 border border-white/10 pl-16 pr-8 py-4 rounded-[28px] text-xs font-black italic outline-none focus:border-hospital-primary/30 transition-all w-80 lg:w-[450px] shadow-inner text-white placeholder:text-gray-800" />
+                                className="bg-slate-50 border border-black/5 pl-16 pr-8 py-4 rounded-[28px] text-xs font-black italic outline-none focus:border-hospital-primary transition-all w-80 lg:w-[450px] shadow-inner text-slate-900 placeholder:text-slate-200" />
                         </div>
                         <div className="flex items-center gap-6 group">
                             <div className="text-right hidden sm:block">
-                                <p className="text-[10px] font-black uppercase text-gray-700 leading-none mb-2 italic">Node Status: <span className="text-green-500">Live</span></p>
-                                <p className="text-sm font-black text-white italic underline decoration-hospital-secondary/20 uppercase tracking-tighter">Chief Director</p>
+                                <p className="text-[10px] font-black uppercase text-slate-400 leading-none mb-2 italic">Node Status: <span className="text-green-500">Live</span></p>
+                                <p className="text-sm font-black text-slate-900 italic underline decoration-hospital-secondary/20 uppercase tracking-tighter">Chief Director</p>
                             </div>
-                            <div className="w-16 h-16 bg-white/5 border border-white/10 rounded-[24px] shadow-4xl flex items-center justify-center text-hospital-secondary group-hover:scale-110 group-hover:rotate-12 transition-all"><Cpu size={30}/></div>
+                            <div className="w-16 h-16 bg-white border border-black/5 rounded-[24px] shadow-md flex items-center justify-center text-hospital-secondary group-hover:scale-110 group-hover:rotate-12 transition-all"><Cpu size={30}/></div>
                         </div>
                     </div>
                 </header>
@@ -274,50 +274,50 @@ const AdminDashboard = () => {
                                     {[
                                         { l: 'Load Factor', v: appointments.length, i: <Clock/>, c: 'text-hospital-primary', bg: 'bg-hospital-primary' },
                                         { l: 'Patient Master', v: patients.length, i: <Users/>, c: 'text-hospital-secondary', bg: 'bg-hospital-secondary' },
-                                        { l: 'Pharma Inventory', v: products.length, i: <Pill/>, c: 'text-white', bg: 'bg-white' },
+                                        { l: 'Pharma Inventory', v: products.length, i: <Pill/>, c: 'text-slate-900', bg: 'bg-slate-900' },
                                         { l: 'Revenue Node', v: `₹${appointments.length * 200}`, i: <Zap/>, c: 'text-hospital-primary', bg: 'bg-hospital-primary' }
                                     ].map((stat, i) => (
-                                        <div key={i} className="bg-[#0a0a0a] p-10 rounded-[50px] shadow-4xl border border-white/10 hover:border-white/20 transition-all relative overflow-hidden group">
-                                            <div className="absolute -top-10 -right-10 opacity-[0.03] group-hover:scale-110 transition-transform duration-1000 rotate-12">{stat.i}</div>
+                                        <div key={i} className="bg-white p-10 rounded-[50px] shadow-xl border border-black/5 hover:border-black/10 transition-all relative overflow-hidden group">
+                                            <div className="absolute -top-10 -right-10 opacity-5 group-hover:scale-110 transition-transform duration-1000 rotate-12">{stat.i}</div>
                                             <div className="flex items-start justify-between mb-8">
-                                                <div className={`w-16 h-16 bg-white/5 border border-white/10 text-white rounded-[24px] flex items-center justify-center shadow-inner group-hover:rotate-12 transition-transform`}>{stat.i}</div>
+                                                <div className={`w-16 h-16 bg-slate-50 border border-black/5 text-slate-900 rounded-[24px] flex items-center justify-center shadow-inner group-hover:rotate-12 transition-transform`}>{stat.i}</div>
                                                 <div className="w-1.5 h-1.5 rounded-full bg-hospital-primary animate-ping"></div>
                                             </div>
-                                            <p className="text-[10px] font-black uppercase tracking-[0.5em] text-gray-500 mb-2 italic leading-none">{stat.l}</p>
-                                            <h3 className="text-5xl font-black text-white tracking-tighter italic glow-text">{stat.v}</h3>
+                                            <p className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-400 mb-2 italic leading-none">{stat.l}</p>
+                                            <h3 className="text-5xl font-black text-slate-900 tracking-tighter italic">{stat.v}</h3>
                                         </div>
                                     ))}
                                 </div>
                                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                                    <div className="bg-[#0a0a0a] p-14 rounded-[65px] shadow-4xl border border-white/10 relative overflow-hidden h-[450px] group backdrop-blur-3xl">
-                                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white opacity-[0.02] group-hover:scale-[1.2] transition-transform duration-[3s]"><Activity size={400} strokeWidth={1} /></div>
+                                    <div className="bg-white p-14 rounded-[65px] shadow-xl border border-black/5 relative overflow-hidden h-[450px] group backdrop-blur-3xl">
+                                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-slate-900 opacity-5 group-hover:scale-[1.2] transition-transform duration-[3s]"><Activity size={400} strokeWidth={1} /></div>
                                         <div className="relative z-10 h-full flex flex-col justify-between">
                                             <div>
-                                               <h3 className="text-4xl font-black mb-3 italic tracking-tighter uppercase leading-none">Global Health IQ</h3>
+                                               <h3 className="text-4xl font-black mb-3 italic tracking-tighter uppercase leading-none text-slate-900">Global Health IQ</h3>
                                                <p className="text-[10px] font-black text-hospital-primary tracking-[0.6em] uppercase italic">Real-Time Core Orchestration</p>
                                             </div>
                                             <div className="space-y-10">
                                                 <div className="space-y-4">
-                                                    <div className="flex justify-between text-[11px] font-black uppercase tracking-[0.4em] italic text-gray-700"><span>Neural Lattice Sync</span><span className="text-hospital-secondary">99.8%</span></div>
-                                                    <div className="h-2 bg-white/5 rounded-full overflow-hidden border border-white/5"><motion.div initial={{width:0}} animate={{width:'99.8%'}} transition={{duration:2}} className="h-full bg-hospital-secondary shadow-neon-secondary"></motion.div></div>
+                                                    <div className="flex justify-between text-[11px] font-black uppercase tracking-[0.4em] italic text-slate-400"><span>Neural Lattice Sync</span><span className="text-hospital-secondary">99.8%</span></div>
+                                                    <div className="h-2 bg-slate-100 rounded-full overflow-hidden border border-black/5"><motion.div initial={{width:0}} animate={{width:'99.8%'}} transition={{duration:2}} className="h-full bg-hospital-secondary"></motion.div></div>
                                                 </div>
                                                 <div className="space-y-4">
-                                                    <div className="flex justify-between text-[11px] font-black uppercase tracking-[0.4em] italic text-gray-700"><span>IOPS Efficiency</span><span className="text-hospital-primary">94.2%</span></div>
-                                                    <div className="h-2 bg-white/5 rounded-full overflow-hidden border border-white/5"><motion.div initial={{width:0}} animate={{width:'94.2%'}} transition={{duration:2, delay:0.2}} className="h-full bg-hospital-primary shadow-neon-primary"></motion.div></div>
+                                                    <div className="flex justify-between text-[11px] font-black uppercase tracking-[0.4em] italic text-slate-400"><span>IOPS Efficiency</span><span className="text-hospital-primary">94.2%</span></div>
+                                                    <div className="h-2 bg-slate-100 rounded-full overflow-hidden border border-black/5"><motion.div initial={{width:0}} animate={{width:'94.2%'}} transition={{duration:2, delay:0.2}} className="h-full bg-hospital-primary"></motion.div></div>
                                                 </div>
                                             </div>
-                                            <p className="text-[9px] font-black text-gray-800 uppercase tracking-[0.8em] italic">AUTONOMOUS CLOUD ANALYTICS ACTIVE</p>
+                                            <p className="text-[9px] font-black text-slate-300 uppercase tracking-[0.8em] italic">AUTONOMOUS CLOUD ANALYTICS ACTIVE</p>
                                         </div>
                                     </div>
-                                    <div className="bg-[#0a0a0a] p-14 rounded-[65px] shadow-4xl border border-white/10 flex flex-col justify-center items-center text-center relative overflow-hidden group">
-                                       <div className="absolute -bottom-20 -left-20 text-white opacity-[0.02] -rotate-12 group-hover:scale-110 transition-transform duration-[3s]"><Users size={350} strokeWidth={1} /></div>
-                                       <div className="w-32 h-32 bg-white/5 border border-white/10 rounded-[45px] flex items-center justify-center text-hospital-secondary mb-10 shadow-4xl group-hover:rotate-[360deg] transition-all duration-1000"><Users size={54}/></div>
-                                       <h3 className="text-3xl font-black text-white italic tracking-tighter uppercase mb-6">STAFF TELEMETRY</h3>
+                                    <div className="bg-white p-14 rounded-[65px] shadow-xl border border-black/5 flex flex-col justify-center items-center text-center relative overflow-hidden group">
+                                       <div className="absolute -bottom-20 -left-20 text-slate-900 opacity-5 -rotate-12 group-hover:scale-110 transition-transform duration-[3s]"><Users size={350} strokeWidth={1} /></div>
+                                       <div className="w-32 h-32 bg-slate-50 border border-black/5 rounded-[45px] flex items-center justify-center text-hospital-secondary mb-10 shadow-md group-hover:rotate-[360deg] transition-all duration-1000"><Users size={54}/></div>
+                                       <h3 className="text-3xl font-black text-slate-900 italic tracking-tighter uppercase mb-6">STAFF TELEMETRY</h3>
                                        <div className="flex -space-x-6 mb-10 h-16">
-                                          {[...Array(5)].map((_, i) => <div key={i} className="w-16 h-16 rounded-[24px] bg-[#111] border-4 border-[#0a0a0a] shadow-4xl flex items-center justify-center text-[10px] font-black text-white italic uppercase grayscale hover:grayscale-0 transition-all">S-{i}</div>)}
-                                          <div className="w-16 h-16 rounded-[24px] bg-hospital-primary text-black flex items-center justify-center text-xs font-black shadow-neon-primary italic">+14</div>
+                                          {[...Array(5)].map((_, i) => <div key={i} className="w-16 h-16 rounded-[24px] bg-slate-50 border-4 border-white shadow-md flex items-center justify-center text-[10px] font-black text-slate-900 italic uppercase transition-all">S-{i}</div>)}
+                                          <div className="w-16 h-16 rounded-[24px] bg-hospital-primary text-white flex items-center justify-center text-xs font-black shadow-lg italic">+14</div>
                                        </div>
-                                       <button className="text-[11px] font-black uppercase tracking-[0.6em] text-hospital-primary hover:text-white transition-colors italic leading-none border-b border-hospital-primary/30 pb-2">View Specialized Matrix</button>
+                                       <button className="text-[11px] font-black uppercase tracking-[0.6em] text-hospital-primary hover:text-slate-900 transition-colors italic leading-none border-b border-hospital-primary/30 pb-2">View Specialized Matrix</button>
                                     </div>
                                 </div>
                             </motion.div>
@@ -325,44 +325,44 @@ const AdminDashboard = () => {
 
                         {activeTab === 'appointments' && (
                             <motion.div key="appointments" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-12">
-                                <div className="bg-[#0a0a0a] rounded-[60px] shadow-4xl border border-white/10 p-12 lg:p-16 relative overflow-hidden backdrop-blur-3xl">
-                                    <div className="absolute top-0 right-0 p-12 opacity-[0.02] text-white rotate-12 pointer-events-none scale-150"><Calendar size={300} strokeWidth={1}/></div>
+                                <div className="bg-white rounded-[60px] shadow-xl border border-black/5 p-12 lg:p-16 relative overflow-hidden backdrop-blur-3xl">
+                                    <div className="absolute top-0 right-0 p-12 opacity-5 text-slate-900 rotate-12 pointer-events-none scale-150"><Calendar size={300} strokeWidth={1}/></div>
                                     <div className="flex items-center justify-between mb-16 relative z-10">
                                         <div>
-                                            <h3 className="text-4xl font-black italic tracking-tighter uppercase leading-none">Booking Stream</h3>
-                                            <p className="text-[10px] font-black text-hospital-secondary tracking-[0.6em] uppercase italic mt-3 flex items-center gap-4">Active Queue Surveillance <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse shadow-neon-secondary"></div></p>
+                                            <h3 className="text-4xl font-black italic tracking-tighter uppercase leading-none text-slate-900">Booking Stream</h3>
+                                            <p className="text-[10px] font-black text-hospital-secondary tracking-[0.6em] uppercase italic mt-3 flex items-center gap-4">Active Queue Surveillance <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div></p>
                                         </div>
-                                        <button className="px-10 py-5 bg-white/5 border border-white/10 rounded-full text-[11px] font-black uppercase tracking-[0.4em] italic hover:bg-white/10 active:scale-95 transition-all">Download Audit CSV</button>
+                                        <button className="px-10 py-5 bg-slate-50 border border-black/5 rounded-full text-[11px] font-black uppercase tracking-[0.4em] italic hover:bg-slate-100 active:scale-95 transition-all text-slate-900">Download Audit CSV</button>
                                     </div>
                                     <div className="overflow-x-auto relative z-10 scrollbar-hide">
                                         <table className="w-full text-left min-w-[900px]">
                                             <thead>
-                                                <tr className="border-b border-white/5">
-                                                    <th className="py-8 px-6 text-[11px] font-black uppercase tracking-[0.6em] text-gray-700 italic">Token Trace</th>
-                                                    <th className="py-8 px-6 text-[11px] font-black uppercase tracking-[0.6em] text-gray-700 italic">Patient Profile</th>
-                                                    <th className="py-8 px-6 text-[11px] font-black uppercase tracking-[0.6em] text-gray-700 italic">Service Node</th>
-                                                    <th className="py-8 px-6 text-[11px] font-black uppercase tracking-[0.6em] text-gray-700 italic text-right">Verification</th>
+                                                <tr className="border-b border-black/5">
+                                                    <th className="py-8 px-6 text-[11px] font-black uppercase tracking-[0.6em] text-slate-400 italic">Token Trace</th>
+                                                    <th className="py-8 px-6 text-[11px] font-black uppercase tracking-[0.6em] text-slate-400 italic">Patient Profile</th>
+                                                    <th className="py-8 px-6 text-[11px] font-black uppercase tracking-[0.6em] text-slate-400 italic">Service Node</th>
+                                                    <th className="py-8 px-6 text-[11px] font-black uppercase tracking-[0.6em] text-slate-400 italic text-right">Verification</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {appointments.filter(a => a.name.toLowerCase().includes(searchTerm.toLowerCase())).map((apt, i) => (
-                                                    <motion.tr initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} key={apt._id || i} className="group hover:bg-white/5 transition-all cursor-default border-b border-white/5 last:border-none">
-                                                        <td className="py-10 px-6 font-mono font-black text-lg text-hospital-primary italic glow-text group-hover:scale-105 transition-transform origin-left">{apt.token}</td>
+                                                    <motion.tr initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} key={apt._id || i} className="group hover:bg-slate-50 transition-all cursor-default border-b border-black/5 last:border-none">
+                                                        <td className="py-10 px-6 font-mono font-black text-lg text-hospital-primary italic group-hover:scale-105 transition-transform origin-left">{apt.token}</td>
                                                         <td className="py-10 px-6">
                                                             <div className="flex items-center gap-5">
-                                                                <div className="w-14 h-14 bg-[#111] border border-white/5 rounded-2xl flex items-center justify-center text-white font-black italic shadow-inner group-hover:border-hospital-primary/40 transition-colors">P-{i}</div>
+                                                                <div className="w-14 h-14 bg-slate-50 border border-black/5 rounded-2xl flex items-center justify-center text-slate-900 font-black italic shadow-inner group-hover:border-hospital-primary/40 transition-colors">P-{i}</div>
                                                                 <div>
-                                                                    <p className="font-black text-xl italic tracking-tighter uppercase leading-none mb-2">{apt.name}</p>
-                                                                    <p className="text-[10px] font-black text-gray-700 uppercase tracking-[0.4em] italic">{apt.phone} // {apt.age}y // {apt.gender}</p>
+                                                                    <p className="font-black text-xl italic tracking-tighter uppercase leading-none mb-2 text-slate-900">{apt.name}</p>
+                                                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] italic">{apt.phone} // {apt.age}y // {apt.gender}</p>
                                                                 </div>
                                                             </div>
                                                         </td>
                                                         <td className="py-10 px-6">
-                                                            <span className={`px-6 py-2 bg-white/5 border border-white/5 text-white text-[10px] font-black uppercase tracking-[0.4em] rounded-full italic group-hover:border-hospital-secondary transition-colors`}>{apt.department}</span>
+                                                            <span className={`px-6 py-2 bg-slate-50 border border-black/5 text-slate-600 text-[10px] font-black uppercase tracking-[0.4em] rounded-full italic group-hover:border-hospital-secondary transition-colors`}>{apt.department}</span>
                                                         </td>
                                                         <td className="py-10 px-6 text-right">
                                                             <button onClick={() => updateAptStatus(apt._id, 'Paid')}
-                                                                className={`px-10 py-4 rounded-[30px] text-[10px] font-black uppercase tracking-[0.6em] border transition-all active:scale-90 italic ${apt.paymentStatus === 'Paid' ? 'bg-green-500/20 border-green-500/30 text-green-400 shadow-neon-mint' : 'bg-transparent border-white/10 text-gray-700 hover:border-hospital-primary hover:text-white hover:bg-white/5'}`}>
+                                                                className={`px-10 py-4 rounded-[30px] text-[10px] font-black uppercase tracking-[0.6em] border transition-all active:scale-90 italic ${apt.paymentStatus === 'Paid' ? 'bg-green-50 border-green-200 text-green-600' : 'bg-transparent border-black/5 text-slate-300 hover:border-hospital-primary hover:text-slate-900 hover:bg-white'}`}>
                                                                 {apt.paymentStatus === 'Paid' ? 'VERIFIED ✓' : 'INIT VERIFY'}
                                                             </button>
                                                         </td>
@@ -378,26 +378,26 @@ const AdminDashboard = () => {
                         {activeTab === 'patients' && (
                             <motion.div key="patients" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="flex flex-col lg:flex-row gap-16 h-full min-h-[800px]">
                                 <div className="lg:w-1/3 space-y-10">
-                                   <div className="bg-[#0a0a0a] rounded-[55px] border border-white/10 p-10 shadow-4xl h-[750px] flex flex-col backdrop-blur-3xl overflow-hidden relative">
+                                   <div className="bg-white rounded-[55px] border border-black/5 p-10 shadow-xl h-[750px] flex flex-col backdrop-blur-3xl overflow-hidden relative">
                                         <div className="absolute bottom-0 left-0 w-full h-1 bg-hospital-secondary opacity-20"></div>
                                         <div className="mb-12 flex items-center justify-between">
-                                            <h3 className="text-3xl font-black italic tracking-tighter uppercase leading-none">Subjects</h3>
-                                            <div className="px-4 py-2 bg-white/5 border border-white/10 rounded-full text-[9px] font-black text-gray-700 uppercase tracking-[0.3em] italic">{patients.length} Master Nodes</div>
+                                            <h3 className="text-3xl font-black italic tracking-tighter uppercase leading-none text-slate-900">Subjects</h3>
+                                            <div className="px-4 py-2 bg-slate-50 border border-black/5 rounded-full text-[9px] font-black text-slate-400 uppercase tracking-[0.3em] italic">{patients.length} Master Nodes</div>
                                         </div>
                                         <div className="space-y-4 overflow-y-auto pr-4 scrollbar-hide flex-1">
                                             {patients.filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase()) || p.phone.includes(searchTerm)).map((p, i) => (
                                                 <button key={i} onClick={() => { setActivePatient(p); loadClinicalHistory(p); }}
-                                                    className={`w-full flex items-center justify-between p-8 rounded-[40px] border transition-all relative overflow-hidden group/item active:scale-95 ${activePatient?.name === p.name ? 'border-hospital-primary/30 bg-hospital-primary/5 shadow-4xl' : 'border-white/5 hover:border-white/20 bg-white/5'}`}>
+                                                    className={`w-full flex items-center justify-between p-8 rounded-[40px] border transition-all relative overflow-hidden group/item active:scale-95 ${activePatient?.name === p.name ? 'border-hospital-primary/30 bg-hospital-primary/5 shadow-md' : 'border-black/5 hover:border-black/10 bg-slate-50'}`}>
                                                     <div className="flex items-center gap-6 text-left relative z-10">
-                                                        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-white italic font-black text-xs transition-transform group-hover/item:rotate-12 ${activePatient?.name === p.name ? 'bg-hospital-primary' : 'bg-[#111] shadow-inner'}`}>S</div>
+                                                        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-white italic font-black text-xs transition-transform group-hover/item:rotate-12 ${activePatient?.name === p.name ? 'bg-hospital-primary' : 'bg-slate-200 shadow-inner'}`}>S</div>
                                                         <div>
-                                                            <h4 className="font-black text-lg italic tracking-tighter leading-none mb-2 uppercase group-hover/item:text-hospital-primary transition-colors">{p.name}</h4>
-                                                            <p className="text-[10px] font-black text-gray-700 uppercase tracking-[0.4em] italic">{p.phone}</p>
+                                                            <h4 className="font-black text-lg italic tracking-tighter leading-none mb-2 uppercase group-hover/item:text-hospital-primary transition-colors text-slate-900">{p.name}</h4>
+                                                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] italic">{p.phone}</p>
                                                         </div>
                                                     </div>
                                                     <div className="text-right relative z-10">
-                                                        <p className="text-2xl font-black text-white leading-none italic glow-text">{p.visits.length}</p>
-                                                        <p className="text-[9px] font-black uppercase text-gray-700 tracking-[0.2em] italic">Logs</p>
+                                                        <p className="text-2xl font-black text-slate-900 leading-none italic">{p.visits.length}</p>
+                                                        <p className="text-[9px] font-black uppercase text-slate-400 tracking-[0.2em] italic">Logs</p>
                                                     </div>
                                                 </button>
                                             ))}
@@ -405,24 +405,24 @@ const AdminDashboard = () => {
                                    </div>
                                 </div>
                                 
-                                <div className="lg:w-2/3 bg-[#0a0a0a] rounded-[60px] shadow-4xl border border-white/10 p-12 lg:p-20 relative overflow-hidden backdrop-blur-3xl h-[750px] flex flex-col">
-                                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.02] text-white rotate-45 pointer-events-none scale-150"><Dna size={500} strokeWidth={1}/></div>
+                                <div className="lg:w-2/3 bg-white rounded-[60px] shadow-xl border border-black/5 p-12 lg:p-20 relative overflow-hidden backdrop-blur-3xl h-[750px] flex flex-col">
+                                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-5 text-slate-900 rotate-45 pointer-events-none scale-150"><Dna size={500} strokeWidth={1}/></div>
                                     <AnimatePresence mode="wait">
                                         {activePatient ? (
                                             <motion.div key={activePatient.name} initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} className="h-full flex flex-col relative z-10">
                                                 <div className="flex flex-col md:flex-row justify-between items-start gap-12 mb-16">
                                                     <div className="space-y-4">
                                                         <div className="flex items-center gap-4">
-                                                            <h3 className="text-5xl lg:text-6xl font-black italic tracking-tighter uppercase leading-none text-white">{activePatient.name}</h3>
-                                                            {auditResult && <div className="px-6 py-2 bg-hospital-primary text-black text-[10px] font-black uppercase tracking-[0.4em] rounded-full shadow-neon-primary italic animate-pulse">AI AUDIT ACTIVE</div>}
+                                                            <h3 className="text-5xl lg:text-6xl font-black italic tracking-tighter uppercase leading-none text-slate-900">{activePatient.name}</h3>
+                                                            {auditResult && <div className="px-6 py-2 bg-hospital-primary text-black text-[10px] font-black uppercase tracking-[0.4em] rounded-full shadow-md italic animate-pulse">AI AUDIT ACTIVE</div>}
                                                         </div>
                                                         <p className="text-hospital-primary font-black uppercase text-[12px] tracking-[0.8em] italic leading-none">{activePatient.token} // Institutional Identifier</p>
                                                         <div className="flex gap-6 mt-8">
-                                                            <div className="px-6 py-3 bg-white/5 border border-white/10 rounded-2xl text-[11px] font-black uppercase tracking-[0.4em] italic text-white/60 shadow-inner">Age: {activePatient.age}Y</div>
-                                                            <div className="px-6 py-3 bg-white/5 border border-white/10 rounded-2xl text-[11px] font-black uppercase tracking-[0.4em] italic text-white/60 shadow-inner">Gender: {activePatient.gender}</div>
+                                                            <div className="px-6 py-3 bg-slate-50 border border-black/5 rounded-2xl text-[11px] font-black uppercase tracking-[0.4em] italic text-slate-400 shadow-inner">Age: {activePatient.age}Y</div>
+                                                            <div className="px-6 py-3 bg-slate-50 border border-black/5 rounded-2xl text-[11px] font-black uppercase tracking-[0.4em] italic text-slate-400 shadow-inner">Gender: {activePatient.gender}</div>
                                                         </div>
                                                     </div>
-                                                    <div className="w-32 h-32 bg-white/5 border border-white/10 rounded-[50px] flex items-center justify-center text-hospital-secondary shadow-4xl relative overflow-hidden group">
+                                                    <div className="w-32 h-32 bg-slate-50 border border-black/5 rounded-[50px] flex items-center justify-center text-hospital-secondary shadow-md relative overflow-hidden group">
                                                          <div className="absolute inset-0 bg-hospital-secondary opacity-0 group-hover:opacity-10 transition-opacity"></div>
                                                          <Sparkles size={54} className="group-hover:rotate-[360deg] transition-all duration-1000"/>
                                                     </div>
@@ -433,17 +433,17 @@ const AdminDashboard = () => {
                                                         <h4 className="text-[11px] font-black uppercase tracking-[0.6em] text-hospital-primary italic flex items-center gap-6 leading-none">
                                                             <Activity size={20}/>
                                                             CASE FILE TELEMETRY MATRIX
-                                                            <div className="h-px flex-1 bg-white/5"></div>
+                                                            <div className="h-px flex-1 bg-black/5"></div>
                                                         </h4>
                                                         {auditResult && (
-                                                            <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="p-10 bg-hospital-secondary/10 border border-hospital-secondary/30 rounded-[45px] shadow-4xl relative overflow-hidden group">
-                                                                <div className="absolute -top-10 -right-10 text-hospital-secondary opacity-[0.05] rotate-12 group-hover:scale-110 transition-transform"><Brain size={150}/></div>
+                                                            <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="p-10 bg-hospital-secondary/10 border border-hospital-secondary/30 rounded-[45px] shadow-lg relative overflow-hidden group">
+                                                                <div className="absolute -top-10 -right-10 text-hospital-secondary opacity-5 rotate-12 group-hover:scale-110 transition-transform"><Brain size={150}/></div>
                                                                 <p className="text-[11px] font-black text-hospital-secondary uppercase tracking-[0.6em] mb-4 italic flex items-center gap-3">Autonomous Pre-Screening Result <div className="h-px flex-1 bg-hospital-secondary/20"></div></p>
-                                                                <p className="text-2xl font-black text-white italic leading-tight mb-8">"{auditResult.condition?.en || 'Pattern Analysis Negative'}"</p>
+                                                                <p className="text-2xl font-black text-slate-900 italic leading-tight mb-8">"{auditResult.condition?.en || 'Pattern Analysis Negative'}"</p>
                                                                 <div className="flex flex-wrap gap-4">
-                                                                    {auditResult.precautions?.map((p, i) => <span key={i} className="text-[9px] bg-black/40 border border-white/5 px-6 py-2 rounded-full text-white/50 italic font-black uppercase tracking-widest">{p.en}</span>)}
+                                                                    {auditResult.precautions?.map((p, i) => <span key={i} className="text-[9px] bg-white border border-black/5 px-6 py-2 rounded-full text-slate-500 italic font-black uppercase tracking-widest">{p.en}</span>)}
                                                                 </div>
-                                                                <button onClick={() => setAuditResult(null)} className="mt-8 text-[9px] font-black text-white/20 hover:text-white transition-colors uppercase tracking-[0.4em] italic">Flush Decision Node</button>
+                                                                <button onClick={() => setAuditResult(null)} className="mt-8 text-[9px] font-black text-slate-300 hover:text-slate-900 transition-colors uppercase tracking-[0.4em] italic">Flush Decision Node</button>
                                                             </motion.div>
                                                         )}
                                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -477,43 +477,43 @@ const AdminDashboard = () => {
                                                         </div>
                                                      </div>
 
-                                                     <div className="space-y-10 pt-10 border-t border-white/5">
+                                                     <div className="space-y-10 pt-10 border-t border-black/5">
                                                         <h4 className="text-[11px] font-black uppercase tracking-[0.6em] text-hospital-secondary italic flex items-center gap-6 leading-none">
                                                             <Edit3 size={20}/>
                                                             ACTIVE CASE NOTES & PHARMA
-                                                            <div className="h-px flex-1 bg-white/5"></div>
+                                                            <div className="h-px flex-1 bg-black/5"></div>
                                                         </h4>
                                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                                                             <div className="space-y-6">
                                                                 <div className="space-y-3">
-                                                                    <label className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-700 ml-6 italic">Diagnosis Cluster</label>
-                                                                    <select value={clinicalType} onChange={(e) => setClinicalType(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-[28px] p-6 text-[11px] font-black text-white italic uppercase tracking-[0.3em] outline-none appearance-none cursor-pointer focus:border-hospital-secondary/30 transition-colors">
-                                                                        <option className="bg-[#050505]">General OP Node</option>
-                                                                        <option className="bg-[#050505]">Diagnostics Node</option>
-                                                                        <option className="bg-[#050505]">Cardiac Protocol</option>
-                                                                        <option className="bg-[#050505]">Surgical Review</option>
+                                                                    <label className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400 ml-6 italic">Diagnosis Cluster</label>
+                                                                    <select value={clinicalType} onChange={(e) => setClinicalType(e.target.value)} className="w-full bg-slate-50 border border-black/5 rounded-[28px] p-6 text-[11px] font-black text-slate-900 italic uppercase tracking-[0.3em] outline-none appearance-none cursor-pointer focus:border-hospital-secondary transition-colors">
+                                                                        <option className="bg-white">General OP Node</option>
+                                                                        <option className="bg-white">Diagnostics Node</option>
+                                                                        <option className="bg-white">Cardiac Protocol</option>
+                                                                        <option className="bg-white">Surgical Review</option>
                                                                     </select>
                                                                 </div>
                                                                 <div className="space-y-3">
-                                                                    <label className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-700 ml-6 italic">Core Findings Log</label>
+                                                                    <label className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400 ml-6 italic">Core Findings Log</label>
                                                                     <textarea value={clinicalNotes} onChange={(e) => setClinicalNotes(e.target.value)} placeholder="Type clinical findings (molecular review required)..."
-                                                                        className="w-full bg-white/5 border border-white/10 rounded-[35px] p-8 text-sm font-serif italic text-white outline-none placeholder:text-gray-800 transition-all h-40 focus:border-hospital-secondary/30" />
+                                                                        className="w-full bg-slate-50 border border-black/5 rounded-[35px] p-8 text-sm font-serif italic text-slate-900 outline-none placeholder:text-slate-200 transition-all h-40 focus:border-hospital-secondary" />
                                                                 </div>
                                                             </div>
                                                             <div className="space-y-6">
                                                                 <div className="space-y-3 h-full flex flex-col">
-                                                                    <label className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-700 ml-6 italic">Active Prescription (Pharma Node)</label>
-                                                                    <div className="flex-1 bg-white/5 border border-white/10 rounded-[35px] p-8 space-y-4 overflow-y-auto scrollbar-hide min-h-[200px]">
+                                                                    <label className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400 ml-6 italic">Active Prescription (Pharma Node)</label>
+                                                                    <div className="flex-1 bg-slate-50 border border-black/5 rounded-[35px] p-8 space-y-4 overflow-y-auto scrollbar-hide min-h-[200px]">
                                                                         {selectedMedicines.length === 0 ? (
-                                                                            <div className="h-full flex flex-col items-center justify-center opacity-[0.03] space-y-4">
+                                                                            <div className="h-full flex flex-col items-center justify-center opacity-5 space-y-4 text-slate-900">
                                                                                 <Pill size={60}/>
                                                                                 <p className="text-[10px] font-black uppercase tracking-[0.4em]">Awaiting Molecular Selection</p>
                                                                             </div>
                                                                         ) : selectedMedicines.map((med) => (
-                                                                            <motion.div initial={{ x: -10, opacity: 0 }} animate={{ x: 0, opacity: 1 }} key={med.name} className="flex items-center gap-6 p-4 bg-white/5 border border-white/5 rounded-2xl group/med hover:bg-white/10 transition-colors">
-                                                                                <p className="text-xs font-black italic uppercase leading-none flex-1 text-white">{med.name}</p>
+                                                                            <motion.div initial={{ x: -10, opacity: 0 }} animate={{ x: 0, opacity: 1 }} key={med.name} className="flex items-center gap-6 p-4 bg-white border border-black/5 rounded-2xl group/med hover:bg-slate-50 transition-colors shadow-sm">
+                                                                                <p className="text-xs font-black italic uppercase leading-none flex-1 text-slate-900">{med.name}</p>
                                                                                 <div className="flex items-center gap-4">
-                                                                                    <input type="number" min="1" value={med.qty} onChange={(e) => updateMedicineQty(med.name, e.target.value)} className="w-16 bg-black/40 border border-white/10 rounded-xl p-2 text-[11px] font-black text-center text-hospital-secondary italic" />
+                                                                                    <input type="number" min="1" value={med.qty} onChange={(e) => updateMedicineQty(med.name, e.target.value)} className="w-16 bg-slate-50 border border-black/5 rounded-xl p-2 text-[11px] font-black text-center text-hospital-secondary italic" />
                                                                                     <button onClick={() => removeMedicine(med.name)} className="text-red-500/30 hover:text-red-500 transition-colors active:scale-90"><Trash2 size={18} /></button>
                                                                                 </div>
                                                                             </motion.div>
@@ -522,7 +522,7 @@ const AdminDashboard = () => {
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <button onClick={saveClinicalEntry} className="w-full py-8 bg-white text-black rounded-[40px] font-black text-[12px] uppercase tracking-[0.6em] shadow-4xl hover:bg-hospital-secondary transition-all active:scale-95 italic group/btn relative overflow-hidden">
+                                                        <button onClick={saveClinicalEntry} className="w-full py-8 bg-[#0f172a] text-white rounded-[40px] font-black text-[12px] uppercase tracking-[0.6em] shadow-xl hover:bg-hospital-secondary transition-all active:scale-95 italic group/btn relative overflow-hidden">
                                                             <span className="relative z-10 flex items-center justify-center gap-6"><Zap size={22}/> Synchronize Clinical Record</span>
                                                             <div className="absolute inset-x-0 bottom-0 top-0 bg-hospital-secondary opacity-0 group-hover/btn:opacity-100 transition-opacity"></div>
                                                         </button>
@@ -531,13 +531,13 @@ const AdminDashboard = () => {
                                             </motion.div>
                                         ) : (
                                             <div className="flex-1 flex flex-col items-center justify-center text-center space-y-12">
-                                                <div className="w-56 h-56 bg-white/5 border border-white/5 rounded-[65px] flex items-center justify-center text-white/5 shadow-inner relative group">
+                                                <div className="w-56 h-56 bg-white border border-black/5 rounded-[65px] flex items-center justify-center text-slate-100 shadow-inner relative group">
                                                     <div className="absolute inset-0 bg-hospital-primary opacity-5 rounded-[65px] group-hover:opacity-10 transition-opacity animate-pulse"></div>
                                                     <FileText size={120} strokeWidth={1} className="relative z-10"/>
                                                 </div>
                                                 <div className="space-y-4">
-                                                    <p className="text-[14px] font-black uppercase tracking-[1em] text-white/20 italic">Awaiting Subject Selection</p>
-                                                    <p className="text-[9px] font-black text-gray-800 uppercase tracking-[0.6em] italic">Access Hospital Master Data Matrix</p>
+                                                    <p className="text-[14px] font-black uppercase tracking-[1em] text-slate-200 italic">Awaiting Subject Selection</p>
+                                                    <p className="text-[9px] font-black text-slate-300 uppercase tracking-[0.6em] italic">Access Hospital Master Data Matrix</p>
                                                 </div>
                                             </div>
                                         )}
@@ -548,30 +548,30 @@ const AdminDashboard = () => {
 
                         {activeTab === 'medicines' && (
                             <motion.div key="medicines" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="space-y-16">
-                                <div className="bg-[#0a0a0a] p-16 lg:p-24 rounded-[75px] shadow-4xl border border-white/10 relative overflow-hidden backdrop-blur-3xl group">
+                                <div className="bg-white p-16 lg:p-24 rounded-[75px] shadow-xl border border-black/5 relative overflow-hidden backdrop-blur-3xl group">
                                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-hospital-secondary opacity-[0.01] pointer-events-none group-hover:scale-110 transition-transform duration-[3s]"></div>
                                      <div className="absolute -top-20 -right-20 w-[600px] h-[600px] bg-hospital-secondary opacity-[0.03] rounded-full blur-[140px] animate-pulse-soft"></div>
                                      
                                      <div className="max-w-4xl relative z-10 space-y-16">
                                         <div className="space-y-4">
-                                            <h3 className="text-6xl font-black italic tracking-tighter uppercase leading-none">AI Pharma Discovery</h3>
+                                            <h3 className="text-6xl font-black italic tracking-tighter uppercase leading-none text-slate-900">AI Pharma Discovery</h3>
                                             <p className="text-[11px] font-black text-hospital-secondary tracking-[0.8em] uppercase italic leading-none pl-2">Clinical Stock Predictive Intelligence</p>
                                         </div>
                                         
                                         <div className="space-y-10">
                                             <div className="relative group">
-                                                <div className="absolute -inset-1 bg-gradient-to-r from-hospital-primary via-hospital-secondary to-white opacity-0 group-focus-within:opacity-20 blur-xl transition-all rounded-[40px]"></div>
-                                                <div className="relative bg-[#050505]/40 border-2 border-white/5 focus-within:border-hospital-primary/30 p-8 pl-20 rounded-[40px] shadow-4xl backdrop-blur-3xl transition-all">
-                                                    <Sparkles size={28} className="absolute left-8 top-1/2 -translate-y-1/2 text-hospital-primary animate-pulse shadow-neon-primary" />
+                                                <div className="absolute -inset-1 bg-gradient-to-r from-hospital-primary via-hospital-secondary to-slate-200 opacity-0 group-focus-within:opacity-20 blur-xl transition-all rounded-[40px]"></div>
+                                                <div className="relative bg-slate-50 border-2 border-black/5 focus-within:border-hospital-primary p-8 pl-20 rounded-[40px] shadow-inner backdrop-blur-3xl transition-all">
+                                                    <Sparkles size={28} className="absolute left-8 top-1/2 -translate-y-1/2 text-hospital-primary animate-pulse shadow-sm" />
                                                     <input value={aiKeyword} onChange={(e) => handleAiSearch(e.target.value)} type="text" placeholder="Scan Molecular Registry (e.g. 'injection', 'statin')..."
-                                                        className="w-full bg-transparent text-3xl font-black outline-none italic placeholder:text-gray-900 transition-all text-white tracking-tight" />
+                                                        className="w-full bg-transparent text-3xl font-black outline-none italic placeholder:text-slate-200 transition-all text-slate-900 tracking-tight" />
                                                 </div>
                                             </div>
 
                                             <div className="flex items-center gap-6 px-4">
-                                                <div className="h-px flex-1 bg-white/5"></div>
+                                                <div className="h-px flex-1 bg-black/5"></div>
                                                 <p className="text-[10px] font-black uppercase tracking-[0.6em] text-hospital-primary italic">Live Cluster Match Index: {aiMatchCount}</p>
-                                                <div className="h-px flex-1 bg-white/5"></div>
+                                                <div className="h-px flex-1 bg-black/5"></div>
                                             </div>
 
                                             <AnimatePresence>
@@ -580,15 +580,15 @@ const AdminDashboard = () => {
                                                         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                                                         {aiSuggestions.map((med, i) => (
                                                             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.05 }}
-                                                                key={i} className="p-10 bg-white/5 border border-white/5 hover:border-hospital-primary/40 rounded-[45px] flex items-center justify-between group/card hover:bg-white/10 transition-all cursor-pointer shadow-4xl active:scale-95">
+                                                                key={i} className="p-10 bg-white border border-black/5 hover:border-hospital-primary rounded-[45px] flex items-center justify-between group/card hover:bg-slate-50 transition-all cursor-pointer shadow-md active:scale-95">
                                                                 <div className="flex items-center gap-6">
-                                                                    <div className="w-16 h-16 bg-[#111] border border-white/5 rounded-[22px] flex items-center justify-center text-hospital-secondary group-card:rotate-12 transition-transform shadow-inner text-4xl font-serif italic font-black">P</div>
+                                                                    <div className="w-16 h-16 bg-slate-50 border border-black/5 rounded-[22px] flex items-center justify-center text-hospital-secondary group-card:rotate-12 transition-transform shadow-inner text-4xl font-serif italic font-black">P</div>
                                                                     <div>
-                                                                        <p className="font-black text-xl italic tracking-tighter uppercase leading-none group-card:text-white transition-colors">{med}</p>
-                                                                        <p className="text-[8px] font-black text-gray-700 uppercase tracking-widest mt-2 italic leading-none">Pharma ID: LOG-{i*1024}</p>
+                                                                        <p className="font-black text-xl italic tracking-tighter uppercase leading-none text-slate-900 group-hover/card:text-hospital-secondary transition-colors">{med}</p>
+                                                                        <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest mt-2 italic leading-none">Pharma ID: LOG-{i*1024}</p>
                                                                     </div>
                                                                 </div>
-                                                                <button onClick={() => addMedicineToPrescription(med)} className="p-4 bg-white/5 border border-white/10 rounded-2xl text-white/20 group-card:text-hospital-primary group-card:bg-white/10 transition-all hover:scale-110"><Plus size={24}/></button>
+                                                                <button onClick={() => addMedicineToPrescription(med)} className="p-4 bg-slate-50 border border-black/5 rounded-2xl text-slate-400 hover:text-hospital-primary transition-all hover:scale-110"><Plus size={24}/></button>
                                                             </motion.div>
                                                         ))}
                                                     </motion.div>
@@ -596,8 +596,8 @@ const AdminDashboard = () => {
                                             </AnimatePresence>
 
                                             {aiNote && (
-                                                <div className="p-8 bg-black/40 border border-white/5 rounded-[35px] italic text-sm text-hospital-primary/50 leading-loose flex items-start gap-6 group">
-                                                    <Brain size={24} className="shrink-0 mt-1 group-hover:rotate-12 transition-transform" />
+                                                <div className="p-8 bg-slate-50 border border-black/5 rounded-[35px] italic text-sm text-slate-400 leading-loose flex items-start gap-6 group shadow-inner">
+                                                    <Brain size={24} className="shrink-0 mt-1 group-hover:rotate-12 transition-transform text-hospital-primary" />
                                                     <span className="font-serif italic">"Autonomous Observation: {aiNote}"</span>
                                                 </div>
                                             )}
@@ -605,25 +605,25 @@ const AdminDashboard = () => {
                                      </div>
                                 </div>
                                 
-                                <div className="bg-[#0a0a0a] rounded-[75px] shadow-4xl border border-white/10 p-16 lg:p-24 space-y-16 backdrop-blur-3xl relative overflow-hidden">
-                                     <div className="absolute top-0 left-0 p-16 text-white opacity-[0.02] pointer-events-none -rotate-12"><Pill size={300}/></div>
+                                <div className="bg-white rounded-[75px] shadow-xl border border-black/5 p-16 lg:p-24 space-y-16 backdrop-blur-3xl relative overflow-hidden">
+                                     <div className="absolute top-0 left-0 p-16 text-slate-100 opacity-5 pointer-events-none -rotate-12"><Pill size={300}/></div>
                                      <div className="flex items-center justify-between relative z-10">
-                                         <h3 className="text-4xl font-black italic tracking-tighter uppercase leading-none">Inventory Master</h3>
+                                         <h3 className="text-4xl font-black italic tracking-tighter uppercase leading-none text-slate-900">Inventory Master</h3>
                                          <div className="flex gap-4">
-                                            <button className="px-10 py-5 bg-white text-black rounded-full text-[11px] font-black uppercase tracking-[0.4em] italic hover:bg-hospital-primary transition-all active:scale-95 shadow-4xl">Add Compound</button>
+                                            <button className="px-10 py-5 bg-[#0f172a] text-white rounded-full text-[11px] font-black uppercase tracking-[0.4em] italic hover:bg-hospital-primary transition-all active:scale-95 shadow-lg">Add Compound</button>
                                          </div>
                                      </div>
                                      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-12 relative z-10">
                                          {products.map((p, i) => (
-                                             <div key={i} className="p-10 bg-white/5 rounded-[50px] border border-white/5 hover:border-white/10 hover:bg-white/10 transition-all group relative overflow-hidden shadow-4xl">
-                                                 <div className="absolute -top-10 -right-10 opacity-[0.03] group-hover:scale-125 transition-transform duration-[2s]"><Pill size={150}/></div>
+                                             <div key={i} className="p-10 bg-slate-50 rounded-[50px] border border-black/5 hover:border-black/10 transition-all group relative overflow-hidden shadow-md">
+                                                 <div className="absolute -top-10 -right-10 opacity-5 group-hover:scale-125 transition-transform duration-[2s] text-slate-900"><Pill size={150}/></div>
                                                  <div className="flex justify-between items-start mb-10">
-                                                     <div className="w-20 h-20 bg-[#111] border border-white/5 rounded-[30px] shadow-inner flex items-center justify-center text-hospital-secondary group-hover:rotate-12 transition-transform italic text-5xl font-serif">M</div>
-                                                     <div className="px-6 py-2 bg-white/5 border border-white/10 rounded-full text-[9px] font-black uppercase tracking-[0.3em] italic text-gray-500">{p.category}</div>
+                                                     <div className="w-20 h-20 bg-white border border-black/5 rounded-[30px] shadow-inner flex items-center justify-center text-hospital-secondary group-hover:rotate-12 transition-transform italic text-5xl font-serif">M</div>
+                                                     <div className="px-6 py-2 bg-white border border-black/5 rounded-full text-[9px] font-black uppercase tracking-[0.3em] italic text-slate-400">{p.category}</div>
                                                  </div>
-                                                 <h4 className="text-2xl font-black text-white italic tracking-tighter uppercase mb-2 leading-none">{p.name}</h4>
-                                                 <p className="text-4xl font-black text-hospital-primary mb-10 glow-text italic">₹{p.price}</p>
-                                                 <button className="w-full py-6 bg-transparent border border-white/10 text-white/30 rounded-[28px] text-[10px] font-black uppercase tracking-[0.5em] hover:bg-white hover:text-black hover:border-white transition-all italic active:scale-95">Adjust Stock Node</button>
+                                                 <h4 className="text-2xl font-black text-slate-900 italic tracking-tighter uppercase mb-2 leading-none">{p.name}</h4>
+                                                 <p className="text-4xl font-black text-hospital-primary mb-10 italic">₹{p.price}</p>
+                                                 <button className="w-full py-6 bg-white border border-black/5 text-slate-400 rounded-[28px] text-[10px] font-black uppercase tracking-[0.5em] hover:bg-[#0f172a] hover:text-white hover:border-transparent transition-all italic active:scale-95 shadow-sm">Adjust Stock Node</button>
                                              </div>
                                          ))}
                                      </div>
@@ -633,103 +633,103 @@ const AdminDashboard = () => {
 
                         {activeTab === 'settings' && (
                             <motion.div key="settings" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="max-w-5xl space-y-16 pb-24 mx-auto">
-                                <div className="bg-[#0a0a0a] p-16 lg:p-24 rounded-[75px] shadow-4xl border border-white/10 backdrop-blur-3xl relative overflow-hidden group">
-                                    <div className="absolute top-0 right-0 p-16 opacity-[0.02] text-white rotate-12 transition-transform duration-[3s] group-hover:rotate-45"><Settings size={300} strokeWidth={1}/></div>
+                                <div className="bg-white p-16 lg:p-24 rounded-[75px] shadow-xl border border-black/5 backdrop-blur-3xl relative overflow-hidden group">
+                                    <div className="absolute top-0 right-0 p-16 opacity-5 text-slate-900 rotate-12 transition-transform duration-[3s] group-hover:rotate-45"><Settings size={300} strokeWidth={1}/></div>
                                     <div className="space-y-4 mb-20">
-                                        <h3 className="text-6xl font-black italic tracking-tighter uppercase leading-none">Cloud Config</h3>
+                                        <h3 className="text-6xl font-black italic tracking-tighter uppercase leading-none text-slate-900">Cloud Config</h3>
                                         <p className="text-[11px] font-black text-hospital-primary tracking-[0.8em] uppercase italic leading-none pl-2">Authorized Global Node Control</p>
                                     </div>
                                     
                                     <div className="space-y-16">
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                                             <div className="space-y-5">
-                                                <label className="text-[11px] font-black uppercase tracking-[0.5em] text-gray-700 ml-10 italic">Institutional Primary Hotline</label>
+                                                <label className="text-[11px] font-black uppercase tracking-[0.5em] text-slate-400 ml-10 italic">Institutional Primary Hotline</label>
                                                 <div className="relative group/input">
                                                     <div className="absolute -inset-0.5 bg-hospital-primary opacity-0 group-focus-within/input:opacity-10 blur-xl transition-all rounded-[35px]"></div>
                                                     <Phone size={22} className="absolute left-8 top-1/2 -translate-y-1/2 text-hospital-primary/50 group-focus-within/input:text-hospital-primary transition-colors" />
                                                     <input value={config.hospitalPhone} onChange={(e) => setConfig({...config, hospitalPhone: e.target.value})} type="text"
-                                                        className="w-full bg-[#050505] border border-white/10 p-8 pl-20 rounded-[35px] font-black text-lg outline-none focus:border-hospital-primary/40 transition-all text-white shadow-inner italic" />
+                                                        className="w-full bg-slate-50 border border-black/5 p-8 pl-20 rounded-[35px] font-black text-lg outline-none focus:border-hospital-primary transition-all text-slate-900 shadow-inner italic" />
                                                 </div>
                                             </div>
                                             <div className="space-y-5">
-                                                <label className="text-[11px] font-black uppercase tracking-[0.5em] text-gray-700 ml-10 italic">Diagnostics Laboratory Link</label>
+                                                <label className="text-[11px] font-black uppercase tracking-[0.5em] text-slate-400 ml-10 italic">Diagnostics Laboratory Link</label>
                                                 <div className="relative group/input">
                                                     <div className="absolute -inset-0.5 bg-hospital-secondary opacity-0 group-focus-within/input:opacity-10 blur-xl transition-all rounded-[35px]"></div>
                                                     <Sparkles size={22} className="absolute left-8 top-1/2 -translate-y-1/2 text-hospital-secondary/50 group-focus-within/input:text-hospital-secondary transition-colors" />
                                                     <input value={config.diagnosticsPhone} onChange={(e) => setConfig({...config, diagnosticsPhone: e.target.value})} type="text"
-                                                        className="w-full bg-[#050505] border border-white/10 p-8 pl-20 rounded-[35px] font-black text-lg outline-none focus:border-hospital-secondary/40 transition-all text-white shadow-inner italic" />
+                                                        className="w-full bg-slate-50 border border-black/5 p-8 pl-20 rounded-[35px] font-black text-lg outline-none focus:border-hospital-secondary transition-all text-slate-900 shadow-inner italic" />
                                                 </div>
                                             </div>
                                         </div>
                                         
-                                        <div className="p-12 bg-white/5 rounded-[50px] border border-white/10 shadow-4xl flex flex-col md:flex-row items-center justify-between gap-10 hover:border-white/20 transition-all">
+                                        <div className="p-12 bg-slate-50 rounded-[50px] border border-black/5 shadow-inner flex flex-col md:flex-row items-center justify-between gap-10 hover:border-black/10 transition-all">
                                             <div className="flex items-center gap-10">
-                                                <div className="w-24 h-24 bg-white/5 border border-white/10 flex items-center justify-center text-hospital-primary rounded-[35px] shadow-4xl relative overflow-hidden group/ico">
+                                                <div className="w-24 h-24 bg-white border border-black/5 flex items-center justify-center text-hospital-primary rounded-[35px] shadow-md relative overflow-hidden group/ico">
                                                     <div className="absolute inset-x-0 bottom-0 top-0 bg-hospital-primary opacity-0 group-hover/ico:opacity-10 transition-opacity"></div>
                                                     <Globe size={40} className="group-hover:rotate-[360deg] transition-all duration-1000" />
                                                 </div>
                                                 <div>
-                                                    <p className="font-black text-white text-3xl italic tracking-tighter leading-none mb-3">CORE SERVICE ACCESSIBILITY</p>
-                                                    <p className="text-[11px] font-black text-gray-700 uppercase tracking-[0.4em] mt-1 italic">Real-Time Visibility Matrix Synchronization</p>
+                                                    <p className="font-black text-slate-900 text-3xl italic tracking-tighter leading-none mb-3">CORE SERVICE ACCESSIBILITY</p>
+                                                    <p className="text-[11px] font-black text-slate-400 uppercase tracking-[0.4em] mt-1 italic">Real-Time Visibility Matrix Synchronization</p>
                                                 </div>
                                             </div>
                                             <button onClick={async () => {
                                                 const payload = { ...config, showCoreServices: !config.showCoreServices };
                                                 await updateConfig(payload);
                                                 setConfig(payload);
-                                            }} className={`w-28 h-14 rounded-full p-2 transition-all relative shadow-4xl ${config.showCoreServices ? 'bg-hospital-primary shadow-neon-primary' : 'bg-[#111]'}`}>
-                                                <motion.div animate={{ x: config.showCoreServices ? 56 : 0 }} className="w-10 h-10 bg-black rounded-full shadow-4xl flex items-center justify-center">
-                                                    <Zap size={14} className={config.showCoreServices ? 'text-hospital-primary' : 'text-gray-900'} />
+                                            }} className={`w-28 h-14 rounded-full p-2 transition-all relative shadow-inner ${config.showCoreServices ? 'bg-hospital-primary' : 'bg-slate-200'}`}>
+                                                <motion.div animate={{ x: config.showCoreServices ? 56 : 0 }} className="w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center">
+                                                    <Zap size={14} className={config.showCoreServices ? 'text-hospital-primary' : 'text-slate-400'} />
                                                 </motion.div>
                                             </button>
                                         </div>
 
-                                        <div className="p-12 bg-white/5 rounded-[50px] border border-white/10 shadow-4xl flex flex-col md:flex-row items-center justify-between gap-10 hover:border-white/20 transition-all">
+                                        <div className="p-12 bg-slate-50 rounded-[50px] border border-black/5 shadow-inner flex flex-col md:flex-row items-center justify-between gap-10 hover:border-black/10 transition-all">
                                             <div className="flex items-center gap-10">
-                                                <div className="w-24 h-24 bg-white/5 border border-white/10 flex items-center justify-center text-hospital-secondary rounded-[35px] shadow-4xl relative overflow-hidden group/ico">
+                                                <div className="w-24 h-24 bg-white border border-black/5 flex items-center justify-center text-hospital-secondary rounded-[35px] shadow-md relative overflow-hidden group/ico">
                                                     <div className="absolute inset-x-0 bottom-0 top-0 bg-hospital-secondary opacity-0 group-hover/ico:opacity-10 transition-opacity"></div>
                                                     <Zap size={40} className="group-hover:scale-125 transition-transform duration-1000" />
                                                 </div>
                                                 <div>
-                                                    <p className="font-black text-white text-3xl italic tracking-tighter leading-none mb-3">PAYMENT GATEWAY DEPLOYMENT</p>
-                                                    <p className="text-[11px] font-black text-gray-700 uppercase tracking-[0.4em] mt-1 italic">Allow Online Transactions vs Manual Only</p>
+                                                    <p className="font-black text-slate-900 text-3xl italic tracking-tighter leading-none mb-3">PAYMENT GATEWAY DEPLOYMENT</p>
+                                                    <p className="text-[11px] font-black text-slate-400 uppercase tracking-[0.4em] mt-1 italic">Allow Online Transactions vs Manual Only</p>
                                                 </div>
                                             </div>
                                             <div className="flex items-center gap-6">
-                                                <span className="text-[10px] font-black uppercase tracking-widest text-gray-500 italic">{config.allowOnlinePayment ? 'ONLINE + COUNTER' : 'ONLY COUNTER'}</span>
+                                                <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 italic">{config.allowOnlinePayment ? 'ONLINE + COUNTER' : 'ONLY COUNTER'}</span>
                                                 <button onClick={async () => {
                                                     const payload = { ...config, allowOnlinePayment: !config.allowOnlinePayment };
                                                     await updateConfig(payload);
                                                     setConfig(payload);
-                                                }} className={`w-28 h-14 rounded-full p-2 transition-all relative shadow-4xl ${config.allowOnlinePayment ? 'bg-hospital-secondary shadow-neon-secondary' : 'bg-[#111]'}`}>
-                                                    <motion.div animate={{ x: config.allowOnlinePayment ? 56 : 0 }} className="w-10 h-10 bg-black rounded-full shadow-4xl flex items-center justify-center">
-                                                        <Plus size={14} className={config.allowOnlinePayment ? 'text-hospital-secondary' : 'text-gray-900'} />
+                                                }} className={`w-28 h-14 rounded-full p-2 transition-all relative shadow-inner ${config.allowOnlinePayment ? 'bg-hospital-secondary' : 'bg-slate-200'}`}>
+                                                    <motion.div animate={{ x: config.allowOnlinePayment ? 56 : 0 }} className="w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center">
+                                                        <Plus size={14} className={config.allowOnlinePayment ? 'text-hospital-secondary' : 'text-slate-200'} />
                                                     </motion.div>
                                                 </button>
                                             </div>
                                         </div>
 
-                                        <div className="p-12 bg-white/5 border border-white/5 rounded-[45px] space-y-6">
-                                            <div className="flex items-center gap-4 text-white/20">
+                                        <div className="p-12 bg-slate-50 border border-black/5 rounded-[45px] space-y-6">
+                                            <div className="flex items-center gap-4 text-slate-200">
                                                 <ShieldCheck size={20}/>
                                                 <p className="text-[10px] font-black uppercase tracking-[0.5em] italic">Security Protocol Level: Institutional Max</p>
                                             </div>
-                                            <p className="text-xs font-serif italic text-white/30 leading-relaxed uppercase tracking-widest text-center">Config Changes Are Distributed Across All Regional Edge Nodes Globally within 100ms.</p>
+                                            <p className="text-xs font-serif italic text-slate-300 leading-relaxed uppercase tracking-widest text-center">Config Changes Are Distributed Across All Regional Edge Nodes Globally within 100ms.</p>
                                         </div>
                                     </div>
                                     
-                                    <button onClick={() => updateConfig(config)} className="mt-20 w-full bg-white text-black py-10 rounded-[45px] font-black text-[13px] uppercase tracking-[0.8em] shadow-4xl hover:bg-hospital-primary transition-all active:scale-95 italic group/publish relative overflow-hidden">
+                                    <button onClick={() => updateConfig(config)} className="mt-20 w-full bg-[#0f172a] text-white py-10 rounded-[45px] font-black text-[13px] uppercase tracking-[0.8em] shadow-xl hover:bg-hospital-primary transition-all active:scale-95 italic group/publish relative overflow-hidden">
                                         <span className="relative z-10 flex items-center justify-center gap-6">PUBLISH ARCHITECTURE CHANGES</span>
                                         <div className="absolute inset-x-0 bottom-0 top-0 bg-hospital-primary opacity-0 group-hover/publish:opacity-100 transition-opacity"></div>
                                     </button>
                                 </div>
                                 <div className="text-center italic mt-16 pb-12">
-                                     <p className="text-[10px] font-black text-gray-800 uppercase tracking-[1em] mb-4">Sri Kamala Operating System v4.0.2</p>
-                                     <div className="flex justify-center gap-8 text-[9px] font-black text-gray-700 uppercase tracking-[0.4em]">
+                                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-[1em] mb-4">Sri Kamala Operating System v4.0.2</p>
+                                     <div className="flex justify-center gap-8 text-[9px] font-black text-slate-300 uppercase tracking-[0.4em]">
                                         <span>Latency: 14ms</span>
-                                        <div className="w-1 h-1 bg-gray-900 rounded-full mt-1"></div>
+                                        <div className="w-1 h-1 bg-slate-200 rounded-full mt-1"></div>
                                         <span>Encryption: AES-256</span>
-                                        <div className="w-1 h-1 bg-gray-900 rounded-full mt-1"></div>
+                                        <div className="w-1 h-1 bg-slate-200 rounded-full mt-1"></div>
                                         <span>Core: Autonomous</span>
                                      </div>
                                 </div>
@@ -740,8 +740,8 @@ const AdminDashboard = () => {
             </main>
             
             {/* Ambient Background elements */}
-            <div className="fixed top-[20%] left-[-10%] opacity-[0.02] text-white rotate-12 pointer-events-none scale-150"><Scissors size={400} strokeWidth={1}/></div>
-             <div className="fixed bottom-[20%] right-[-10%] opacity-[0.02] text-hospital-secondary -rotate-12 pointer-events-none scale-150"><Syringe size={400} strokeWidth={1}/></div>
+            <div className="fixed top-[20%] left-[-10%] opacity-5 text-slate-100 rotate-12 pointer-events-none scale-150"><Scissors size={400} strokeWidth={1}/></div>
+             <div className="fixed bottom-[20%] right-[-10%] opacity-5 text-hospital-secondary/20 -rotate-12 pointer-events-none scale-150"><Syringe size={400} strokeWidth={1}/></div>
 
         </div>
     );
