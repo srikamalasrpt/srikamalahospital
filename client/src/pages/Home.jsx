@@ -7,6 +7,7 @@ import PatientReviews from '../components/PatientReviews';
 import Doctors from '../components/Doctors';
 import ClinicalPulseDashboard from '../components/ClinicalPulseDashboard';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Plus, Heart } from 'lucide-react';
 import { getConfig } from '../utils/api';
 
 function Home() {
@@ -35,7 +36,7 @@ function Home() {
 
   return (
     <div className="bg-[#050505] selection:bg-hospital-primary selection:text-black overflow-hidden pb-40 relative">
-      
+
       {/* Dynamic Midnight Layering Matrix */}
       <div className="fixed inset-0 z-0 pointer-events-none opacity-20 overflow-hidden">
         <div className="absolute top-[15%] right-[20%] w-[500px] h-[500px] bg-hospital-primary/10 rounded-full blur-[140px] animate-pulse-soft"></div>
@@ -43,32 +44,32 @@ function Home() {
       </div>
 
       <main className="relative z-10">
-        
+
         {/* Core Sections Matrix */}
         <section id="hero" className="relative group">
-            <Hero />
+          <Hero />
         </section>
 
         <section id="dashboard" className="relative -mt-24 group">
-            <ClinicalPulseDashboard />
+          <ClinicalPulseDashboard />
         </section>
 
         <section id="actions" className="relative group">
-            <QuickActionGrid />
+          <QuickActionGrid />
         </section>
 
         <section id="doctors" className="relative group">
-            <Doctors />
+          <Doctors />
         </section>
 
         <section id="registry" className="relative group">
-            <OPBoard />
+          <OPBoard />
         </section>
 
         {showCoreServices && (
-          <motion.div 
-            initial={{ opacity: 0, y: 50 }} 
-            whileInView={{ opacity: 1, y: 0 }} 
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 1.2 }}
             id="services"
@@ -78,7 +79,7 @@ function Home() {
         )}
 
         <section id="reviews" className="relative group mt-20">
-            <PatientReviews />
+          <PatientReviews />
         </section>
 
       </main>
