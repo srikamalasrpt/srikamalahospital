@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS public.appointments (
     reason TEXT,
     appointment_date TEXT,
     payment_status TEXT DEFAULT 'Pending' CHECK (payment_status IN ('Paid', 'Not Paid', 'Pending', 'Pay at Hospital')),
+    image TEXT,
     created_at TIMESTAMPTZ DEFAULT now(),
     updated_at TIMESTAMPTZ DEFAULT now()
 );

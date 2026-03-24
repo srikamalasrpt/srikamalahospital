@@ -616,7 +616,19 @@ IMPORTANT:
                         .from('appointments')
                         .insert(bookingData)
                         .select();
-                    if (error) throw error;
+                    
+                    if (error) {
+                        console.error("Supabase Primary Insert Error:", error.message);
+                        // Fallback: Try inserting without image if it fails (likely missing column or size issue)
+                        const { image, ...sanitizedData } = bookingData;
+                        const { data: fallbackData, error: fallbackError } = await supabase
+                            .from('appointments')
+                            .insert(sanitizedData)
+                            .select();
+                        
+                        if (fallbackError) throw fallbackError;
+                        return res.json({ success: true, appointment: fallbackData[0], token: finalToken });
+                    }
                     res.json({ success: true, appointment: data[0], token: finalToken });
                 } else {
                     res.json({ success: true, appointment: bookingData, token: finalToken });
