@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Calendar, User, Phone, Clipboard, Heart, Send, CheckCircle2, ChevronRight, Activity, Clock, ShieldCheck, Zap, Plus, Scissors, Syringe, Droplets } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { bookAppointment } from '../utils/api';
+import { bookAppointment, getConfig } from '../utils/api';
 
 const BookingForm = () => {
   const [formData, setFormData] = useState({
@@ -18,6 +18,15 @@ const BookingForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [aiInput, setAiInput] = useState('');
   const [isAiLoading, setIsAiLoading] = useState(false);
+  const [allowOnlinePayment, setAllowOnlinePayment] = useState(true);
+
+  React.useEffect(() => {
+    getConfig().then(resp => {
+      if (resp.data.success) {
+        setAllowOnlinePayment(resp.data.config.allowOnlinePayment ?? true);
+      }
+    });
+  }, []);
 
   const departments = [
     { en: 'General Medicine', te: 'జనరల్ మెడిసిన్' },
@@ -230,11 +239,11 @@ const BookingForm = () => {
 
                     <div className="space-y-4 mb-12">
                         <label className="text-[11px] font-black uppercase tracking-[0.4em] text-gray-500 ml-2 font-['Noto_Sans_Telugu'] text-xs opacity-60 italic">చెల్లింపు విధానం (Payment Protocol)</label>
-                        <div className="grid grid-cols-2 gap-5">
-                           {['Online', 'ఆసుపత్రిలో'].map(m => (
+                        <div className={`grid ${allowOnlinePayment ? 'grid-cols-2' : 'grid-cols-1'} gap-5`}>
+                           {['Online', 'ఆసుపత్రిలో'].filter(m => allowOnlinePayment || m !== 'Online').map(m => (
                                <button key={m} type="button" onClick={() => setFormData({...formData, paymentMethod: m})}
                                   className={`p-5 rounded-2xl font-black text-[10px] uppercase tracking-[0.5em] border transition-all active:scale-95 ${formData.paymentMethod === m ? 'border-hospital-primary bg-hospital-primary text-black shadow-neon-primary' : 'border-white/10 text-gray-600 hover:border-white/20 hover:text-white'}`}>
-                                  {m === 'Online' ? 'Secure Link' : 'Node Entry'}
+                                  {m === 'Online' ? 'Secure Link' : 'Node Entry (Counter)'}
                                </button>
                            ))}
                         </div>

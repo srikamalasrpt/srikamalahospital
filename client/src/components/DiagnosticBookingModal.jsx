@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { X, Calendar, User, Phone, Send, CheckCircle2, FlaskRound as Flask, CreditCard } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { bookAppointment } from '../utils/api';
+import { bookAppointment, getConfig } from '../utils/api';
 
 const DiagnosticBookingModal = ({ test, isOpen, onClose }) => {
   const [formData, setFormData] = useState({
@@ -15,6 +15,15 @@ const DiagnosticBookingModal = ({ test, isOpen, onClose }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [token, setToken] = useState('');
+  const [allowOnlinePayment, setAllowOnlinePayment] = useState(true);
+
+  React.useEffect(() => {
+    getConfig().then(resp => {
+      if (resp.data.success) {
+        setAllowOnlinePayment(resp.data.config.allowOnlinePayment ?? true);
+      }
+    });
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -124,11 +133,11 @@ const DiagnosticBookingModal = ({ test, isOpen, onClose }) => {
                          </div>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-3 pt-2">
-                         {['Online', 'ఆసుపత్రిలో'].map(m => (
+                      <div className={`grid ${allowOnlinePayment ? 'grid-cols-2' : 'grid-cols-1'} gap-3 pt-2`}>
+                         {['Online', 'ఆసుపత్రిలో'].filter(m => allowOnlinePayment || m !== 'Online').map(m => (
                             <button key={m} type="button" onClick={() => setFormData({...formData, paymentMethod: m})}
                                className={`p-3 rounded-xl font-black text-[8px] uppercase tracking-widest border transition-all flex items-center justify-center gap-2 ${formData.paymentMethod === m ? 'border-hospital-primary bg-hospital-primary/5 text-hospital-primary' : 'border-gray-50 text-gray-300'}`}>
-                               <span className="font-['Noto_Sans_Telugu'] tracking-normal lowercase text-[10px]">{m}</span> {m === 'Online' ? '(UPI)' : '(At Center)'}
+                               <span className="font-['Noto_Sans_Telugu'] tracking-normal lowercase text-[10px]">{m}</span> {m === 'Online' ? '(UPI Link)' : '(Counter Node)'}
                             </button>
                          ))}
                       </div>

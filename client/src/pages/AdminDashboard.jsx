@@ -399,7 +399,7 @@ const AdminDashboard = () => {
                                                         <p className="text-2xl font-black text-white leading-none italic glow-text">{p.visits.length}</p>
                                                         <p className="text-[9px] font-black uppercase text-gray-700 tracking-[0.2em] italic">Logs</p>
                                                     </div>
-                                                </motion.button>
+                                                </button>
                                             ))}
                                         </div>
                                    </div>
@@ -682,6 +682,31 @@ const AdminDashboard = () => {
                                                     <Zap size={14} className={config.showCoreServices ? 'text-hospital-primary' : 'text-gray-900'} />
                                                 </motion.div>
                                             </button>
+                                        </div>
+
+                                        <div className="p-12 bg-white/5 rounded-[50px] border border-white/10 shadow-4xl flex flex-col md:flex-row items-center justify-between gap-10 hover:border-white/20 transition-all">
+                                            <div className="flex items-center gap-10">
+                                                <div className="w-24 h-24 bg-white/5 border border-white/10 flex items-center justify-center text-hospital-secondary rounded-[35px] shadow-4xl relative overflow-hidden group/ico">
+                                                    <div className="absolute inset-x-0 bottom-0 top-0 bg-hospital-secondary opacity-0 group-hover/ico:opacity-10 transition-opacity"></div>
+                                                    <Zap size={40} className="group-hover:scale-125 transition-transform duration-1000" />
+                                                </div>
+                                                <div>
+                                                    <p className="font-black text-white text-3xl italic tracking-tighter leading-none mb-3">PAYMENT GATEWAY DEPLOYMENT</p>
+                                                    <p className="text-[11px] font-black text-gray-700 uppercase tracking-[0.4em] mt-1 italic">Allow Online Transactions vs Manual Only</p>
+                                                </div>
+                                            </div>
+                                            <div className="flex items-center gap-6">
+                                                <span className="text-[10px] font-black uppercase tracking-widest text-gray-500 italic">{config.allowOnlinePayment ? 'ONLINE + COUNTER' : 'ONLY COUNTER'}</span>
+                                                <button onClick={async () => {
+                                                    const payload = { ...config, allowOnlinePayment: !config.allowOnlinePayment };
+                                                    await updateConfig(payload);
+                                                    setConfig(payload);
+                                                }} className={`w-28 h-14 rounded-full p-2 transition-all relative shadow-4xl ${config.allowOnlinePayment ? 'bg-hospital-secondary shadow-neon-secondary' : 'bg-[#111]'}`}>
+                                                    <motion.div animate={{ x: config.allowOnlinePayment ? 56 : 0 }} className="w-10 h-10 bg-black rounded-full shadow-4xl flex items-center justify-center">
+                                                        <Plus size={14} className={config.allowOnlinePayment ? 'text-hospital-secondary' : 'text-gray-900'} />
+                                                    </motion.div>
+                                                </button>
+                                            </div>
                                         </div>
 
                                         <div className="p-12 bg-white/5 border border-white/5 rounded-[45px] space-y-6">
