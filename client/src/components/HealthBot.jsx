@@ -11,10 +11,169 @@ const HealthBot = () => {
     const [input, setInput] = useState('');
     const [isTyping, setIsTyping] = useState(false);
     const [bookingState, setBookingState] = useState({ active: false, step: 0, data: {} });
+    const [allowOnlinePayment, setAllowOnlinePayment] = useState(true);
     const [isDismissed, setIsDismissed] = useState(false);
     const scrollRef = useRef(null);
 
-    // ... (rest of the logic remains the same, but use isDismissed in the return)
+    const steps = [
+        { key: 'name', q: { te: "దయచేసి మీ పూర్తి పేరు తెలియజేయండి?", en: "Please provide your full name?" } },
+        { key: 'phone', q: { te: "మీ ఫోన్ నంబర్ ఎంత?", en: "What is your phone number?" } },
+        { key: 'age', q: { te: "మీ వయస్సు ఎంత?", en: "How old are you?" } },
+        { key: 'gender', q: { te: "మీ లింగం? (పురుషుడు/స్త్రీ/ఇతరము)", en: "Your gender? (Male/Female/Other)" } },
+        { key: 'department', q: { te: "ఏ విభాగంలో పరీక్ష చేయించుకోవాలి? (General, Cardiology, etc.)", en: "Which department would you like to visit? (General, Cardiology, etc.)" } },
+        { key: 'paymentMethod', q: { te: "చెల్లింపు విధానం? (Online/ఆసుపత్రిలో)", en: "Payment Method? (Online/Pay at Hospital)" } }
+    ].filter(s => s.key !== 'paymentMethod' || allowOnlinePayment);
+
+    useEffect(() => {
+        getConfig().then(resp => {
+            if (resp.data.success) {
+                setAllowOnlinePayment(resp.data.config.allowOnlinePayment ?? true);
+            }
+        });
+    }, []);
+
+    useEffect(() => {
+        if (isOpen && messages.length === 0) {
+            const welcome = {
+                id: 'welcome',
+                text: language === 'te' 
+                    ? "శ్రీ కమల హాస్పిటల్ క్లినికల్ AI కోర్ కు స్వాగతం. నేను డాక్టర్ కమల. మీకు ఎలా సహాయపడగలను?" 
+                    : "Welcome to Sri Kamala Hospital Clinical AI Core. I am Dr. Kamala. How can I assist you today?",
+                sender: 'bot',
+                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            };
+            setMessages([welcome]);
+        }
+    }, [language, isOpen]);
+
+    useEffect(() => {
+        if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }, [messages, isTyping]);
+
+    const toggleLanguage = () => setLanguage(prev => prev === 'te' ? 'en' : 'te');
+
+    const generateReceiptPDF = (data) => {
+        const doc = new jsPDF();
+        
+        doc.setFillColor(248, 250, 252);
+        doc.rect(0, 0, 210, 297, 'F');
+        
+        doc.setTextColor(0, 204, 204);
+        doc.setFontSize(24);
+        doc.text("SRI KAMALA HOSPITAL", 105, 40, { align: 'center' });
+        
+        doc.setTextColor(15, 23, 42);
+        doc.setFontSize(10);
+        doc.text("CLINICAL APPOINTMENT RECEIPT", 105, 50, { align: 'center' });
+        
+        doc.setDrawColor(15, 23, 42, 0.1);
+        doc.line(20, 60, 190, 60);
+        
+        const details = [
+            ["Token", data.token || "PENDING"],
+            ["Patient", data.name],
+            ["Phone", data.phone],
+            ["Age/Gender", `${data.age} / ${data.gender}`],
+            ["Clinical Node", data.department],
+            ["Payment", data.paymentMethod || "Institutional Credit"],
+            ["Verification", "VERIFIED BY AI CORE"]
+        ];
+        
+        let y = 80;
+        details.forEach(([label, val]) => {
+            doc.setTextColor(100, 116, 139);
+            doc.text(label.toUpperCase(), 30, y);
+            doc.setTextColor(15, 23, 42);
+            doc.text(String(val), 120, y);
+            y += 15;
+        });
+        
+        doc.setTextColor(0, 204, 204, 0.5);
+        doc.setFontSize(8);
+        doc.text("Powered by Kamala AI Core v5.0", 105, 250, { align: 'center' });
+        
+        doc.save(`Receipt_${data.name}.pdf`);
+    };
+
+    const handleSend = async (manualText = null) => {
+        const text = manualText || input;
+        if (!text.trim()) return;
+
+        const userMsg = { id: Date.now(), text, sender: 'user', time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) };
+        setMessages(prev => [...prev, userMsg]);
+        setInput('');
+
+        if (bookingState.active) {
+            const currentStep = steps[bookingState.step];
+            const updatedData = { ...bookingState.data, [currentStep.key]: text };
+            
+            if (bookingState.step < steps.length - 1) {
+                setBookingState({ ...bookingState, step: bookingState.step + 1, data: updatedData });
+                const nextQ = steps[bookingState.step + 1].q[language];
+                setTimeout(() => {
+                    setMessages(prev => [...prev, { id: Date.now() + 1, text: nextQ, sender: 'bot', time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]);
+                }, 500);
+            } else {
+                try {
+                    const bookingPayload = { ...updatedData };
+                    if (!allowOnlinePayment) bookingPayload.paymentMethod = 'ఆసుపత్రిలో';
+                    const resp = await bookAppointment(bookingPayload);
+                    const finalData = resp.data.success ? resp.data.appointment : { ...bookingPayload, token: 'ERR-NODE' };
+                    
+                    const successMsg = language === 'te'
+                        ? `నియామకం విజయవంతంగా బుక్ చేయబడింది! మీ టోకెన్: ${finalData.token}. రసీదును డౌన్‌లోడ్ చేయండి.`
+                        : `Appointment booked! Your Token: ${finalData.token}. Access receipt below.`;
+                    
+                    setMessages(prev => [...prev, { 
+                        id: Date.now() + 2, 
+                        text: successMsg, 
+                        sender: 'bot', 
+                        isReceipt: true, 
+                        receiptData: finalData,
+                        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) 
+                    }]);
+                    setBookingState({ active: false, step: 0, data: {} });
+                } catch (err) {
+                    setMessages(prev => [...prev, { id: Date.now() + 2, text: "Clinical link error. Please try again.", sender: 'bot' }]);
+                } finally {
+                    setIsTyping(false);
+                }
+            }
+            return;
+        }
+
+        setIsTyping(true);
+        try {
+            const { chatWithAI } = await import('../utils/api');
+            const lText = text.toLowerCase();
+            if (lText.includes('book') || lText.includes('appointment') || lText.includes('బుకింగ్') || lText.includes('అపాయింట్‌మెంట్')) {
+                setBookingState({ active: true, step: 0, data: {} });
+                setTimeout(() => {
+                    setMessages(prev => [...prev, { 
+                        id: Date.now() + 1, 
+                        text: language === 'te' ? "మీ నియామకం ప్రారంభిస్తున్నాను. మీ పేరు చెప్పండి?" : "Starting booking. May I have your name?", 
+                        sender: 'bot', 
+                        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) 
+                    }]);
+                    setIsTyping(false);
+                }, 600);
+                return;
+            }
+
+            const prompt = `You are Dr. Kamala, AI focal point for Sri Kamala Hospital. 
+                Respond in ${language === 'te' ? 'Telugu' : 'English'}. Concise info (1-2 sentences). 
+                User: "${text}"`;
+            
+            const resp = await chatWithAI(prompt);
+            const botResponse = resp.data.success ? resp.data.response : "NODE ERROR: Link severed.";
+            setMessages(prev => [...prev, { id: Date.now() + 1, text: botResponse, sender: 'bot', time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]);
+        } catch (err) {
+            setMessages(prev => [...prev, { id: Date.now() + 1, text: "Link failure.", sender: 'bot' }]);
+        } finally {
+            setIsTyping(false);
+        }
+    };
+
     const handleDismiss = (e) => {
         e.stopPropagation();
         setIsDismissed(true);
