@@ -35,60 +35,60 @@ function Home() {
   };
 
   return (
-    <div className="bg-white min-h-screen selection:bg-hospital-primary selection:text-white overflow-hidden pb-40 relative font-['Plus_Jakarta_Sans']">
+    <div className="bg-hospital-surface min-h-screen selection:bg-hospital-primary selection:text-white overflow-hidden grainy font-['Plus_Jakarta_Sans']">
 
-      {/* Dynamic Clinical Matrix */}
+      {/* Global Clinical Accents */}
       <div className="fixed inset-0 z-0 pointer-events-none opacity-20 overflow-hidden">
-        <div className="absolute top-[10%] right-[10%] w-[600px] h-[600px] bg-hospital-primary/10 rounded-full blur-[160px] animate-pulse-soft"></div>
-        <div className="absolute bottom-[20%] left-[5%] w-[500px] h-[500px] bg-hospital-secondary/5 rounded-full blur-[140px] animate-pulse-soft" style={{ animationDelay: '3s' }}></div>
+        <div className="absolute top-[10%] right-[10%] w-[800px] h-[800px] bg-hospital-primary/5 rounded-full blur-[160px] animate-pulse-soft"></div>
+        <div className="absolute bottom-[20%] left-[5%] w-[600px] h-[600px] bg-hospital-secondary/5 rounded-full blur-[140px] animate-pulse-soft" style={{ animationDelay: '3s' }}></div>
       </div>
 
       <main className="relative z-10">
 
         {/* Global Hub Architecture */}
-        <section id="hero" className="relative group">
+        <section id="hero" className="relative">
           <Hero />
         </section>
 
-        <section id="actions" className="relative -mt-32 md:-mt-48 px-6 group z-20">
+        <section id="actions" className="relative -mt-40 md:-mt-64 px-6 z-20">
           <QuickActionGrid />
         </section>
 
-        <section id="dashboard" className="relative py-20 group">
+        <section id="dashboard" className="relative py-32">
           <ClinicalPulseDashboard />
         </section>
 
         {showCoreServices && (
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, scale: 0.98 }}
+            whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 1 }}
+            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
             id="services"
           >
             <FeatureGrid />
           </motion.div>
         )}
 
-        <section id="doctors" className="relative py-20 group">
+        <section id="doctors" className="relative py-32">
           <Doctors />
         </section>
 
-        <section id="registry" className="relative py-20 group">
+        <section id="registry" className="relative py-32">
           <div className="container mx-auto max-w-7xl px-6">
             <OPBoard />
           </div>
         </section>
 
-        <section id="reviews" className="relative py-20 group">
+        <section id="reviews" className="relative py-32">
           <PatientReviews />
         </section>
 
       </main>
 
       {/* Global Decor Nodes */}
-      <div className="absolute top-1/2 left-[-10%] opacity-[0.02] text-slate-900 pointer-events-none -rotate-12"><Plus size={400} /></div>
-      <div className="absolute bottom-[10%] right-[-10%] opacity-[0.02] text-hospital-secondary pointer-events-none rotate-12"><Heart size={350} /></div>
+      <div className="fixed top-1/2 left-[-15%] opacity-[0.01] text-hospital-dark pointer-events-none -rotate-12 scale-[2]"><Plus size={400} /></div>
+      <div className="fixed bottom-[10%] right-[-15%] opacity-[0.01] text-hospital-secondary pointer-events-none rotate-12 scale-[2]"><Heart size={350} /></div>
 
     </div>
   );

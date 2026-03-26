@@ -28,67 +28,94 @@ const Doctors = () => {
   };
 
   return (
-    <section id="doctors" className="py-32 bg-white relative overflow-hidden flex justify-center items-center">
-      
-      {/* Background Decor - Clinical Mesh */}
-      <div className="absolute top-0 right-0 w-[50%] h-full bg-hospital-secondary/5 rounded-bl-[300px] z-0 pointer-events-none animate-pulse-soft"></div>
-      <div className="absolute bottom-0 left-0 w-[40%] h-[40%] bg-hospital-primary/5 rounded-tr-[200px] z-0 pointer-events-none"></div>
+    <section id="doctors" className="py-32 bg-hospital-surface relative overflow-hidden grainy">
+
+      {/* Background Decor */}
+      <div className="absolute top-0 right-0 w-[50%] h-full bg-hospital-secondary/5 rounded-bl-[300px] pointer-events-none animate-pulse-soft"></div>
+      <div className="absolute bottom-0 left-0 w-[40%] h-[40%] bg-hospital-primary/5 rounded-tr-[200px] pointer-events-none"></div>
 
       <div className="container mx-auto max-w-7xl relative z-10 px-6">
-        <div className="flex flex-col lg:flex-row items-end justify-between mb-24 gap-10 text-center lg:text-left">
-          <div className="max-w-2xl text-left">
-            <div className="flex items-center gap-4 mb-10 justify-center lg:justify-start text-left">
-              <div className="w-14 h-14 rounded-2xl bg-white border border-black/5 flex items-center justify-center text-hospital-primary shadow-xl"><HeartPulse size={28} /></div>
-              <div>
-                <h4 className="text-[11px] font-black uppercase tracking-[0.5em] text-hospital-secondary">Elite Clinical Specialists // నిపుణులు</h4>
-                <p className="text-[8px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1 italic">Global Medical Board Certified</p>
+        <div className="flex flex-col lg:flex-row items-end justify-between mb-24 gap-12 text-left">
+          <div className="max-w-2xl">
+            <div className="flex items-center gap-6 mb-10">
+              <div className="w-16 h-16 rounded-[2rem] bg-white border border-white/80 flex items-center justify-center text-hospital-primary shadow-premium">
+                <HeartPulse size={32} />
+              </div>
+              <div className="space-y-1">
+                <h4 className="text-overline">Clinical Leadership // v4.0</h4>
+                <p className="text-[10px] font-bold text-hospital-slate/40 uppercase tracking-[0.2em] italic">Board Certified Specialists</p>
               </div>
             </div>
-            <h2 className="text-3xl lg:text-6xl font-black text-slate-900 mb-6 leading-tight font-['Noto_Sans_Telugu'] tracking-tighter text-left">శిక్షణ పొందిన <span className="text-hospital-secondary italic font-serif text-left">వైద్యులు</span>.</h2>
-            <p className="text-[10px] uppercase font-bold text-slate-300 tracking-[0.6em] mb-10 leading-none text-left">Elite Panel of Certified Medical Pioneers</p>
-            <p className="text-[13px] font-medium text-slate-500 max-w-sm font-serif italic text-left">"అత్యున్నత స్థాయి వైద్య నైపుణ్యం మరియు ఖచ్చితమైన చికిత్స కోసం మా నిపుణులను సంప్రదించండి."</p>
+            <h2 className="heading-clinical text-left">
+              Medical <span className="text-hospital-secondary italic">Specialists</span>
+            </h2>
+            <p className="font-['Noto_Sans_Telugu'] text-2xl text-hospital-slate mt-4 font-bold">శిక్షణ పొందిన ప్రొఫెషనల్ వైద్యులు</p>
           </div>
-          <button className="animated-button group relative px-12 py-6 bg-[#0f172a] text-white rounded-[35px] font-black text-[10px] uppercase tracking-[0.4em] shadow-xl overflow-hidden active:scale-95 transition-all text-left">
-            <span className="relative z-10 flex items-center gap-3 font-['Noto_Sans_Telugu'] text-lg font-bold tracking-normal group-hover:text-white transition-colors text-left">అపాయింట్‌మెంట్ <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" /></span>
+          <button className="btn-clinical h-20 px-12 group rounded-[2.5rem]">
+            <span className="flex items-center gap-4">
+              RESERVE CONSULTATION
+              <ChevronRight size={20} className="group-hover:translate-x-2 transition-transform" />
+            </span>
           </button>
         </div>
 
         <div className="flex justify-center">
           {doctors.map((doctor, index) => (
-            <motion.div key={index} whileHover={{ y: -15 }} transition={{ duration: 1, type: 'spring' }}
-                className="group bg-white rounded-[60px] border border-black/5 shadow-2xl overflow-hidden flex flex-col items-center p-14 max-w-md transition-all hover:shadow-4xl active:scale-95 text-left">
-                
-                <div className="w-full aspect-square bg-slate-50 rounded-[45px] overflow-hidden mb-12 border border-black/5 shadow-inner relative text-left">
-                   <div className="absolute inset-0 bg-hospital-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 text-left"></div>
-                   <img src={doctor.img} alt={doctor.name} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-115 text-left" />
-                   <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-xl px-5 py-2.5 rounded-full text-[9px] font-black uppercase tracking-widest text-hospital-primary shadow-lg border border-black/5 italic text-left">
-                      ⭐ 5.0 Precision Rating // అగ్రశ్రేణి
-                   </div>
+            <motion.div key={index}
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+              className="premium-card group p-12 flex flex-col items-center max-w-lg border-white/80 bg-white/40"
+            >
+
+              <div className="w-full aspect-[4/5] bg-hospital-surface rounded-[3rem] overflow-hidden mb-12 border border-white/60 shadow-clinical relative">
+                <div className="absolute inset-0 bg-gradient-to-t from-hospital-dark/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                <img src={doctor.img} alt={doctor.name} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
+                <div className="absolute top-8 left-8 glass-panel px-6 py-3 rounded-full shadow-premium border-white/80">
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-hospital-primary italic">
+                    ⭐ 5.0 Rating // నిపుణుడు
+                  </span>
+                </div>
+              </div>
+
+              <div className="text-center w-full space-y-6">
+                <div className="space-y-2">
+                  <h5 className="font-black text-3xl text-hospital-dark group-hover:text-hospital-primary transition-colors font-['Noto_Sans_Telugu'] tracking-tighter">
+                    {doctor.name}
+                  </h5>
+                  <p className="text-sm font-black uppercase tracking-[0.3em] text-hospital-primary italic">
+                    {doctor.qualification}
+                  </p>
                 </div>
 
-                <div className="text-center w-full text-left">
-                    <h5 className="font-black text-2xl text-slate-900 mb-2 group-hover:text-hospital-primary tracking-tighter transition-colors font-['Noto_Sans_Telugu'] text-left">{doctor.name}</h5>
-                    <p className="text-[11px] font-black uppercase tracking-[0.3em] text-hospital-primary mb-4 underline decoration-dotted decoration-hospital-primary/30 text-left">{doctor.qualification}</p>
-                    <p className="text-[9px] font-black text-slate-300 group-hover:text-slate-500 mb-10 uppercase tracking-[0.6em] text-left">TS Council Reg: {doctor.regNo} / Active</p>
-                    
-                    <div className="flex gap-4 justify-center mb-12 text-left">
-                       <div className="px-6 py-3 bg-slate-50 border border-black/5 rounded-full text-[9px] font-black text-slate-400 uppercase tracking-widest transition-colors group-hover:bg-white group-hover:text-hospital-secondary text-left">{doctor.exp} CLINICAL EXPERTISE</div>
-                    </div>
+                <p className="text-[10px] font-black text-hospital-slate/40 uppercase tracking-[0.5em] pb-6 border-b border-black/5">
+                  REG: {doctor.regNo} // ACTIVE STATUS
+                </p>
 
-                    <button onClick={() => handleConsult(doctor)} className="animated-button w-full p-6 rounded-[30px] bg-[#0f172a] text-white font-black text-[10px] uppercase tracking-[0.4em] transition-all flex items-center justify-center gap-4 hover:bg-hospital-secondary hover:text-white shadow-xl text-left">
-                       <MessageSquare size={20} className="animate-pulse" /> సంప్రదించండి // CONSULT NOW
-                    </button>
+                <div className="flex justify-center">
+                  <div className="px-8 py-4 glass-panel border-white/80 rounded-[2rem] text-[10px] font-black text-hospital-slate/60 uppercase tracking-[0.4em] group-hover:text-hospital-secondary transition-colors italic">
+                    {doctor.exp} CLINICAL EXPERIENCE
+                  </div>
                 </div>
+
+                <button onClick={() => handleConsult(doctor)} className="btn-clinical w-full h-24 group rounded-[2.5rem] bg-hospital-dark text-white hover:bg-hospital-secondary shadow-premium">
+                  <span className="flex items-center justify-center gap-5">
+                    <MessageSquare size={24} className="group-hover:scale-110 transition-transform" />
+                    CONSULT RESIDENCY // సంప్రదించండి
+                  </span>
+                </button>
+              </div>
             </motion.div>
           ))}
         </div>
       </div>
       <DoctorConsultationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} doctor={selectedDoctor} />
 
-       {/* Local Decorations */}
-       <div className="absolute top-1/4 left-[5%] opacity-[0.03] text-slate-900 rotate-45 text-left"><Scissors size={150} /></div>
-       <div className="absolute bottom-1/4 right-[5%] opacity-[0.03] text-hospital-secondary -rotate-45 text-left"><Syringe size={150} /></div>
-       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 opacity-[0.01] text-slate-900 text-left"><Plus size={300} /></div>
+      {/* Local Decorations */}
+      <div className="absolute top-1/4 left-[-10%] opacity-[0.01] text-hospital-dark pointer-events-none -rotate-12"><Activity size={300} /></div>
+      <div className="absolute bottom-1/4 right-[-10%] opacity-[0.01] text-hospital-primary pointer-events-none rotate-12"><Award size={280} /></div>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 opacity-[0.01] text-hospital-slate pointer-events-none"><Plus size={400} /></div>
 
     </section>
   );

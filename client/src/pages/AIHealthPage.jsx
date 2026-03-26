@@ -137,64 +137,70 @@ const AIHealthPage = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-slate-50 pt-32 pb-24 px-6 relative overflow-hidden text-left">
-            
-            {/* Background matrices */}
+        <div className="min-h-screen bg-hospital-surface pt-40 pb-24 px-6 relative overflow-hidden grainy font-['Plus_Jakarta_Sans']">
+
+            {/* Clinical Accents */}
             <div className="fixed inset-0 z-0 pointer-events-none opacity-20 overflow-hidden">
-                <div className="absolute top-[10%] right-[10%] w-[800px] h-[800px] bg-hospital-primary/5 rounded-full blur-[140px] animate-pulse-soft"></div>
-                <div className="absolute bottom-[10%] left-[10%] w-[600px] h-[600px] bg-hospital-secondary/3 rounded-full blur-[120px] animate-pulse-soft" style={{ animationDelay: '2s' }}></div>
+                <div className="absolute top-[10%] right-[10%] w-[800px] h-[800px] bg-hospital-primary/5 rounded-full blur-[160px] animate-pulse-soft"></div>
+                <div className="absolute bottom-[20%] left-[5%] w-[600px] h-[600px] bg-hospital-secondary/5 rounded-full blur-[140px] animate-pulse-soft" style={{ animationDelay: '3s' }}></div>
             </div>
 
             <div className="container mx-auto max-w-7xl relative z-10">
 
-                {/* Cybernetic Header */}
-                <div className="flex flex-col items-center text-center mb-24 text-left">
-                    <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="mb-10 relative">
-                        <div className="w-24 h-24 bg-white border border-black/5 rounded-[30px] flex items-center justify-center text-hospital-primary shadow-xl group-hover:rotate-12 transition-transform relative overflow-hidden">
-                            <Cpu size={40} className="animate-spin-slow relative z-10" />
-                            <div className="absolute -top-2 -right-2 w-8 h-8 bg-hospital-secondary text-white rounded-xl flex items-center justify-center shadow-lg animate-pulse">
-                               <Sparkles size={16} />
+                {/* Cybernetic Leaderhood */}
+                <div className="flex flex-col items-center mb-24">
+                    <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="mb-12 relative group">
+                        <div className="w-28 h-28 bg-white border border-white/80 rounded-[2.5rem] flex items-center justify-center text-hospital-primary shadow-premium group-hover:rotate-[15deg] transition-all duration-700 relative overflow-hidden">
+                            <Cpu size={48} className="animate-spin-slow relative z-10" />
+                            <div className="absolute -top-3 -right-3 w-10 h-10 bg-hospital-secondary text-white rounded-2xl flex items-center justify-center shadow-premium animate-pulse">
+                                <Sparkles size={20} />
                             </div>
                         </div>
                     </motion.div>
 
-                    <h1 className="text-5xl lg:text-8xl font-black text-slate-900 mb-6 leading-none tracking-tighter italic text-left uppercase">
-                       AI CLINICAL <span className="text-hospital-secondary">CORE</span>
+                    <h1 className="text-6xl lg:text-9xl font-black text-hospital-dark mb-6 leading-none tracking-tighter italic uppercase text-center">
+                        AI CLINICAL <span className="text-hospital-secondary">CORE</span>
                     </h1>
-                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.8em] italic text-left">Authorized Sri Kamala Autonomous Diagnostics v4.0.2</p>
+                    <div className="flex items-center gap-4">
+                        <div className="w-2 h-2 rounded-full bg-hospital-secondary"></div>
+                        <p className="text-overline">Autonomous Diagnostics Layer v4.0.2</p>
+                    </div>
                 </div>
 
-                {/* Tactical Navigation Sidebar-style for desktop, grid for mobile */}
-                <div className="flex flex-wrap justify-center gap-3 mb-20 text-left">
+                {/* Tactical Navigation Link Matrix */}
+                <div className="flex flex-wrap justify-center gap-4 mb-24">
                     {tabs.map(tab => (
                         <button key={tab.id} onClick={() => setActiveTab(tab.id)}
-                            className={`px-6 py-4 rounded-[25px] font-black text-[9px] uppercase tracking-[0.4em] transition-all flex items-center gap-3 border h-14 active:scale-95 italic ${activeTab === tab.id ? 'bg-[#0f172a] text-white border-transparent shadow-xl' : 'bg-white text-slate-400 border-black/5 hover:border-black/20 hover:text-slate-900 shadow-md'}`}>
-                            <tab.icon size={16} className={activeTab === tab.id ? "text-hospital-secondary" : ""} />
+                            className={`h-20 px-10 rounded-[2.5rem] font-black text-[10px] uppercase tracking-[0.4em] transition-all flex items-center gap-4 border active:scale-95 italic ${activeTab === tab.id ? 'bg-hospital-dark text-white border-transparent shadow-premium' : 'bg-white/40 text-hospital-slate/40 border-white/80 hover:border-hospital-primary hover:text-hospital-dark hover:bg-white/60 shadow-clinical'}`}>
+                            <tab.icon size={24} className={activeTab === tab.id ? "text-hospital-secondary" : "opacity-40"} />
                             <span>{tab.label}</span>
                         </button>
                     ))}
                 </div>
 
                 {/* Processing Terminal */}
-                <div className="bg-white border border-black/5 rounded-[50px] min-h-[750px] shadow-xl relative overflow-hidden group text-left">
-                    <div className="absolute top-0 left-0 w-full h-12 bg-slate-50 border-b border-black/5 flex items-center justify-between px-8 text-left">
-                        <div className="flex gap-2 text-left">
-                             {[1,2,3].map(i => <div key={i} className={`w-2 h-2 rounded-full ${i===1?'bg-hospital-primary':i===2?'bg-hospital-secondary':'bg-slate-200'}`}></div>)}
+                <div className="premium-card bg-white/40 border-white/80 min-h-[800px] shadow-premium relative overflow-hidden group">
+                    <div className="absolute top-0 left-0 w-full h-16 bg-white/60 border-b border-black/5 flex items-center justify-between px-10">
+                        <div className="flex gap-3">
+                            {[1, 2, 3].map(i => <div key={i} className={`w-2.5 h-2.5 rounded-full ${i === 1 ? 'bg-hospital-primary' : i === 2 ? 'bg-hospital-secondary' : 'bg-hospital-slate/20'}`}></div>)}
                         </div>
-                        <p className="text-[8px] font-black text-slate-300 uppercase tracking-[0.5em] italic text-left">Accessing Node: {activeTab.toUpperCase()} // Clinical Protocol Enabled</p>
+                        <div className="flex items-center gap-4">
+                            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                            <p className="text-[10px] font-black text-hospital-primary uppercase tracking-[0.4em] italic">Accessing Node: {activeTab.toUpperCase()} // Clinical Protocol Enabled</p>
+                        </div>
                     </div>
 
-                    <div className="p-10 lg:p-20 pt-24 h-full">
+                    <div className="p-10 lg:p-24 pt-32 h-full">
                         <AnimatePresence mode="wait">
                             {activeTab === 'clinical' && (
                                 <motion.div key="clinical" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
                                     <div className="max-w-4xl mx-auto space-y-16">
-                                         <div className="flex items-center gap-6 justify-center lg:justify-start text-left">
-                                           <div className="w-16 h-16 rounded-2xl bg-white border border-black/5 flex items-center justify-center text-hospital-secondary shadow-lg"><Activity size={28} /></div>
-                                           <div className="text-left">
-                                               <h2 className="text-3xl font-black italic tracking-tighter text-slate-900 uppercase text-left font-['Noto_Sans_Telugu']">లక్షణ <span className="text-hospital-secondary">విశ్లేషణ</span></h2>
-                                               <p className="text-[9px] font-black text-hospital-primary uppercase tracking-[0.4em] mt-2 italic text-left">Neural Logic Matrix Synchronization Active</p>
-                                           </div>
+                                        <div className="flex items-center gap-6 justify-center lg:justify-start text-left">
+                                            <div className="w-16 h-16 rounded-2xl bg-white border border-black/5 flex items-center justify-center text-hospital-secondary shadow-lg"><Activity size={28} /></div>
+                                            <div className="text-left">
+                                                <h2 className="text-3xl font-black italic tracking-tighter text-slate-900 uppercase text-left font-['Noto_Sans_Telugu']">లక్షణ <span className="text-hospital-secondary">విశ్లేషణ</span></h2>
+                                                <p className="text-[9px] font-black text-hospital-primary uppercase tracking-[0.4em] mt-2 italic text-left">Neural Logic Matrix Synchronization Active</p>
+                                            </div>
                                         </div>
                                         <AISymptomChecker />
                                     </div>
@@ -203,7 +209,7 @@ const AIHealthPage = () => {
 
                             {activeTab === 'ocr' && (
                                 <motion.div key="ocr" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.02 }} className="grid grid-cols-1 lg:grid-cols-2 gap-20">
-                                     <div className="space-y-10 text-left">
+                                    <div className="space-y-10 text-left">
                                         <h2 className="text-4xl font-black tracking-tighter text-slate-900 uppercase italic text-left font-['Noto_Sans_Telugu']">రిపోర్ట్ <span className="text-hospital-secondary">విశ్లేషణ</span></h2>
                                         <p className="text-[13px] text-slate-500 italic leading-relaxed font-serif text-left">"Upload clinical documentation for molecular de-coding. Our neural nodes explain prescriptions and lab results."</p>
                                         <label className="block w-full h-[400px] border border-black/5 border-dashed rounded-[40px] bg-slate-50 hover:bg-slate-100 transition-all cursor-pointer relative overflow-hidden group/scan text-left">
@@ -233,14 +239,14 @@ const AIHealthPage = () => {
                                         {ocrResult ? (
                                             <div className="space-y-10">
                                                 <div className="grid grid-cols-2 gap-8">
-                                                    {[{l:'DATE',v:ocrResult.date},{l:'PATIENT',v:ocrResult.patient}].map((d,i)=>(
+                                                    {[{ l: 'DATE', v: ocrResult.date }, { l: 'PATIENT', v: ocrResult.patient }].map((d, i) => (
                                                         <div key={i} className="p-8 bg-white border border-black/5 rounded-3xl italic shadow-sm">
                                                             <p className="text-[9px] text-slate-400 uppercase tracking-widest mb-3 font-black">{d.l}</p>
                                                             <p className="text-lg font-black text-slate-900">{d.v || 'DETECTED'}</p>
                                                         </div>
                                                     ))}
                                                 </div>
-                                                 <div className="space-y-8 text-left">
+                                                <div className="space-y-8 text-left">
                                                     <div className="text-left">
                                                         <p className="text-[9px] text-hospital-primary uppercase tracking-widest mb-4 font-black italic text-left">CLINICAL EXPLANATION [TELUGU]</p>
                                                         <p className="text-2xl font-black leading-tight font-['Noto_Sans_Telugu'] text-slate-900 italic text-left">{ocrResult.explanation_te}</p>
@@ -254,7 +260,7 @@ const AIHealthPage = () => {
                                         ) : (
                                             <div className="flex-1 flex flex-col items-center justify-center opacity-[0.05] text-slate-900">
                                                 <Brain size={150} strokeWidth={1} />
-                                                <p className="text-[11px] font-black uppercase tracking-[0.8em] mt-12 text-center italic">Neural sensors offline<br/>Awaiting visual input</p>
+                                                <p className="text-[11px] font-black uppercase tracking-[0.8em] mt-12 text-center italic">Neural sensors offline<br />Awaiting visual input</p>
                                             </div>
                                         )}
                                     </div>
@@ -263,13 +269,13 @@ const AIHealthPage = () => {
 
                             {activeTab === 'bmi' && (
                                 <motion.div key="bmi" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95 }} className="grid grid-cols-1 lg:grid-cols-2 gap-24">
-                                     <div className="space-y-12 text-left">
+                                    <div className="space-y-12 text-left">
                                         <div className="text-left">
                                             <h2 className="text-4xl font-black mb-6 tracking-tighter text-slate-900 italic uppercase text-left font-['Noto_Sans_Telugu']">బయోమెట్రిక్ <span className="text-hospital-secondary">విభాగం</span></h2>
                                             <p className="text-[13px] text-slate-500 font-medium italic font-serif leading-relaxed text-left">"Metabolic de-coding suite. Physical metrics are processed through our clinical activity matrix."</p>
                                         </div>
                                         <div className="grid grid-cols-2 gap-8 text-left">
-                                            {[{l:'Height (cm)',p:'175',v:bmi.height,k:'height'},{l:'Weight (kg)',p:'70',v:bmi.weight,k:'weight'}].map(f=>(
+                                            {[{ l: 'Height (cm)', p: '175', v: bmi.height, k: 'height' }, { l: 'Weight (kg)', p: '70', v: bmi.weight, k: 'weight' }].map(f => (
                                                 <div key={f.k} className="space-y-4 text-left">
                                                     <label className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400 ml-4 italic text-left">{f.l}</label>
                                                     <input value={f.v} onChange={e => setBmi(p => ({ ...p, [f.k]: e.target.value }))} type="number" placeholder={f.p}
@@ -281,7 +287,7 @@ const AIHealthPage = () => {
                                             className="animated-button w-full py-6 bg-[#0f172a] text-white rounded-[30px] font-black text-[10px] uppercase tracking-[0.5em] shadow-lg hover:bg-hospital-primary transition-all flex items-center justify-center gap-4 active:scale-95 text-left italic">
                                             {isBmiLoading ? <div className="w-6 h-6 border-4 border-white/20 border-t-white rounded-full animate-spin"></div> : <><Zap size={20} /> Initiate Profile Calc</>}
                                         </button>
-                                         {bmi.result && (
+                                        {bmi.result && (
                                             <div className="p-10 bg-slate-50 rounded-[40px] border border-black/5 relative overflow-hidden text-center shadow-lg text-left">
                                                 <div className="absolute top-0 left-0 w-full h-1.5" style={{ backgroundColor: bmi.result.color }}></div>
                                                 <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.6em] mb-8 italic text-left">Core Metabolic Index Detected</p>
@@ -290,7 +296,7 @@ const AIHealthPage = () => {
                                             </div>
                                         )}
                                     </div>
-                                     <div className="bg-slate-50 rounded-[45px] p-10 border border-black/5 shadow-lg flex flex-col min-h-[550px] text-left">
+                                    <div className="bg-slate-50 rounded-[45px] p-10 border border-black/5 shadow-lg flex flex-col min-h-[550px] text-left">
                                         <div className="flex items-center gap-4 mb-14 text-left">
                                             <div className="w-2 h-2 bg-hospital-primary rounded-full animate-pulse shadow-lg"></div>
                                             <h4 className="text-[9px] font-black uppercase tracking-[0.6em] text-slate-300 italic text-left">Clinical Logistics Matrix</h4>
@@ -309,7 +315,7 @@ const AIHealthPage = () => {
                                         ) : (
                                             <div className="flex-1 flex flex-col items-center justify-center opacity-[0.1] text-left">
                                                 <Activity size={150} strokeWidth={1} className="text-slate-900" />
-                                                <p className="text-[11px] font-black uppercase tracking-[0.8em] mt-12 text-center text-slate-900 italic text-left">Biometric core idle<br/>Sync metrics to activate</p>
+                                                <p className="text-[11px] font-black uppercase tracking-[0.8em] mt-12 text-center text-slate-900 italic text-left">Biometric core idle<br />Sync metrics to activate</p>
                                             </div>
                                         )}
                                     </div>
@@ -324,15 +330,15 @@ const AIHealthPage = () => {
                                     </div>
                                     <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-10">
                                         <div className="p-10 bg-white border border-black/5 rounded-[40px] shadow-lg text-center group text-left">
-                                           <div className="w-16 h-16 bg-hospital-secondary shadow-lg rounded-full flex items-center justify-center text-white mx-auto mb-8 group-hover:scale-110 transition-transform text-left">
+                                            <div className="w-16 h-16 bg-hospital-secondary shadow-lg rounded-full flex items-center justify-center text-white mx-auto mb-8 group-hover:scale-110 transition-transform text-left">
                                                 <Heart size={32} className="animate-pulse" />
-                                           </div>
-                                           <h4 className="text-lg font-black text-slate-900 italic mb-4 text-left">HEART RATE SYNC</h4>
-                                           <p className="text-[9px] text-slate-400 uppercase tracking-[0.4em] mb-8 italic text-left">Passive Surveillance Active</p>
-                                           <button onClick={checkHeartHealth} disabled={isHeartLoading}
+                                            </div>
+                                            <h4 className="text-lg font-black text-slate-900 italic mb-4 text-left">HEART RATE SYNC</h4>
+                                            <p className="text-[9px] text-slate-400 uppercase tracking-[0.4em] mb-8 italic text-left">Passive Surveillance Active</p>
+                                            <button onClick={checkHeartHealth} disabled={isHeartLoading}
                                                 className="animated-button w-full py-5 bg-[#0f172a] text-white rounded-[25px] font-black text-[10px] uppercase tracking-[0.5em] hover:bg-hospital-secondary transition-all active:scale-95 italic text-left">
                                                 {isHeartLoading ? "Processing Pulse..." : "Assess Cardiac Node"}
-                                           </button>
+                                            </button>
                                         </div>
                                         <div className="bg-slate-50 border border-black/5 rounded-[40px] p-10 flex flex-col justify-center min-h-[350px] text-left">
                                             {heartRisk ? (
@@ -358,7 +364,7 @@ const AIHealthPage = () => {
                                         <p className="text-[9px] text-slate-400 italic leading-relaxed font-black uppercase tracking-widest text-left">Precision Dietary Architect v5.0</p>
                                         <div className="space-y-4 text-left">
                                             {['Clinical Diabetes Plan', 'Cardio Recovery Diet', 'Muscle Synthesis AI'].map(tag => (
-                                                <button key={tag} onClick={() => setDietInput(tag)} 
+                                                <button key={tag} onClick={() => setDietInput(tag)}
                                                     className="w-full p-5 text-left bg-slate-50 hover:bg-slate-100 rounded-2xl border border-black/5 hover:border-hospital-secondary/30 transition-all flex items-center justify-between group text-left">
                                                     <span className="text-[9px] font-black uppercase tracking-[0.5em] text-slate-400 group-hover:text-slate-900 transition-colors text-left">{tag}</span>
                                                     <ChevronRight size={16} className="text-slate-200 group-hover:text-hospital-secondary" />
@@ -406,11 +412,11 @@ const AIHealthPage = () => {
                                         <p className="text-[14px] text-slate-500 italic font-serif leading-relaxed text-left">"Verified molecular interaction analysis. Sri Kamala's pharmacology core identifies drug conflicts using global medical datasets."</p>
                                         <div className="space-y-8 text-left">
                                             <div className="flex flex-wrap gap-3 text-left">
-                                                {['Aspirin', 'Metformin', 'Statins'].map(t=>(
-                                                    <button key={t} onClick={()=>setDrugsInput(curr=>curr?`${curr}, ${t}`:t)} className="px-5 py-2 bg-slate-50 border border-black/5 rounded-2xl text-[9px] font-black uppercase tracking-widest text-hospital-primary hover:bg-slate-100 transition-all italic text-left">+ {t}</button>
+                                                {['Aspirin', 'Metformin', 'Statins'].map(t => (
+                                                    <button key={t} onClick={() => setDrugsInput(curr => curr ? `${curr}, ${t}` : t)} className="px-5 py-2 bg-slate-50 border border-black/5 rounded-2xl text-[9px] font-black uppercase tracking-widest text-hospital-primary hover:bg-slate-100 transition-all italic text-left">+ {t}</button>
                                                 ))}
                                             </div>
-                                            <textarea value={drugsInput} onChange={e=>setDrugsInput(e.target.value)} placeholder="Enter molecular compounds..."
+                                            <textarea value={drugsInput} onChange={e => setDrugsInput(e.target.value)} placeholder="Enter molecular compounds..."
                                                 className="w-full bg-slate-50 border border-black/5 p-8 rounded-[35px] text-[13px] font-black outline-none focus:border-hospital-primary transition-all text-slate-900 placeholder:text-slate-200 italic h-40 text-left" />
                                             <button onClick={checkDrugInteractions} disabled={isDrugsLoading}
                                                 className="animated-button w-full py-6 bg-[#0f172a] text-white rounded-[30px] font-black text-[10px] uppercase tracking-[0.5em] shadow-lg hover:bg-hospital-primary transition-all italic active:scale-95 text-left">
@@ -423,7 +429,7 @@ const AIHealthPage = () => {
                                             <div className="space-y-12 text-left">
                                                 <p className="text-2xl font-black font-['Noto_Sans_Telugu'] text-slate-900 italic leading-tight text-left">{drugsResult.split('|||')[0]}</p>
                                                 <div className="pt-10 border-t border-black/5 text-left">
-                                                     <p className="text-[13px] font-medium text-slate-500 italic font-serif h-auto transition-all text-left">"{drugsResult.split('|||')[1]}"</p>
+                                                    <p className="text-[13px] font-medium text-slate-500 italic font-serif h-auto transition-all text-left">"{drugsResult.split('|||')[1]}"</p>
                                                 </div>
                                             </div>
                                         ) : (
@@ -442,15 +448,15 @@ const AIHealthPage = () => {
                                         <h2 className="text-5xl font-black italic uppercase tracking-tighter text-slate-900 text-left font-['Noto_Sans_Telugu']">ఆరోగ్య <span className="text-hospital-secondary">సూచిక</span></h2>
                                         <p className="text-[14px] text-slate-500 font-serif italic max-w-sm text-left">"Autonomous clinical quotient assessment. Our neural net computes a holistic wellness index."</p>
                                         <div className="grid grid-cols-2 gap-8 text-left">
-                                            {[{l:'Patient Age',v:healthData.age,k:'age',t:'number'},{l:'Activity Level',v:healthData.activity,k:'activity',t:'select',o:['Sedentary','Moderate','Athlete']},{l:'Sleep Cycle',v:healthData.sleep,k:'sleep',t:'select',o:['< 5h','7-8h','9h+']},{l:'Diet Index',v:healthData.nutrition,k:'nutrition',t:'select',o:['Standard','Organic','Fast Food']}].map(f=>(
+                                            {[{ l: 'Patient Age', v: healthData.age, k: 'age', t: 'number' }, { l: 'Activity Level', v: healthData.activity, k: 'activity', t: 'select', o: ['Sedentary', 'Moderate', 'Athlete'] }, { l: 'Sleep Cycle', v: healthData.sleep, k: 'sleep', t: 'select', o: ['< 5h', '7-8h', '9h+'] }, { l: 'Diet Index', v: healthData.nutrition, k: 'nutrition', t: 'select', o: ['Standard', 'Organic', 'Fast Food'] }].map(f => (
                                                 <div key={f.k} className="space-y-4 text-left">
                                                     <label className="text-[9px] font-black uppercase tracking-[0.4em] text-slate-400 ml-4 italic text-left">{f.l}</label>
-                                                    {f.t==='select'?(
-                                                        <select value={f.v} onChange={e=>setHealthData({...healthData,[f.k]:e.target.value})} className="w-full bg-slate-50 border border-black/5 p-5 rounded-2xl text-[12px] font-black text-slate-900 outline-none cursor-pointer appearance-none italic text-left">
-                                                            {f.o.map(o=><option key={o} value={o} className="bg-white">{o}</option>)}
+                                                    {f.t === 'select' ? (
+                                                        <select value={f.v} onChange={e => setHealthData({ ...healthData, [f.k]: e.target.value })} className="w-full bg-slate-50 border border-black/5 p-5 rounded-2xl text-[12px] font-black text-slate-900 outline-none cursor-pointer appearance-none italic text-left">
+                                                            {f.o.map(o => <option key={o} value={o} className="bg-white">{o}</option>)}
                                                         </select>
-                                                    ):(
-                                                        <input value={f.v} onChange={e=>setHealthData({...healthData,[f.k]:e.target.value})} type={f.t} className="w-full bg-slate-50 border border-black/5 p-5 rounded-2xl text-xl font-black text-slate-900 outline-none italic placeholder:text-slate-200 text-left" placeholder="25" />
+                                                    ) : (
+                                                        <input value={f.v} onChange={e => setHealthData({ ...healthData, [f.k]: e.target.value })} type={f.t} className="w-full bg-slate-50 border border-black/5 p-5 rounded-2xl text-xl font-black text-slate-900 outline-none italic placeholder:text-slate-200 text-left" placeholder="25" />
                                                     )}
                                                 </div>
                                             ))}
@@ -461,7 +467,7 @@ const AIHealthPage = () => {
                                         </button>
                                     </div>
                                     <div className="bg-slate-50 rounded-[45px] p-16 border border-black/5 shadow-lg flex flex-col items-center justify-center text-center relative overflow-hidden group text-left">
-                                        <div className="absolute top-0 right-0 p-16 opacity-[0.05] group-hover:rotate-45 transition-transform duration-1000 text-slate-900"><Star size={240} strokeWidth={1}/></div>
+                                        <div className="absolute top-0 right-0 p-16 opacity-[0.05] group-hover:rotate-45 transition-transform duration-1000 text-slate-900"><Star size={240} strokeWidth={1} /></div>
                                         {healthScore ? (
                                             <div className="relative z-10 space-y-12 text-left">
                                                 <div className="p-12 rounded-[45px] bg-white border border-black/5 shadow-lg mx-auto flex flex-col items-center justify-center backdrop-blur-3xl group-hover:scale-105 transition-transform duration-700 text-left">
@@ -488,10 +494,10 @@ const AIHealthPage = () => {
                                     <div className="space-y-12 text-left">
                                         <h2 className="text-4xl font-black tracking-tighter text-slate-900 italic uppercase leading-none text-left font-['Noto_Sans_Telugu']">చర్మారోగ్య <span className="text-hospital-secondary">కేంద్రం</span></h2>
                                         <p className="text-[14px] text-slate-500 italic font-serif leading-relaxed text-left">"Autonomous computer vision for dermatological screening. Our CNN neural nodes analyze skin lesion morphology."</p>
-                                        <label 
-                                            onDragOver={e=>{e.preventDefault();setDragOver(true);}}
-                                            onDragLeave={()=>setDragOver(false)}
-                                            onDrop={e=>{e.preventDefault();setDragOver(false);analyzeSkin(e.dataTransfer.files[0]);}}
+                                        <label
+                                            onDragOver={e => { e.preventDefault(); setDragOver(true); }}
+                                            onDragLeave={() => setDragOver(false)}
+                                            onDrop={e => { e.preventDefault(); setDragOver(false); analyzeSkin(e.dataTransfer.files[0]); }}
                                             className={`block w-full h-[400px] border border-dashed rounded-[40px] transition-all relative overflow-hidden flex flex-col items-center justify-center text-center p-10 group/img-node text-left ${dragOver ? 'border-hospital-primary bg-hospital-primary/10' : 'border-black/5 bg-slate-50 hover:bg-slate-100'}`}>
                                             {isSkinLoading ? (
                                                 <div className="flex flex-col items-center gap-8 text-left">
@@ -512,19 +518,19 @@ const AIHealthPage = () => {
                                                     <p className="text-[9px] text-slate-400 uppercase tracking-[0.5em] font-black italic text-left">Advanced Pattern Recognition Node Active</p>
                                                 </div>
                                             )}
-                                            <input type="file" className="hidden" accept="image/*" onChange={e=>analyzeSkin(e.target.files[0])} />
+                                            <input type="file" className="hidden" accept="image/*" onChange={e => analyzeSkin(e.target.files[0])} />
                                         </label>
                                     </div>
                                     <div className="bg-slate-50 rounded-[45px] p-12 border border-black/5 shadow-lg flex flex-col justify-center relative overflow-hidden italic text-left">
-                                        <div className="absolute top-0 right-0 p-12 opacity-[0.05] -rotate-12 text-slate-900"><Dna size={240} strokeWidth={1}/></div>
+                                        <div className="absolute top-0 right-0 p-12 opacity-[0.05] -rotate-12 text-slate-900"><Dna size={240} strokeWidth={1} /></div>
                                         {skinResult ? (
                                             <div className="space-y-12 relative z-10 transition-all text-left">
                                                 <div className="text-left">
                                                     <p className="text-[9px] uppercase font-black tracking-[0.6em] text-slate-300 mb-6 italic underline underline-offset-[10px] decoration-black/5 text-left">Neural Detection Log</p>
                                                     <h4 className="text-5xl font-black text-slate-900 tracking-tighter mb-6 italic text-left">{skinResult.condition}</h4>
                                                     <div className="flex items-center gap-6 text-left">
-                                                        <div className={`px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.4em] italic shadow-sm border text-left`} 
-                                                            style={{ backgroundColor: `${skinResult.risk==='High'?'#ff3366':skinResult.risk==='Medium'?'#f59e0b':'#00cccc'}15`, color: skinResult.risk==='High'?'#ff3366':skinResult.risk==='Medium'?'#f59e0b':'#00cccc', borderColor: `${skinResult.risk==='High'?'#ff3366':skinResult.risk==='Medium'?'#f59e0b':'#00cccc'}30` }}>
+                                                        <div className={`px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.4em] italic shadow-sm border text-left`}
+                                                            style={{ backgroundColor: `${skinResult.risk === 'High' ? '#ff3366' : skinResult.risk === 'Medium' ? '#f59e0b' : '#00cccc'}15`, color: skinResult.risk === 'High' ? '#ff3366' : skinResult.risk === 'Medium' ? '#f59e0b' : '#00cccc', borderColor: `${skinResult.risk === 'High' ? '#ff3366' : skinResult.risk === 'Medium' ? '#f59e0b' : '#00cccc'}30` }}>
                                                             {skinResult.risk} Clinical Priority
                                                         </div>
                                                         <span className="text-2xl font-black text-slate-900 italic text-left">{skinResult.confidence}% <span className="text-[9px] text-slate-300 ml-2 text-left">CONFIDENCE</span></span>
@@ -555,25 +561,25 @@ const AIHealthPage = () => {
                 <div className="mt-32 flex flex-col md:flex-row items-center justify-between gap-12 py-12 border-t border-black/5 text-left">
                     <div className="flex flex-wrap items-center gap-8 justify-center text-left">
                         {[
-                            {i:<ShieldCheck size={20}/>,l:'HIPAA PROTOCOL v4.0',c:'text-hospital-primary'},
-                            {i:<Dna size={18}/>,l:'NVIDIA CLINICAL CORE',c:'text-hospital-secondary'},
-                            {i:<Cpu size={18}/>,l:'SRI KAMALA NEURAL NET',c:'text-slate-800'}
-                        ].map((b,idx)=>(
+                            { i: <ShieldCheck size={20} />, l: 'HIPAA PROTOCOL v4.0', c: 'text-hospital-primary' },
+                            { i: <Dna size={18} />, l: 'NVIDIA CLINICAL CORE', c: 'text-hospital-secondary' },
+                            { i: <Cpu size={18} />, l: 'SRI KAMALA NEURAL NET', c: 'text-slate-800' }
+                        ].map((b, idx) => (
                             <div key={idx} className="flex items-center gap-4 px-6 py-3 bg-white border border-black/5 rounded-2xl shadow-md group hover:border-black/20 transition-all text-left">
-                               <div className={`${b.c} group-hover:scale-110 transition-transform`}>{b.i}</div>
-                               <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.5em] italic text-left">{b.l}</span>
+                                <div className={`${b.c} group-hover:scale-110 transition-transform`}>{b.i}</div>
+                                <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.5em] italic text-left">{b.l}</span>
                             </div>
                         ))}
                     </div>
-                    <p className="text-[9px] font-bold text-slate-300 uppercase tracking-[0.4em] italic leading-tight text-center md:text-right">Autonomous Health Nexus © 2026 Sri Kamala Medical Group. <br/>All Logic Clusters Encrypted.</p>
+                    <p className="text-[9px] font-bold text-slate-300 uppercase tracking-[0.4em] italic leading-tight text-center md:text-right">Autonomous Health Nexus © 2026 Sri Kamala Medical Group. <br />All Logic Clusters Encrypted.</p>
                 </div>
 
             </div>
 
             {/* Ambient Background Elements */}
-            <div className="absolute top-[30%] left-[-15%] opacity-[0.02] text-slate-900 rotate-45 pointer-events-none scale-150"><Scissors size={400} strokeWidth={1}/></div>
-             <div className="absolute bottom-[30%] right-[-15%] opacity-[0.02] text-hospital-secondary -rotate-45 pointer-events-none scale-150"><Syringe size={400} strokeWidth={1}/></div>
-             <div className="absolute top-[10%] left-1/2 -translate-x-1/2 opacity-[0.01] text-slate-900 pointer-events-none"><Dna size={800} strokeWidth={0.5}/></div>
+            <div className="absolute top-[30%] left-[-15%] opacity-[0.02] text-slate-900 rotate-45 pointer-events-none scale-150"><Scissors size={400} strokeWidth={1} /></div>
+            <div className="absolute bottom-[30%] right-[-15%] opacity-[0.02] text-hospital-secondary -rotate-45 pointer-events-none scale-150"><Syringe size={400} strokeWidth={1} /></div>
+            <div className="absolute top-[10%] left-1/2 -translate-x-1/2 opacity-[0.01] text-slate-900 pointer-events-none"><Dna size={800} strokeWidth={0.5} /></div>
 
         </div>
     );

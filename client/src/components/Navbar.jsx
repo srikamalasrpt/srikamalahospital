@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Home, Calendar, Users, FlaskConical, ShoppingBag, Activity, ChevronRight, Menu, X, ArrowLeft, HeartPulse, Sparkles, Orbit, Plus, Droplets, Scissors, Pill, Syringe, Zap, ShieldCheck } from 'lucide-react';
+import { Home, Calendar, Users, FlaskConical, ShoppingBag, Activity, ChevronRight, Menu, X, HeartPulse, Sparkles, Orbit, Plus, Droplets, Scissors, Pill, Syringe, Zap, ShieldCheck } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -24,46 +24,49 @@ const Navbar = () => {
         { name: 'AI Health', link: '/ai-health', telugu: 'AI హెల్త్', icon: <Activity size={18} /> }
     ];
 
-    const isMainPage = location.pathname === '/';
-
     return (
-        <nav className={`fixed top-0 left-0 right-0 z-[500] transition-all duration-500 ${scrolled ? 'py-2' : 'py-3'}`}>
+        <nav className={`fixed top-0 left-0 right-0 z-[500] transition-all duration-700 ${scrolled ? 'py-4' : 'py-8'}`}>
             <div className="container mx-auto px-6 max-w-7xl">
-                <div className={`relative liquid-glass rounded-[40px] px-8 py-2.5 flex items-center justify-between border border-black/5 shadow-xl backdrop-blur-3xl transition-all ${scrolled ? 'bg-white/95 border-hospital-primary/10' : 'bg-white/40'}`}>
+                <div className={`relative glass-panel px-8 py-3.5 flex items-center justify-between border border-white/40 shadow-premium transition-all duration-700 ${scrolled ? 'scale-95' : 'scale-100'}`}>
                     
-                    {/* Logo Cluster */}
-                    <Link to="/" className="flex items-center gap-3 group">
-                        <div className="w-10 h-10 bg-white p-2 rounded-xl border border-black/5 group-hover:scale-110 group-hover:rotate-6 transition-all shadow-xl relative overflow-hidden">
-                             <img src="/logo.png" alt="Sri Kamala" className="w-full h-full object-contain relative z-10" />
+                    {/* Logo Section */}
+                    <Link to="/" className="flex items-center gap-4 group">
+                        <div className="relative">
+                            <div className="w-12 h-12 bg-hospital-dark p-2.5 rounded-2xl group-hover:rotate-[15deg] transition-all duration-500 shadow-2xl relative z-10 overflow-hidden">
+                                 <img src="/logo.png" alt="Sri Kamala" className="w-full h-full object-contain relative z-10 brightness-200" />
+                                 <div className="absolute inset-0 bg-gradient-to-br from-hospital-primary/20 to-transparent"></div>
+                            </div>
+                            <div className="absolute -inset-1 bg-hospital-primary/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full"></div>
                         </div>
-                        <div className="hidden sm:block">
-                            <h1 className="text-lg font-black text-slate-900 leading-none font-['Noto_Sans_Telugu'] tracking-tighter group-hover:text-hospital-primary transition-colors">శ్రీ కమల <span className="text-hospital-secondary italic">హాస్పిటల్</span></h1>
-                            <p className="text-[7px] font-black uppercase tracking-[0.4em] text-slate-400 mt-1 opacity-60">Integrated Clinical Hub</p>
+                        <div className="flex flex-col">
+                            <h1 className="text-xl font-black text-hospital-dark leading-none font-outfit uppercase tracking-tighter group-hover:text-hospital-primary transition-colors">
+                                Sri Kamala <span className="text-hospital-primary italic">Hospital</span>
+                            </h1>
+                            <div className="flex items-center gap-2 mt-1">
+                                <span className="w-2 h-2 rounded-full bg-hospital-secondary animate-pulse"></span>
+                                <p className="text-[8px] font-black uppercase tracking-[0.4em] text-hospital-slate/50">Integrated Hub</p>
+                            </div>
                         </div>
                     </Link>
 
-                    {/* Desktop Navigation */}
-                    <div className="hidden lg:flex items-center gap-3">
+                    {/* Navigation Items (Desktop) */}
+                    <div className="hidden lg:flex items-center gap-1.5 p-1.5 bg-hospital-surface/50 rounded-full border border-black/5">
                         {navItems.map((item) => {
                             const isActive = location.pathname === item.link;
                             return (
                                 <Link 
                                     key={item.name} 
                                     to={item.link} 
-                                    className="group relative flex flex-col items-center animated-button"
+                                    className="relative group"
                                 >
-                                    <div className={`flex flex-col items-center transition-all px-4 py-2 rounded-xl ${isActive ? 'bg-slate-100/50 border border-black/5 shadow-inner' : 'hover:bg-slate-100/30'}`}>
-                                        <span className={`font-['Noto_Sans_Telugu'] text-[15px] font-black leading-none mb-1 transition-colors ${isActive ? 'text-hospital-primary' : 'text-slate-600 group-hover:text-slate-900'}`}>
-                                            {item.telugu}
-                                        </span>
-                                        <span className={`text-[7px] font-black uppercase tracking-widest leading-none italic transition-opacity ${isActive ? 'text-hospital-secondary opacity-100' : 'text-slate-400 opacity-40 group-hover:opacity-100'}`}>
-                                            {item.name}
-                                        </span>
+                                    <div className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-500 flex items-center gap-2 ${isActive ? 'bg-white text-hospital-primary shadow-clinical' : 'text-hospital-slate hover:text-hospital-dark hover:bg-white/50'}`}>
+                                        <span className="font-outfit text-[11px] uppercase tracking-widest">{item.name}</span>
+                                        {isActive && <div className="w-1.5 h-1.5 rounded-full bg-hospital-primary shadow-glow"></div>}
                                     </div>
                                     {isActive && (
                                         <motion.div 
-                                            layoutId="nav-underline"
-                                            className="absolute -bottom-1 w-1 h-1 rounded-full bg-hospital-primary shadow-neon-primary"
+                                            layoutId="nav-bg"
+                                            className="absolute inset-0 bg-white rounded-full -z-10 shadow-clinical"
                                         />
                                     )}
                                 </Link>
@@ -71,32 +74,31 @@ const Navbar = () => {
                         })}
                     </div>
  
-                    {/* Actions & Mobile Trigger */}
-                    <div className="flex items-center gap-3">
-                        <a href="tel:+919948076665" className="animated-button hidden md:flex items-center gap-2 px-5 py-2.5 bg-slate-900 border border-black/5 rounded-full text-white hover:bg-hospital-secondary transition-all shadow-xl group">
-                            <HeartPulse size={14} className="group-hover:animate-pulse" />
-                            <span className="text-[9px] font-black uppercase tracking-widest italic">Emergency Hotlink</span>
-                        </a>
+                    {/* Actions */}
+                    <div className="flex items-center gap-4">
+                        <Link to="/book" className="btn-clinical hidden md:flex h-12 px-8">
+                            <span>Get Appointment</span>
+                        </Link>
                         
                         <button 
                             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                            className="lg:hidden w-11 h-11 rounded-2xl bg-white border border-black/5 flex items-center justify-center text-slate-900 hover:bg-slate-50 transition-all shadow-lg"
+                            className="lg:hidden w-12 h-12 rounded-2xl bg-hospital-dark text-white flex items-center justify-center hover:scale-105 transition-all shadow-xl"
                         >
-                            {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+                            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
                         </button>
                     </div>
 
                 </div>
             </div>
 
-            {/* Mobile Menu Overlay */}
+            {/* Mobile Navigation Overlay */}
             <AnimatePresence>
                 {mobileMenuOpen && (
                     <motion.div 
-                        initial={{ opacity: 0, y: -20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -20 }}
-                        className="lg:hidden absolute top-[100%] left-6 right-6 mt-4 p-8 bg-white border border-black/5 rounded-[40px] shadow-4xl z-[400]"
+                        initial={{ opacity: 0, scale: 0.95, y: -20 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.95, y: -20 }}
+                        className="lg:hidden absolute top-[100%] left-6 right-6 mt-4 p-8 glass-panel z-[400]"
                     >
                         <div className="grid grid-cols-2 gap-4">
                             {navItems.map((item) => (
@@ -104,17 +106,16 @@ const Navbar = () => {
                                     key={item.name} 
                                     to={item.link} 
                                     onClick={() => setMobileMenuOpen(false)}
-                                    className="flex flex-col items-center p-6 bg-slate-50/50 border border-black/5 rounded-3xl hover:border-hospital-primary transition-all group"
+                                    className="flex flex-col items-center p-6 bg-hospital-surface/50 border border-black/5 rounded-[2rem] hover:border-hospital-primary transition-all group"
                                 >
-                                    <div className="w-10 h-10 bg-white border border-black/5 rounded-xl flex items-center justify-center text-hospital-primary mb-3 shadow-md">{item.icon}</div>
-                                    <span className="font-['Noto_Sans_Telugu'] text-xl font-black text-slate-900 mb-1">{item.telugu}</span>
-                                    <span className="text-[8px] font-black uppercase tracking-widest text-slate-400">{item.name}</span>
+                                    <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-hospital-primary mb-4 shadow-clinical">{item.icon}</div>
+                                    <span className="font-outfit text-[10px] font-black uppercase tracking-widest text-hospital-dark">{item.name}</span>
                                 </Link>
                             ))}
                         </div>
-                        <div className="mt-6 pt-6 border-t border-slate-100">
-                            <a href="tel:+919948076665" className="w-full flex items-center justify-center gap-4 p-5 bg-[#0f172a] text-white rounded-3xl font-black text-[10px] uppercase tracking-widest shadow-xl">
-                                <HeartPulse size={18} /> CALL EMERGENCY HUB
+                        <div className="mt-8 pt-6 border-t border-black/5">
+                            <a href="tel:+919948076665" className="btn-clinical w-full">
+                                <span>Emergency Hub</span>
                             </a>
                         </div>
                     </motion.div>
