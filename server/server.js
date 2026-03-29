@@ -630,7 +630,7 @@ IMPORTANT:
                 console.error("Booking Clinical Error:", err);
                 res.status(500).json({ 
                     success: false, 
-                    message: "Clinic system busy.", 
+                    message: `Booking system failure: ${err.message || 'Unknown error'}`, 
                     clinical_debug: err.message,
                     stack: process.env.NODE_ENV === 'development' ? err.stack : undefined 
                 });
