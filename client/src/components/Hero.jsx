@@ -8,7 +8,7 @@ const Hero = () => {
         <section className="relative min-h-[75vh] flex items-center overflow-hidden bg-hospital-surface px-6 pt-24 grainy">
             <div className="container mx-auto max-w-5xl relative z-10">
                 <div className="grid lg:grid-cols-2 gap-12 items-center">
-                    
+
                     <div>
                         <motion.div
                             initial={{ opacity: 0, x: -20 }}
@@ -20,7 +20,7 @@ const Hero = () => {
                             <span className="font-['Noto_Sans_Telugu'] text-[10px] font-black text-hospital-slate uppercase">డిజిటల్ కేర్ సెంటర్ <span className="text-[8px] opacity-40 ml-1">Digital Care Center</span></span>
                         </motion.div>
 
-                        <motion.h1 
+                        <motion.h1
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.2, duration: 0.8 }}
@@ -31,7 +31,7 @@ const Hero = () => {
                             <div className="text-[14px] font-black uppercase tracking-[0.3em] text-hospital-dark/20 mt-2">Advanced Health</div>
                         </motion.h1>
 
-                        <motion.p 
+                        <motion.p
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.4, duration: 1 }}
@@ -41,7 +41,7 @@ const Hero = () => {
                             <span className="block text-[10px] opacity-40 uppercase tracking-widest mt-1">Modern Medicine - Compassionate Care</span>
                         </motion.p>
 
-                        <motion.div 
+                        <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.5, duration: 1 }}
@@ -55,7 +55,7 @@ const Hero = () => {
                             </p>
                         </motion.div>
 
-                        <motion.div 
+                        <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.6 }}
@@ -73,21 +73,21 @@ const Hero = () => {
                         </motion.div>
                     </div>
 
-                    <motion.div 
+                    <motion.div
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.3, duration: 1 }}
                         className="relative"
                     >
                         <div className="aspect-[4/5] rounded-[3rem] overflow-hidden shadow-premium border-4 border-white">
-                            <img 
-                                src="/premium_hospital_hero_1774547670024.png" 
-                                alt="Hospital" 
+                            <img
+                                src="/logo.png"
+                                alt="Hospital"
                                 loading="lazy"
                                 className="w-full h-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-1000"
                             />
                         </div>
-                        
+
                         <div className="absolute -bottom-6 -left-6 glass-panel p-6 shadow-xl border border-white/60">
                             <p className="font-['Noto_Sans_Telugu'] text-[10px] font-black text-hospital-primary uppercase leading-none mb-1">విజయవంతమైన రేటు <span className="text-[7px] opacity-40 ml-1">Success Rate</span></p>
                             <p className="text-3xl font-black text-hospital-dark">99.9%</p>

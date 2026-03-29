@@ -112,7 +112,7 @@ const HealthBot = () => {
                 const nextQ = steps[bookingState.step + 1].q[language];
                 setTimeout(() => {
                     setMessages(prev => [...prev, { id: Date.now() + 1, text: nextQ, sender: 'bot', time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]);
-                }, 500);
+                }, 300);
             } else {
                 try {
                     const bookingPayload = { ...updatedData };
@@ -149,14 +149,13 @@ const HealthBot = () => {
             if (lText.includes('book') || lText.includes('appointment') || lText.includes('బుకింగ్') || lText.includes('అపాయింట్‌మెంట్')) {
                 setBookingState({ active: true, step: 0, data: {} });
                 setTimeout(() => {
-                    setMessages(prev => [...prev, { 
-                        id: Date.now() + 1, 
+                    setMessages(prev => [...prev, { id: Date.now() + 1, 
                         text: language === 'te' ? "మీ నియామకం ప్రారంభిస్తున్నాను. మీ పేరు చెప్పండి?" : "Starting booking. May I have your name?", 
                         sender: 'bot', 
                         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) 
                     }]);
                     setIsTyping(false);
-                }, 600);
+                }, 400);
                 return;
             }
 
@@ -210,10 +209,10 @@ const HealthBot = () => {
             <AnimatePresence>
                 {isOpen && (
                     <motion.div 
-                        initial={{ opacity: 0, scale: 0.9, y: 20 }} 
+                        initial={{ opacity: 0, scale: 0.9, y: 30 }} 
                         animate={{ opacity: 1, scale: 1, y: 0 }} 
-                        exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                        className="w-[90vw] md:w-[320px] h-[70vh] md:h-[500px] bg-white rounded-[32px] shadow-4xl flex flex-col overflow-hidden border border-black/5 backdrop-blur-3xl relative">
+                        exit={{ opacity: 0, scale: 0.9, y: 30 }}
+                        className="w-[85vw] md:w-[280px] h-[60vh] md:h-[420px] bg-white rounded-[28px] shadow-4xl flex flex-col overflow-hidden border border-black/5 backdrop-blur-3xl relative">
                         
                         {/* Transparent Logo Background Decor */}
                         <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none select-none">
@@ -282,13 +281,13 @@ const HealthBot = () => {
                         </div>
 
                         {/* Input Core */}
-                        <div className="p-5 bg-slate-50 border-t border-black/5 space-y-3 relative z-10 text-left">
-                            <form onSubmit={(e) => { e.preventDefault(); handleSend(); }} className="flex items-center gap-3">
+                        <div className="p-4 bg-slate-50 border-t border-black/5 space-y-2 relative z-10 text-left">
+                            <form onSubmit={(e) => { e.preventDefault(); handleSend(); }} className="flex items-center gap-2">
                                 <div className="flex-1 relative group">
                                     <input type="text" placeholder={bookingState.active ? "Fill indexing..." : "Query Kamala..."} value={input} onChange={(e) => setInput(e.target.value)}
-                                        className="w-full bg-white border border-black/10 focus:border-hospital-primary px-5 py-4 rounded-[24px] outline-none text-[12px] font-bold transition-all text-slate-900 placeholder:text-slate-200 shadow-inner italic" />
-                                    <button type="submit" className={`absolute right-4 top-1/2 -translate-y-1/2 text-hospital-primary hover:scale-110 active:scale-90 transition-all ${!input.trim() ? 'opacity-20 pointer-events-none' : 'opacity-100'}`}>
-                                        <Send size={20} strokeWidth={2.5} />
+                                        className="w-full bg-white border border-black/5 focus:border-hospital-primary px-4 py-3 rounded-2xl outline-none text-[11px] font-bold transition-all text-slate-900 placeholder:text-slate-200 shadow-inner italic" />
+                                    <button type="submit" className={`absolute right-3 top-1/2 -translate-y-1/2 text-hospital-primary hover:scale-110 active:scale-90 transition-all ${!input.trim() ? 'opacity-20 pointer-events-none' : 'opacity-100'}`}>
+                                        <Send size={16} strokeWidth={2.5} />
                                     </button>
                                 </div>
                                 {bookingState.active && (
