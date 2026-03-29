@@ -10,7 +10,7 @@ import AISymptomChecker from '../components/AISymptomChecker';
 import { chatWithAI, analyzeVisionImage, analyzeOCR } from '../utils/api';
 
 const AIHealthPage = () => {
-    const [activeTab, setActiveTab] = useState('clinical');
+    const [activeTab, setActiveTab] = useState('ocr');
     const [ocrResult, setOcrResult] = useState(null);
     const [isOcrLoading, setIsOcrLoading] = useState(false);
     const [dietInput, setDietInput] = useState('');
@@ -126,7 +126,6 @@ const AIHealthPage = () => {
     };
 
     const tabs = [
-        { id: 'clinical', icon: Stethoscope, labelTe: 'అసిస్టెంట్', labelEn: 'Assistant' },
         { id: 'ocr', icon: Scan, labelTe: 'రిపోర్టులు', labelEn: 'Reports' },
         { id: 'bmi', icon: Activity, labelTe: 'బయోమెట్రిక్స్', labelEn: 'Biometrics' },
         { id: 'cardio', icon: Heart, labelTe: 'కార్డియాక్', labelEn: 'Cardiac' },
@@ -194,21 +193,6 @@ const AIHealthPage = () => {
 
                     <div className="p-10 lg:p-24 pt-32 h-full">
                         <AnimatePresence mode="wait">
-                            {activeTab === 'clinical' && (
-                                <motion.div key="clinical" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-                                    <div className="max-w-4xl mx-auto space-y-16">
-                                        <div className="flex items-center gap-6 justify-center lg:justify-start text-left">
-                                            <div className="w-16 h-16 rounded-2xl bg-white border border-black/5 flex items-center justify-center text-hospital-secondary shadow-lg"><Activity size={28} /></div>
-                                            <div className="text-left">
-                                                <h2 className="text-3xl font-black italic tracking-tighter text-slate-900 uppercase text-left font-['Noto_Sans_Telugu']">లక్షణ <span className="text-hospital-secondary">విశ్లేషణ</span></h2>
-                                                <p className="font-['Noto_Sans_Telugu'] text-[10px] font-bold text-hospital-primary uppercase tracking-[0.2em] mt-2 italic text-left">న్యూరల్ లాజిక్ మ్యాట్రిక్స్ సింక్రొనైజేషన్ <span className="text-[8px] opacity-40 ml-1 uppercase">Neural Logic Matrix</span></p>
-                                            </div>
-                                        </div>
-                                        <AISymptomChecker />
-                                    </div>
-                                </motion.div>
-                            )}
-
                             {activeTab === 'ocr' && (
                                 <motion.div key="ocr" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.02 }} className="grid grid-cols-1 lg:grid-cols-2 gap-20">
                                     <div className="space-y-10 text-left">
