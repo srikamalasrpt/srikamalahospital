@@ -1,5 +1,5 @@
 import React from 'react';
-import { Phone, MapPin, ShieldCheck, Award, Heart, Lock, FileText, HelpCircle, ArrowUpRight, Plus, Sparkles, Orbit, Scissors, Syringe, Droplets, Info } from 'lucide-react';
+import { Phone, MapPin, ShieldCheck, Award, Heart, Lock, FileText, HelpCircle, ArrowUpRight, Plus, Sparkles, Orbit, Scissors, Syringe, Droplets, Info, Activity } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
