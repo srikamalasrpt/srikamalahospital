@@ -573,32 +573,25 @@ IMPORTANT:
 
                 let finalToken = null;
                 if (supabase) {
-                    // Check for Merged History (Patient Name + Phone match)
-                    const { data: existing } = await supabase
-                        .from('appointments')
-                        .select('token')
-                        .eq('phone', phone)
-                        .ilike('name', name)
-                        .order('created_at', { ascending: true })
-                        .limit(1)
-                        .maybeSingle();
-
-                    if (existing) {
-                        finalToken = existing.token;
-                    } else {
-                        // Sequential Count
-                        const { count } = await supabase
+                    try {
+                        const { count, error: countErr } = await supabase
                             .from('appointments')
                             .select('*', { count: 'exact', head: true })
                             .ilike('token', `${prefix}%`);
 
-                        const nextNum = (count || 0) + 1;
-                        finalToken = `${prefix}-${nextNum.toString().padStart(4, '0')}`;
+                        if (!countErr) {
+                            const nextNum = (count || 0) + 1;
+                            // Add a small random suffix to prevent collisions on race conditions
+                            const suffix = Math.random().toString(36).substring(2, 5).toUpperCase();
+                            finalToken = `${prefix}-${nextNum.toString().padStart(4, '0')}-${suffix}`;
+                        }
+                    } catch (e) {
+                        console.warn("Token generation query failed, falling back to random.");
                     }
                 }
 
                 if (!finalToken) {
-                    finalToken = `${prefix}-${Math.floor(1000 + Math.random() * 9000)}`;
+                    finalToken = `${prefix}-${Math.floor(1000 + Math.random() * 9000)}-${Math.random().toString(36).substring(2, 5).toUpperCase()}`;
                 }
 
                 const bookingData = {
