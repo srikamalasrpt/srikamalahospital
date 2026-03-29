@@ -29,17 +29,17 @@ const Navbar = () => {
                 <div className={`glass-panel px-4 py-2 flex items-center justify-between transition-all duration-700 overflow-hidden ${scrolled ? 'rounded-[1.5rem] shadow-premium border-white/40 bg-white/60' : 'rounded-[2.5rem] shadow-none border-transparent bg-transparent'}`}>
                     
                     {/* Unique Logo Section */}
-                    <Link to="/" className="flex items-center gap-4 group relative py-1 px-2 rounded-2xl hover:bg-black/5 transition-all">
-                        <div className="relative w-10 h-10 bg-hospital-dark p-2 rounded-xl group-hover:rotate-[15deg] transition-all duration-500 shadow-lg">
+                    <Link to="/" className="flex items-center gap-3 group relative py-1 px-2 rounded-2xl hover:bg-black/5 transition-all">
+                        <div className="relative w-8 h-8 bg-hospital-dark p-1.5 rounded-lg group-hover:rotate-[15deg] transition-all duration-500 shadow-lg">
                              <img src="/logo.png" alt="Logo" className="w-full h-full object-contain brightness-200" />
-                             <div className="absolute inset-0 bg-hospital-primary opacity-0 group-hover:opacity-20 transition-opacity rounded-xl"></div>
+                             <div className="absolute inset-0 bg-hospital-primary opacity-0 group-hover:opacity-20 transition-opacity rounded-lg"></div>
                         </div>
                         <div className="flex flex-col">
-                            <span className="text-[13px] font-black text-hospital-dark uppercase tracking-tighter leading-none group-hover:text-hospital-secondary transition-colors font-['Noto_Sans_Telugu']">
-                                శ్రీ కమల <span className="text-[8px] font-black uppercase text-hospital-dark/30 ml-1 font-['Plus_Jakarta_Sans']">Sri Kamala</span>
+                            <span className="text-[11px] font-black text-hospital-dark uppercase tracking-tighter leading-none group-hover:text-hospital-secondary transition-colors font-['Noto_Sans_Telugu']">
+                                శ్రీ కమల <span className="text-[7px] font-black uppercase text-hospital-dark/30 ml-1 font-['Plus_Jakarta_Sans']">Sri Kamala</span>
                             </span>
-                            <span className="text-[9px] font-bold text-hospital-primary leading-none mt-1 font-['Noto_Sans_Telugu'] flex items-center gap-2">
-                                హాస్పిటల్ <div className="h-px w-4 bg-hospital-primary/20"></div> <span className="text-[7px] font-bold uppercase tracking-[0.2em] text-hospital-primary/40">Hospital</span>
+                            <span className="text-[8px] font-bold text-hospital-primary leading-none mt-1 font-['Noto_Sans_Telugu'] flex items-center gap-1.5">
+                                హాస్పిటల్ <div className="h-px w-3 bg-hospital-primary/20"></div> <span className="text-[6px] font-bold uppercase tracking-[0.2em] text-hospital-primary/40">Hospital</span>
                             </span>
                         </div>
                     </Link>
@@ -68,12 +68,12 @@ const Navbar = () => {
 
                     {/* Quick Access Portal */}
                     <div className="flex items-center gap-2">
-                        <Link to="/book" className="relative group px-6 py-2.5 bg-hospital-dark text-white rounded-2xl hover:bg-hospital-secondary transition-all shadow-premium overflow-hidden hidden md:flex items-center gap-3">
+                        <Link to="/book" className="relative group px-4 py-2 bg-hospital-dark text-white rounded-xl hover:bg-hospital-secondary transition-all shadow-premium overflow-hidden hidden md:flex items-center gap-2">
                             <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
-                            <Calendar size={14} className="group-hover:rotate-12 transition-transform" />
-                            <span className="font-['Noto_Sans_Telugu'] text-[11px] font-bold flex flex-col leading-none">
+                            <Calendar size={12} className="group-hover:rotate-12 transition-transform" />
+                            <span className="font-['Noto_Sans_Telugu'] text-[10px] font-bold flex flex-col leading-none">
                                 <span>బుక్ చేయండి</span>
-                                <span className="text-[7px] font-black uppercase tracking-widest opacity-40">Book Now</span>
+                                <span className="text-[6px] font-black uppercase tracking-widest opacity-40">Book Now</span>
                             </span>
                         </Link>
                         

@@ -89,19 +89,19 @@ Format: [Telugu] ||| [English]`;
                         animate={{ opacity: 1, y: 0, scale: 1, x: 0 }} 
                         exit={{ opacity: 0, y: 30, scale: 0.95 }}
                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                        className="fixed bottom-0 right-0 md:bottom-6 md:right-6 w-full md:w-[380px] h-[85vh] md:h-[580px] bg-white rounded-t-[40px] md:rounded-[40px] shadow-4xl z-[160] overflow-hidden flex flex-col border border-gray-100">
+                        className="fixed bottom-24 right-4 md:bottom-6 md:right-24 w-[300px] max-w-[90vw] h-[450px] max-h-[70vh] bg-white rounded-[32px] shadow-4xl z-[160] overflow-hidden flex flex-col border border-gray-100">
 
                         {/* Header */}
-                        <div className="bg-hospital-dark px-6 py-5 relative flex items-center gap-4 flex-shrink-0">
-                            <div className="w-12 h-12 rounded-2xl border-2 border-hospital-primary/30 overflow-hidden relative shadow-md">
+                        <div className="bg-hospital-dark px-4 py-3 relative flex items-center gap-3 flex-shrink-0">
+                            <div className="w-10 h-10 rounded-xl border border-hospital-primary/30 overflow-hidden relative shadow-md">
                                 <img src={doctor?.img} className="w-full h-full object-cover" alt="Doctor" />
-                                <div className="absolute bottom-1 right-1 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-hospital-dark"></div>
+                                <div className="absolute bottom-1 right-1 w-2 h-2 bg-green-500 rounded-full border-2 border-hospital-dark"></div>
                             </div>
                             <div className="flex-1">
-                                <h3 className="text-sm font-black text-white tracking-tight">{doctor?.name}</h3>
-                                <div className="flex items-center gap-1.5 mt-0.5">
-                                    <Sparkles size={10} className="text-hospital-secondary animate-pulse" />
-                                    <p className="text-[9px] font-black uppercase tracking-widest text-hospital-secondary opacity-80 underline decoration-dotted">AI Assistant</p>
+                                <h3 className="text-[11px] font-black text-white tracking-tight leading-none">{doctor?.name}</h3>
+                                <div className="flex items-center gap-1.5 mt-1">
+                                    <Sparkles size={8} className="text-hospital-secondary animate-pulse" />
+                                    <p className="text-[7px] font-black uppercase tracking-widest text-hospital-secondary opacity-80">KIRAN CORE AI</p>
                                 </div>
                             </div>
                             <button onClick={onClose} className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-all flex items-center justify-center">

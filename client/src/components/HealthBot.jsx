@@ -187,8 +187,8 @@ const HealthBot = () => {
                   <div className="relative group">
                     <motion.button initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}
                         onClick={() => setIsOpen(true)}
-                        className="w-12 h-12 bg-white text-hospital-primary rounded-full shadow-xl flex items-center justify-center border border-black/5 hover:scale-105 transition-all">
-                        <Bot size={28} className="relative z-10" />
+                        className="w-10 h-10 bg-white text-hospital-primary rounded-full shadow-xl flex items-center justify-center border border-black/5 hover:scale-105 transition-all">
+                        <Bot size={24} className="relative z-10" />
                     </motion.button>
                     
                     {/* Tiny Dismiss Button */}
