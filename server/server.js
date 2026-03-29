@@ -346,84 +346,115 @@ app.post('/api/config', (req, res) => {
 
 // ─── APPOINTMENT ROUTES ────────────────────────────────────────────────────
 
-app.post('/api/create-appointment', async (req, res) => {
-    try {
-        const { name, phone, age, gender, department, appointmentDate, reason, image } = req.body;
-        if (!name || !phone) return res.status(400).json({ success: false, message: "Missing required fields: name and phone" });
+app.post('/api/create-appointment', (req, res) => {
+    // Ultra-defensive: synchronous wrapper prevents any async crash from leaking
+    const generateToken = (prefix) => {
+        const sfx = Math.random().toString(36).substring(2, 6).toUpperCase();
+        const ts = Date.now().toString().slice(-4);
+        return `${prefix}-${ts}-${sfx}`;
+    };
 
-        const safeDept = department || '';
-        const isDia = safeDept.toLowerCase().includes('lab') || safeDept.toLowerCase().includes('diagnosis');
-        const prefix = isDia ? 'KAMALADIA' : 'KAMALA-OP';
-
-        // Generate a guaranteed unique token
-        const suffix = Math.random().toString(36).substring(2, 6).toUpperCase();
-        const timestamp = Date.now().toString().slice(-4);
-        let finalToken = `${prefix}-${timestamp}-${suffix}`;
-
-        // Try to get sequential number from DB (optional enhancement)
-        if (supabase) {
-            try {
-                const { count } = await supabase.from('appointments').select('*', { count: 'exact', head: true }).ilike('token', `${prefix}%`);
-                if (count !== null) {
-                    finalToken = `${prefix}-${String((count || 0) + 1).padStart(4, '0')}-${suffix}`;
-                }
-            } catch (e) {
-                console.warn("Token count query failed, using timestamp token:", e.message);
+    const respond = async () => {
+        try {
+            const { name, phone, age, gender, department, appointmentDate, reason, image } = req.body || {};
+            if (!name || !phone) {
+                return res.status(400).json({ success: false, message: "Missing required fields: name and phone" });
             }
-        }
 
-        const bookingData = {
-            token: finalToken,
-            name, phone, age, gender, department,
-            appointment_date: appointmentDate,
-            reason: reason || (isDia ? 'Diagnostic Test' : 'General Checkup'),
-            payment_status: 'Pay at Hospital',
-            order_id: `OFFLINE_${Date.now()}`,
-            image: image || null
-        };
+            const safeDept = (department || '').toLowerCase();
+            const isDia = safeDept.includes('lab') || safeDept.includes('diagnosis');
+            const prefix = isDia ? 'KAMALADIA' : 'KAMALA-OP';
+            let finalToken = generateToken(prefix);
 
-        // Try to save to Supabase
-        if (supabase) {
-            try {
-                // First try: with image
-                const { data, error } = await supabase.from('appointments').insert(bookingData).select();
-                if (!error && data?.[0]) {
-                    return res.json({ success: true, appointment: data[0], token: finalToken });
+            // Try to get sequential count from DB
+            if (supabase) {
+                try {
+                    const { count } = await supabase
+                        .from('appointments')
+                        .select('*', { count: 'exact', head: true })
+                        .ilike('token', `${prefix}%`);
+                    if (count !== null) {
+                        finalToken = `${prefix}-${String((count || 0) + 1).padStart(4, '0')}-${Math.random().toString(36).substring(2, 5).toUpperCase()}`;
+                    }
+                } catch (e) {
+                    console.warn('Token count failed:', e.message);
                 }
-                console.warn("Primary insert failed:", error?.message);
-
-                // Second try: without image field
-                const { image: _img, ...sanitizedData } = bookingData;
-                const { data: data2, error: error2 } = await supabase.from('appointments').insert(sanitizedData).select();
-                if (!error2 && data2?.[0]) {
-                    return res.json({ success: true, appointment: data2[0], token: finalToken });
-                }
-                console.warn("Fallback insert also failed:", error2?.message);
-            } catch (dbErr) {
-                console.error("DB exception:", dbErr.message);
             }
+
+            const bookingData = {
+                token: finalToken,
+                name, phone,
+                age: age || null,
+                gender: gender || null,
+                department: department || null,
+                appointment_date: appointmentDate || null,
+                reason: reason || (isDia ? 'Diagnostic Test' : 'General Checkup'),
+                payment_status: 'Pay at Hospital',
+                order_id: `OFFLINE_${Date.now()}`,
+            };
+
+            // Try DB insert (with and without image)
+            if (supabase) {
+                // First attempt: with image field
+                try {
+                    const { data, error } = await supabase
+                        .from('appointments')
+                        .insert({ ...bookingData, image: image || null })
+                        .select();
+                    if (!error && data?.[0]) {
+                        return res.json({ success: true, appointment: data[0], token: finalToken });
+                    }
+                    if (error) console.warn('Insert attempt 1 failed:', error.message);
+                } catch (e1) {
+                    console.warn('Insert attempt 1 exception:', e1.message);
+                }
+
+                // Second attempt: without image
+                try {
+                    const { data, error } = await supabase
+                        .from('appointments')
+                        .insert(bookingData)
+                        .select();
+                    if (!error && data?.[0]) {
+                        return res.json({ success: true, appointment: data[0], token: finalToken });
+                    }
+                    if (error) console.warn('Insert attempt 2 failed:', error.message);
+                } catch (e2) {
+                    console.warn('Insert attempt 2 exception:', e2.message);
+                }
+            }
+
+            // Offline fallback — always succeeds
+            return res.json({
+                success: true,
+                appointment: { ...bookingData, image: null, id: `offline_${Date.now()}` },
+                token: finalToken,
+                offline_mode: true,
+                note: 'Show this token at hospital reception.'
+            });
+
+        } catch (criticalErr) {
+            console.error('CRITICAL booking handler error:', criticalErr.message);
+            return res.json({
+                success: true,
+                token: `KAMALA-OP-${Date.now().toString().slice(-6)}`,
+                offline_mode: true,
+                message: 'Emergency offline booking. Show this token at reception.'
+            });
         }
+    };
 
-        // OFFLINE FALLBACK: Always return success so the patient gets their token
-        console.log("Returning offline booking token:", finalToken);
-        return res.json({
-            success: true,
-            appointment: { ...bookingData, id: `offline_${Date.now()}` },
-            token: finalToken,
-            offline_mode: true,
-            note: "Show this token at the hospital reception desk."
-        });
-
-    } catch (err) {
-        console.error("CRITICAL booking error:", err.message);
-        const emergencyToken = `KAMALA-OP-${Date.now().toString().slice(-6)}`;
-        return res.json({
-            success: true,
-            token: emergencyToken,
-            offline_mode: true,
-            message: "Offline booking successful. Please show this token at reception."
-        });
-    }
+    respond().catch(err => {
+        console.error('Unhandled promise rejection in booking:', err.message);
+        if (!res.headersSent) {
+            res.json({
+                success: true,
+                token: `KAMALA-OP-${Date.now().toString().slice(-6)}`,
+                offline_mode: true,
+                message: 'Emergency offline booking. Show this token at reception.'
+            });
+        }
+    });
 });
 
 app.get('/api/admin/appointments', async (req, res) => {
@@ -569,6 +600,21 @@ app.post('/api/admin/patient-clinical-history', (req, res) => {
     if (!patientName || !phone) return res.status(400).json({ success: false, message: 'patientName and phone are required' });
     const key = `${patientName.trim().toLowerCase()}_${phone.trim()}`;
     return res.json({ success: true, records: patientClinicalRecords[key] || [] });
+});
+
+// ─── GLOBAL ERROR HANDLER (catches any unhandled Express errors) ────────────
+app.use((err, req, res, next) => {
+    console.error('Global Express Error:', err.message);
+    // For booking route, always return success so patients get their token
+    if (req.path === '/api/create-appointment' || req.path === '/create-appointment') {
+        return res.json({
+            success: true,
+            token: `KAMALA-OP-${Date.now().toString().slice(-6)}`,
+            offline_mode: true,
+            message: 'Emergency offline booking. Show this token at reception.'
+        });
+    }
+    res.status(500).json({ success: false, message: err.message || 'Internal Server Error' });
 });
 
 // ─── START SERVER ──────────────────────────────────────────────────────────
