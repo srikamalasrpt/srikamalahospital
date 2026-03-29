@@ -61,7 +61,7 @@ const QuickActionGrid = () => {
                         initial={{ opacity: 0, scale: 0 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         transition={{ type: "spring", damping: 15 }}
-                        className="w-24 h-24 rounded-[3rem] bg-white border border-white/80 flex items-center justify-center text-hospital-primary mb-10 shadow-premium"
+                        className="w-24 h-24 rounded-[3rem] bg-white border border-white/80 flex items-center justify-center text-hospital-primary mb-4 shadow-premium"
                     >
                         <Sparkles size={36} className="text-hospital-primary" />
                     </motion.div>
@@ -116,7 +116,7 @@ const QuickActionGrid = () => {
                     ))}
                 </div>
 
-                <div className="mt-32 pt-20 border-t border-black/5 flex flex-wrap justify-center gap-16 opacity-10">
+                <div className="mt-4 pt-4 border-t border-black/5 flex flex-wrap justify-center gap-16 opacity-10">
                     {[Microscope, Activity, Bot, Heart, Droplets, Orbit].map((Icon, idx) => (
                         <Icon key={idx} size={48} className="animate-pulse-soft" style={{ animationDelay: `${idx * 0.5}s` }} />
                     ))}

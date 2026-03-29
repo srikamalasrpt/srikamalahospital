@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 const Hero = () => {
     return (
-        <section className="relative min-h-[75vh] flex items-center overflow-hidden bg-hospital-surface px-6 pt-24 grainy">
+        <section className="relative min-h-[60vh] flex items-center overflow-hidden bg-hospital-surface px-6 pt-24 grainy">
             <div className="container mx-auto max-w-5xl relative z-10">
                 <div className="grid lg:grid-cols-2 gap-12 items-center">
 
