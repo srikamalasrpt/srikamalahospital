@@ -126,14 +126,14 @@ const AIHealthPage = () => {
     };
 
     const tabs = [
-        { id: 'clinical', icon: Stethoscope, label: 'Assistant' },
-        { id: 'ocr', icon: Scan, label: 'Reports' },
-        { id: 'bmi', icon: Activity, label: 'Biometrics' },
-        { id: 'cardio', icon: Heart, label: 'Cardiac' },
-        { id: 'wellness', icon: Utensils, label: 'Nutrition' },
-        { id: 'drugs', icon: Pill, label: 'Pharma' },
-        { id: 'score', icon: TrendingUp, label: 'Score' },
-        { id: 'derma', icon: Eye, label: 'Dermatology' },
+        { id: 'clinical', icon: Stethoscope, labelTe: 'అసిస్టెంట్', labelEn: 'Assistant' },
+        { id: 'ocr', icon: Scan, labelTe: 'రిపోర్టులు', labelEn: 'Reports' },
+        { id: 'bmi', icon: Activity, labelTe: 'బయోమెట్రిక్స్', labelEn: 'Biometrics' },
+        { id: 'cardio', icon: Heart, labelTe: 'కార్డియాక్', labelEn: 'Cardiac' },
+        { id: 'wellness', icon: Utensils, labelTe: 'పోషకాహారం', labelEn: 'Nutrition' },
+        { id: 'drugs', icon: Pill, labelTe: 'ఫార్మా', labelEn: 'Pharma' },
+        { id: 'score', icon: TrendingUp, labelTe: 'స్కోర్', labelEn: 'Score' },
+        { id: 'derma', icon: Eye, labelTe: 'డెర్మటాలజీ', labelEn: 'Dermatology' },
     ];
 
     return (
@@ -158,12 +158,13 @@ const AIHealthPage = () => {
                         </div>
                     </motion.div>
 
-                    <h1 className="text-6xl lg:text-9xl font-black text-hospital-dark mb-6 leading-none tracking-tighter italic uppercase text-center">
-                        AI CLINICAL <span className="text-hospital-secondary">CORE</span>
+                    <h1 className="text-6xl lg:text-9xl font-black text-hospital-dark mb-6 leading-none tracking-tighter italic uppercase text-center font-['Noto_Sans_Telugu']">
+                        AI క్లినికల్ <span className="text-hospital-secondary">కోర్</span>
+                        <div className="text-[14px] lg:text-[18px] font-black uppercase text-hospital-dark/10 tracking-[0.4em] mt-4 font-['Plus_Jakarta_Sans']">AI Clinical Core</div>
                     </h1>
                     <div className="flex items-center gap-4">
                         <div className="w-2 h-2 rounded-full bg-hospital-secondary"></div>
-                        <p className="text-overline">Autonomous Diagnostics Layer v4.0.2</p>
+                        <p className="font-['Noto_Sans_Telugu'] text-[10px] font-bold text-hospital-slate/60 uppercase tracking-[0.2em] italic">అటానమస్ డయాగ్నస్టిక్స్ లేయర్ <span className="text-[8px] opacity-40 ml-1 uppercase">Autonomous Diagnostics Layer</span></p>
                     </div>
                 </div>
 
@@ -171,9 +172,10 @@ const AIHealthPage = () => {
                 <div className="flex flex-wrap justify-center gap-4 mb-24">
                     {tabs.map(tab => (
                         <button key={tab.id} onClick={() => setActiveTab(tab.id)}
-                            className={`h-20 px-10 rounded-[2.5rem] font-black text-[10px] uppercase tracking-[0.4em] transition-all flex items-center gap-4 border active:scale-95 italic ${activeTab === tab.id ? 'bg-hospital-dark text-white border-transparent shadow-premium' : 'bg-white/40 text-hospital-slate/40 border-white/80 hover:border-hospital-primary hover:text-hospital-dark hover:bg-white/60 shadow-clinical'}`}>
-                            <tab.icon size={24} className={activeTab === tab.id ? "text-hospital-secondary" : "opacity-40"} />
-                            <span>{tab.label}</span>
+                            className={`h-22 px-10 py-6 rounded-[2.5rem] font-bold transition-all flex flex-col items-center justify-center gap-2 border active:scale-95 italic ${activeTab === tab.id ? 'bg-hospital-dark text-white border-transparent shadow-premium' : 'bg-white/40 text-hospital-slate/40 border-white/80 hover:border-hospital-primary hover:text-hospital-dark hover:bg-white/60 shadow-clinical'}`}>
+                            <tab.icon size={22} className={activeTab === tab.id ? "text-hospital-secondary" : "opacity-40"} />
+                            <span className="font-['Noto_Sans_Telugu'] text-[11px] leading-none">{tab.labelTe}</span>
+                            <span className="text-[8px] uppercase tracking-widest opacity-40 leading-none">{tab.labelEn}</span>
                         </button>
                     ))}
                 </div>
@@ -199,7 +201,7 @@ const AIHealthPage = () => {
                                             <div className="w-16 h-16 rounded-2xl bg-white border border-black/5 flex items-center justify-center text-hospital-secondary shadow-lg"><Activity size={28} /></div>
                                             <div className="text-left">
                                                 <h2 className="text-3xl font-black italic tracking-tighter text-slate-900 uppercase text-left font-['Noto_Sans_Telugu']">లక్షణ <span className="text-hospital-secondary">విశ్లేషణ</span></h2>
-                                                <p className="text-[9px] font-black text-hospital-primary uppercase tracking-[0.4em] mt-2 italic text-left">Neural Logic Matrix Synchronization Active</p>
+                                                <p className="font-['Noto_Sans_Telugu'] text-[10px] font-bold text-hospital-primary uppercase tracking-[0.2em] mt-2 italic text-left">న్యూరల్ లాజిక్ మ్యాట్రిక్స్ సింక్రొనైజేషన్ <span className="text-[8px] opacity-40 ml-1 uppercase">Neural Logic Matrix</span></p>
                                             </div>
                                         </div>
                                         <AISymptomChecker />
@@ -222,8 +224,8 @@ const AIHealthPage = () => {
                                                 <div className="flex flex-col items-center justify-center h-full space-y-8 text-left">
                                                     <div className="w-24 h-24 rounded-[30px] bg-white border border-black/5 flex items-center justify-center text-hospital-secondary group-hover/scan:scale-110 transition-transform shadow-lg"><Scan size={42} /></div>
                                                     <div className="text-center px-12 text-left">
-                                                        <h4 className="text-xl font-black text-slate-900 italic text-left">Drop Document Node</h4>
-                                                        <p className="text-[9px] text-slate-400 mt-4 font-black uppercase tracking-[0.3em] italic text-left">Standard medical formats: JPG, PNG, PDF</p>
+                                                        <h4 className="font-['Noto_Sans_Telugu'] text-xl font-black text-slate-900 italic text-left">డాక్యుమెంట్‌ను ఇక్కడ వేయండి <span className="text-[12px] opacity-40 ml-1 font-['Plus_Jakarta_Sans']">Drop Document</span></h4>
+                                                        <p className="font-['Noto_Sans_Telugu'] text-[10px] text-slate-400 mt-4 font-black uppercase tracking-[0.3em] italic text-left">మెడికల్ ఫార్మాట్లు: JPG, PNG, PDF <span className="text-[8px] opacity-40 ml-1">JPG, PNG, PDF</span></p>
                                                     </div>
                                                 </div>
                                             )}
@@ -419,8 +421,8 @@ const AIHealthPage = () => {
                                             <textarea value={drugsInput} onChange={e => setDrugsInput(e.target.value)} placeholder="Enter molecular compounds..."
                                                 className="w-full bg-slate-50 border border-black/5 p-8 rounded-[35px] text-[13px] font-black outline-none focus:border-hospital-primary transition-all text-slate-900 placeholder:text-slate-200 italic h-40 text-left" />
                                             <button onClick={checkDrugInteractions} disabled={isDrugsLoading}
-                                                className="animated-button w-full py-6 bg-[#0f172a] text-white rounded-[30px] font-black text-[10px] uppercase tracking-[0.5em] shadow-lg hover:bg-hospital-primary transition-all italic active:scale-95 text-left">
-                                                {isDrugsLoading ? "Verifying Safety..." : "Cross-Verify Pharma Node"}
+                                                className="animated-button w-full py-6 bg-[#0f172a] text-white rounded-[30px] shadow-lg hover:bg-hospital-primary transition-all active:scale-95 group">
+                                                <span className="font-['Noto_Sans_Telugu'] text-[11px] font-bold tracking-[0.1em]">సేఫ్టీని ధృవీకరించండి <span className="text-[9px] opacity-40 ml-1 uppercase tracking-widest group-hover:opacity-100">Cross-Verify Pharma</span></span>
                                             </button>
                                         </div>
                                     </div>

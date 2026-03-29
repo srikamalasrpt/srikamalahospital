@@ -7,8 +7,9 @@ const QuickActionGrid = () => {
     const actions = [
         { 
             title: 'Diagnostic Lab', 
-            telugu: 'రక్త పరీక్షలు', 
-            description: 'Precision molecular diagnosis with automated report delivery.', 
+            telugu: 'రోగ నిర్ధారణ ల్యాబ్', 
+            descriptionTelugu: 'ఆటోమేటెడ్ రిపోర్ట్ సదుపాయంతో ఖచ్చితమైన రోగ నిర్ధారణ.', 
+            descriptionEnglish: 'Precision molecular diagnosis with automated report delivery.', 
             icon: <FlaskConical size={32} />, 
             link: '/diagnosis', 
             color: 'from-emerald-400/20 to-emerald-600/5', 
@@ -17,8 +18,9 @@ const QuickActionGrid = () => {
         },
         { 
             title: 'Cardiac AI Core', 
-            telugu: 'గుండె ఆరోగ్యం', 
-            description: 'Real-time arrhythmia detection and clinical AI metrics.', 
+            telugu: 'కార్డియాక్ AI కోర్', 
+            descriptionTelugu: 'రియల్ టైమ్ అరిథ్మియా గుర్తింపు మరియు క్లినికల్ AI కొలతలు.', 
+            descriptionEnglish: 'Real-time arrhythmia detection and clinical AI metrics.', 
             icon: <Activity size={32} />, 
             link: '/ai-health', 
             color: 'from-rose-400/20 to-rose-600/5', 
@@ -27,8 +29,9 @@ const QuickActionGrid = () => {
         },
         { 
             title: 'Digital Pharmacy', 
-            telugu: 'మందులు ఆర్డర్', 
-            description: 'Verified clinical apothecary for direct home delivery.', 
+            telugu: 'డిజిటల్ ఫార్మసీ', 
+            descriptionTelugu: 'నేరుగా ఇంటికి డెలివరీ చేసే ధృవీకరించబడిన క్లినికల్ ఫార్మసీ.', 
+            descriptionEnglish: 'Verified clinical apothecary for direct home delivery.', 
             icon: <Bot size={32} />, 
             link: '/medical-shop', 
             color: 'from-indigo-400/20 to-indigo-600/5', 
@@ -38,7 +41,8 @@ const QuickActionGrid = () => {
         { 
             title: 'Emergency Hub', 
             telugu: 'అత్యవసర విభాగం', 
-            description: 'Immediate Level-1 trauma response for urgent care.', 
+            descriptionTelugu: 'అత్యవసర సంరక్షణ కోసం తక్షణ ట్రామా రెస్పాన్స్.', 
+            descriptionEnglish: 'Immediate Level-1 trauma response for urgent care.', 
             icon: <Phone size={32} />, 
             link: 'tel:+919154404051', 
             color: 'from-red-600/20 to-red-800/5', 
@@ -62,13 +66,14 @@ const QuickActionGrid = () => {
                         <Sparkles size={36} className="text-hospital-primary" />
                     </motion.div>
                     
-                    <h2 className="heading-clinical mb-6">
-                        Clinical <span className="text-hospital-primary italic">Intelligence</span>
+                    <h2 className="heading-clinical mb-6 font-['Noto_Sans_Telugu']">
+                        క్లినికల్ <span className="text-hospital-primary italic">ఇంటెలిజెన్స్</span>
+                        <div className="text-[14px] font-black uppercase text-hospital-dark/10 tracking-widest mt-2 font-['Plus_Jakarta_Sans']">Clinical Intelligence</div>
                     </h2>
                     
                     <div className="flex items-center gap-4">
                         <span className="h-[1px] w-12 bg-hospital-slate/20"></span>
-                        <p className="text-overline">Strategic Response Modules // v4.0</p>
+                        <p className="font-['Noto_Sans_Telugu'] text-[10px] font-bold text-hospital-slate/60 uppercase tracking-[0.2em] italic">వ్యూహాత్మక ప్రతిస్పందన మాడ్యూల్స్ <span className="text-[8px] opacity-40 ml-1 uppercase">Strategic Response Modules</span></p>
                         <span className="h-[1px] w-12 bg-hospital-slate/20"></span>
                     </div>
                 </div>
@@ -95,12 +100,17 @@ const QuickActionGrid = () => {
                                 {action.title}
                             </p>
                             
-                            <p className="text-sm font-medium text-hospital-slate leading-relaxed mb-10">
-                                {action.description}
-                            </p>
+                            <div className="space-y-4 mb-10">
+                                <p className="font-['Noto_Sans_Telugu'] text-[13px] font-medium text-hospital-slate leading-relaxed">
+                                    {action.descriptionTelugu}
+                                </p>
+                                <p className="text-[11px] font-medium text-hospital-slate/40 leading-relaxed italic uppercase">
+                                    {action.descriptionEnglish}
+                                </p>
+                            </div>
                             
-                            <Link to={action.link} className="mt-auto w-full py-5 rounded-[1.8rem] bg-white text-hospital-dark border border-white flex items-center justify-center gap-4 text-[11px] font-black uppercase tracking-[0.3em] group-hover:bg-hospital-dark group-hover:text-white transition-all shadow-clinical hover:shadow-premium group-hover:-translate-y-1">
-                                Access Core <ArrowUpRight size={18} />
+                            <Link to={action.link} className="mt-auto w-full py-5 rounded-[1.8rem] bg-white text-hospital-dark border border-white flex items-center justify-center gap-4 shadow-clinical hover:shadow-premium group-hover:bg-hospital-dark group-hover:text-white transition-all group-hover:-translate-y-1">
+                                <span className="font-['Noto_Sans_Telugu'] text-[11px] font-bold">యాక్సెస్ చేయండి <span className="text-[8px] opacity-40 ml-1 uppercase group-hover:opacity-100 italic">Access Core</span></span> <ArrowUpRight size={18} />
                             </Link>
                         </motion.div>
                     ))}

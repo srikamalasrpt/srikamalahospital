@@ -37,6 +37,9 @@ function Home() {
   return (
     <div className="bg-hospital-surface min-h-screen selection:bg-hospital-primary selection:text-white overflow-hidden grainy font-['Plus_Jakarta_Sans']">
 
+      {/* Hospital Logo Background Overlay */}
+      <div className="logo-bg-overlay"></div>
+
       {/* Global Clinical Accents */}
       <div className="fixed inset-0 z-0 pointer-events-none opacity-20 overflow-hidden">
         <div className="absolute top-[10%] right-[10%] w-[800px] h-[800px] bg-hospital-primary/5 rounded-full blur-[160px] animate-pulse-soft"></div>

@@ -21,16 +21,17 @@ const PatientReviews = () => {
 
             <div className="flex flex-col lg:flex-row gap-16 items-end mb-24 justify-between">
                <div className="max-w-2xl text-left">
-                  <div className="flex items-center gap-6 mb-10">
-                     <div className="w-16 h-16 rounded-[2rem] bg-white border border-white/80 flex items-center justify-center text-hospital-secondary shadow-premium"><Orbit size={32} className="animate-spin-slow opacity-40" /></div>
-                     <div className="space-y-1">
-                        <h4 className="text-overline">Global Clinical Feedback // v4.0</h4>
-                        <p className="text-[10px] font-bold text-hospital-slate/40 uppercase tracking-[0.2em] italic">Verified Registry Platform</p>
-                     </div>
-                  </div>
-                  <h2 className="heading-clinical text-left">
-                     Patient <span className="text-hospital-secondary italic">Insights</span>
-                  </h2>
+                   <div className="flex items-center gap-6 mb-10">
+                      <div className="w-16 h-16 rounded-[2rem] bg-white border border-white/80 flex items-center justify-center text-hospital-secondary shadow-premium"><Orbit size={32} className="animate-spin-slow opacity-40" /></div>
+                      <div className="space-y-1">
+                         <h4 className="font-['Noto_Sans_Telugu'] text-[10px] font-black uppercase tracking-[0.2em] text-hospital-dark/60 italic">గ్లోబల్ క్లినికల్ ఫీడ్‌బ్యాక్ <span className="text-[8px] opacity-40 ml-1">Global Feedback</span></h4>
+                         <p className="font-['Noto_Sans_Telugu'] text-[9px] font-bold text-hospital-slate/40 uppercase tracking-[0.1em] italic">ధృవీకరించబడిన కేస్ లాగ్‌లు <span className="text-[7px] opacity-40 ml-1">Verified Registry</span></p>
+                      </div>
+                   </div>
+                   <h2 className="heading-clinical text-left font-['Noto_Sans_Telugu']">
+                      రోగి <span className="text-hospital-secondary italic">అభిప్రాయాలు</span>
+                      <div className="text-[14px] font-black uppercase text-hospital-dark/10 tracking-[0.4em] mt-2 font-['Plus_Jakarta_Sans']">Patient Insights</div>
+                   </h2>
                   <p className="font-['Noto_Sans_Telugu'] text-2xl text-hospital-slate mt-4 font-bold">రోగుల అమూల్యమైన అభిప్రాయాలు</p>
                </div>
 
@@ -40,10 +41,10 @@ const PatientReviews = () => {
                      <p className="text-[9px] font-black uppercase tracking-[0.4em] text-hospital-primary mt-4 opacity-70">AVG INDEX</p>
                   </div>
                   <div className="w-px h-16 bg-hospital-slate/10"></div>
-                  <div className="text-center group">
-                     <p className="text-5xl font-black text-hospital-dark leading-none tracking-tighter tabular-nums group-hover:text-hospital-primary transition-colors italic">1.2k+</p>
-                     <p className="text-[9px] font-black uppercase tracking-[0.4em] text-hospital-slate mt-4 opacity-70">VERIFIED LOGS</p>
-                  </div>
+                   <div className="text-center group">
+                      <p className="text-5xl font-black text-hospital-dark leading-none tracking-tighter tabular-nums group-hover:text-hospital-secondary transition-colors italic">1.2k+</p>
+                      <p className="font-['Noto_Sans_Telugu'] text-[9px] font-black uppercase tracking-[0.4em] text-hospital-slate mt-4 opacity-70">ధృవీకరించబడిన డేటా <span className="text-[7px] opacity-40 ml-1">Verified Logs</span></p>
+                   </div>
                </div>
             </div>
 
@@ -94,13 +95,12 @@ const PatientReviews = () => {
             </div>
 
             <div className="mt-32 flex justify-center">
-               <a href="https://g.page/srikamala/review" className="btn-clinical h-20 px-16 group rounded-[2.5rem]">
-                  <span className="flex items-center gap-5">
-                     <MessageSquare size={20} />
-                     ADD TO REGISTRY // అభిప్రాయం
-                     <ChevronRight size={18} className="group-hover:translate-x-2 transition-transform" />
-                  </span>
-               </a>
+                <a href="https://g.page/srikamala/review" className="btn-clinical h-24 px-16 group rounded-[3rem] bg-hospital-dark text-white hover:bg-hospital-secondary">
+                   <div className="flex flex-col items-center gap-1 group/txt">
+                      <span className="font-['Noto_Sans_Telugu'] text-xl tracking-tight leading-none group-hover/txt:text-white flex items-center gap-4"><MessageSquare size={18} /> మీ అభిప్రాయాన్ని తెలపండి</span>
+                      <span className="text-[9px] font-black uppercase tracking-[0.5em] opacity-40 group-hover/txt:opacity-80 transition-opacity">Add to Registry Registry</span>
+                   </div>
+                </a>
             </div>
 
          </div>

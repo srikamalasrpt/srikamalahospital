@@ -18,8 +18,9 @@ const OPBoard = () => {
                         <h4 className="text-overline">Registry Bulletin // క్లినికల్ బోర్డు</h4>
                         <div className="w-16 h-px bg-hospital-secondary/30"></div>
                     </div>
-                    <h2 className="heading-clinical">
-                        Operational <span className="text-hospital-secondary italic">Status</span>
+                    <h2 className="heading-clinical font-['Noto_Sans_Telugu']">
+                        కార్యాచరణ <span className="text-hospital-secondary italic">స్థితి</span>
+                        <div className="text-[14px] font-black uppercase text-hospital-dark/10 tracking-widest mt-2 font-['Plus_Jakarta_Sans']">Operational Status</div>
                     </h2>
                 </div>
 
@@ -33,9 +34,9 @@ const OPBoard = () => {
                             <div className="w-20 h-20 rounded-[2.5rem] bg-hospital-surface border border-white flex items-center justify-center text-hospital-primary shadow-clinical group-hover:rotate-12 transition-all duration-700">
                                 <Clock size={36} />
                             </div>
-                            <div className="space-y-2">
+                             <div className="space-y-2">
                                 <h3 className="text-4xl font-black text-hospital-dark tracking-tighter leading-none font-['Noto_Sans_Telugu']">ఓపిడి సమయాలు</h3>
-                                <p className="text-overline italic opacity-60">Precision Daily Schedule</p>
+                                <p className="font-['Noto_Sans_Telugu'] text-[10px] font-bold text-hospital-slate/60 uppercase tracking-[0.2em] italic">రోజువారీ షెడ్యూల్ <span className="text-[8px] opacity-40 ml-1 uppercase">Daily Schedule</span></p>
                             </div>
                         </div>
 
@@ -50,10 +51,10 @@ const OPBoard = () => {
                                     transition={{ delay: i * 0.2, duration: 0.8 }}
                                     className="flex items-center justify-between p-10 bg-white/40 border border-white/60 rounded-[3rem] shadow-clinical transition-all cursor-pointer hover:bg-white group/slot"
                                 >
-                                    <div className="flex items-center gap-8">
+                                     <div className="flex items-center gap-8">
                                         <div className={`w-14 h-14 ${slot.bg} ${slot.color} rounded-[1.2rem] flex items-center justify-center font-black text-sm shadow-clinical group-hover/slot:scale-110 transition-transform`}>{slot.type}</div>
                                         <div className="space-y-1">
-                                            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-hospital-slate/40">Clinical Phase</span>
+                                            <p className="font-['Noto_Sans_Telugu'] text-[10px] font-black uppercase tracking-[0.4em] text-hospital-primary/40">క్లినికల్ ఫేజ్ <span className="text-[8px] opacity-60 ml-1 uppercase">Clinical Phase</span></p>
                                             <span className="text-xl font-bold text-hospital-dark font-['Noto_Sans_Telugu'] block">{slot.label}</span>
                                         </div>
                                     </div>
@@ -66,10 +67,10 @@ const OPBoard = () => {
                                 <div className="w-16 h-16 bg-white/10 rounded-[1.5rem] flex items-center justify-center border border-white/20 shrink-0">
                                     <ShieldCheck size={32} className="text-hospital-primary animate-pulse" />
                                 </div>
-                                <div className="space-y-2">
-                                    <p className="text-[10px] font-black uppercase tracking-[0.5em] text-hospital-primary opacity-60">Level-1 Critical Care</p>
+                                 <div className="space-y-2">
+                                    <p className="font-['Noto_Sans_Telugu'] text-[10px] font-black uppercase tracking-[0.5em] text-hospital-primary opacity-60">క్రిటికల్ కేర్ <span className="text-[8px] opacity-60 ml-1 uppercase">Critical Care</span></p>
                                     <h4 className="text-2xl font-black tracking-tight font-['Noto_Sans_Telugu']">అత్యవసర విభాగం 24/7 తెరిచి ఉంటుంది</h4>
-                                    <p className="text-[8px] font-black uppercase tracking-[0.3em] text-white/40 italic">Continuous ER Surveillance Active</p>
+                                    <p className="font-['Noto_Sans_Telugu'] text-[9px] font-bold text-white/40 uppercase tracking-[0.3em] italic">నిరంతర అత్యవసర సంరక్షణ అందుబాటులో ఉంది <span className="text-[7px] opacity-40 ml-1 uppercase">Continuous ER Available</span></p>
                                 </div>
                             </div>
                         </div>
@@ -92,14 +93,14 @@ const OPBoard = () => {
                         </div>
 
                         <div className="mt-14 relative z-10 space-y-12">
-                            <div className="p-12 glass-panel border border-white rounded-[4rem] text-center relative overflow-hidden transition-all duration-700 shadow-premium">
-                                <p className="text-overline text-hospital-primary mb-8 font-['Noto_Sans_Telugu']">రాబోయే సెలవు</p>
+                             <div className="p-12 glass-panel border border-white rounded-[4rem] text-center relative overflow-hidden transition-all duration-700 shadow-premium">
+                                <p className="text-overline text-hospital-primary mb-8 font-['Noto_Sans_Telugu']">రాబోయే సెలవు <span className="text-[8px] opacity-40 ml-1 uppercase">Upcoming Holiday</span></p>
                                 <h4 className="text-4xl lg:text-6xl font-['Playfair_Display'] italic mb-6 text-hospital-dark font-black tracking-tighter">మార్చి 25, 2026</h4>
-                                <p className="text-[10px] font-medium text-hospital-slate tracking-[0.3em] leading-relaxed uppercase italic max-w-xs mx-auto mb-12">Limited Outpatient Cycle - Regular ER Active</p>
+                                <p className="font-['Noto_Sans_Telugu'] text-[11px] font-bold text-hospital-slate/60 tracking-wider leading-relaxed uppercase italic max-w-xs mx-auto mb-12">పరిమిత అవుట్ పేషెంట్ సేవలు - రెగ్యులర్ ER అందుబాటులో <span className="text-[8px] opacity-20 ml-1 uppercase leading-none">Limited OP - Regular ER</span></p>
 
                                 <div className="flex items-center gap-5 justify-center py-6 glass-panel border-white/80 rounded-full shadow-clinical">
                                     <div className="w-2 h-2 rounded-full bg-hospital-secondary animate-ping"></div>
-                                    <p className="text-[10px] font-black uppercase tracking-[0.4em] text-hospital-dark">Critical Response Active</p>
+                                    <p className="font-['Noto_Sans_Telugu'] text-[10px] font-black uppercase tracking-[0.4em] text-hospital-dark">ప్రతిస్పందన అందుబాటులో ఉంది <span className="text-[8px] opacity-40 ml-1 uppercase">Response Active</span></p>
                                 </div>
                             </div>
 

@@ -119,8 +119,11 @@ CRITICAL RULE: You MUST format your response as:
                 <p className="text-[7px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1 italic text-left">Verified Medication Protocol Unit</p>
               </div>
             </div>
-            <h2 className="text-3xl lg:text-5xl font-black text-slate-900 leading-[0.9] tracking-tighter font-['Noto_Sans_Telugu'] mb-4 text-left">మెడికల్ <span className="text-hospital-secondary italic font-serif text-left">షాప్</span> <br />మరియు మందులు.</h2>
-            <p className="text-[9px] uppercase font-bold text-slate-400 tracking-[0.8em] mt-2 mb-8 italic text-left">SRI KAMALA PHARMA INTELLIGENCE CORE</p>
+            <h2 className="text-3xl lg:text-5xl font-black text-slate-900 leading-[0.9] tracking-tighter font-['Noto_Sans_Telugu'] mb-4 text-left">
+              మెడికల్ <span className="text-hospital-secondary italic font-serif">షాప్</span> <br />మరియు మందులు.
+              <div className="text-[14px] font-black uppercase text-hospital-dark/10 tracking-[0.4em] mt-4 font-['Plus_Jakarta_Sans']">Medical Shop & Pharmacy</div>
+            </h2>
+            <p className="font-['Noto_Sans_Telugu'] text-[10px] font-bold text-slate-400 tracking-[0.2em] mt-2 mb-8 italic text-left uppercase">శ్రీ కమల ఫార్మా ఇంటెలిజెన్స్ కోర్ <span className="text-[8px] opacity-40 ml-1">Sri Kamala Pharma IQ</span></p>
             <p className="text-[12px] font-medium text-slate-500 font-serif italic max-w-sm text-left">"సురక్షితమైన వైద్య పంపిణీ కోసం ఇంటిగ్రేటెడ్ AI కన్సల్టేషన్‌తో ధృవీకరించబడిన ఫార్మాస్యూటికల్ లాజిస్టిక్స్‌ను అమలు చేయడం."</p>
           </div>
 
@@ -128,10 +131,10 @@ CRITICAL RULE: You MUST format your response as:
             <div className="bg-white border border-black/5 p-10 rounded-[50px] text-slate-900 shadow-xl relative overflow-hidden group text-left">
               <div className="absolute top-0 right-0 p-8 text-hospital-secondary opacity-5 group-hover:scale-125 transition-transform duration-1000"><Pill size={120} /></div>
               <div className="flex justify-between items-start mb-4">
-                <p className="text-[9px] font-black uppercase tracking-[0.5em] text-hospital-secondary opacity-70 italic text-left">Pharmacy AI Advisor v3.0</p>
-                <span className="text-[9px] font-black text-slate-300 font-['Noto_Sans_Telugu']">AI సలహాదారు</span>
+                <p className="font-['Noto_Sans_Telugu'] text-[10px] font-black uppercase tracking-[0.3em] text-hospital-secondary opacity-70 italic text-left">ఫార్మసీ AI సలహాదారు <span className="text-[8px] opacity-40 ml-1 uppercase">Pharmacy AI Advisor</span></p>
+                <span className="text-[9px] font-black text-slate-300 font-['Noto_Sans_Telugu'] uppercase tracking-widest leading-none">AI కోడ్: 0x3F</span>
               </div>
-              <h4 className="text-sm font-black mb-6 uppercase tracking-widest text-slate-800 italic leading-none text-left">Autonomous Clinical Drug Consultation</h4>
+              <h4 className="font-['Noto_Sans_Telugu'] text-sm font-black mb-6 uppercase tracking-widest text-slate-800 italic leading-none text-left">అటానమస్ క్లినికల్ డ్రగ్ కన్సల్టేషన్ <span className="text-[10px] opacity-20 ml-1 block font-['Plus_Jakarta_Sans'] uppercase">Autonomous Drug Consult</span></h4>
               <div className="relative text-left">
                 <input value={aiInput} onChange={(e) => setAiInput(e.target.value)} type="text" placeholder="మెడిసిన్ గురించి అడగండి (e.g. 'పారాసిటమాల్' అని టైప్ చేయండి)..."
                   className="w-full bg-slate-50 border border-black/5 p-6 rounded-3xl text-[12px] text-slate-900 outline-none focus:ring-2 ring-hospital-secondary/20 transition-all font-bold placeholder:text-slate-300 text-left font-['Noto_Sans_Telugu']" />
@@ -193,8 +196,9 @@ CRITICAL RULE: You MUST format your response as:
 
                   <button 
                     onClick={() => setActiveInfo(product)}
-                    className="animated-button group/btn w-full flex items-center justify-center gap-4 py-4 bg-[#0f172a] text-white font-black text-[10px] uppercase tracking-[0.4em] rounded-[22px] hover:bg-hospital-secondary hover:text-white transition-all shadow-lg border-none relative overflow-hidden text-left">
-                    <span className="relative z-10 flex items-center gap-2 text-left"><Info size={16} /> <span className="font-['Noto_Sans_Telugu'] text-[12px] font-black tracking-normal text-left">మరింత సమాచారం</span></span>
+                    className="animated-button group/btn w-full flex flex-col items-center justify-center gap-1 py-4 bg-[#0f172a] text-white rounded-[22px] hover:bg-hospital-secondary hover:text-white transition-all shadow-lg border-none relative overflow-hidden text-left">
+                    <span className="font-['Noto_Sans_Telugu'] text-[11px] font-bold tracking-normal text-left flex items-center gap-2 relative z-10"><Info size={14} /> మరింత సమాచారం</span>
+                    <span className="text-[8px] opacity-40 uppercase tracking-[0.3em] font-black group-hover/btn:opacity-100 transition-all font-['Plus_Jakarta_Sans'] leading-none">Product Info</span>
                   </button>
 
                   <AnimatePresence>

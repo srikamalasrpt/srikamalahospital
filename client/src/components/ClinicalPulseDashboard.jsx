@@ -4,10 +4,10 @@ import { motion } from 'framer-motion';
 
 const ClinicalPulseDashboard = () => {
   const metrics = [
-    { label: 'Clinical Threads', value: '14', unit: 'NODE', icon: <Zap size={20} />, color: 'text-hospital-secondary' },
-    { label: 'Elite Physicians', value: '12', unit: 'VERIFIED', icon: <Users size={20} />, color: 'text-hospital-primary' },
-    { label: 'System Integrity', value: '99.9', unit: '% UPTIME', icon: <ShieldCheck size={20} />, color: 'text-emerald-500' },
-    { label: 'Life Preservations', value: '4500', unit: 'SUCCESSES', icon: <Heart size={20} />, color: 'text-rose-500' }
+    { label: 'క్లినికల్ థ్రెడ్స్', labelEn: 'Clinical Threads', value: '14', unit: 'NODE', icon: <Zap size={20} />, color: 'text-hospital-secondary' },
+    { label: 'వైద్య నిపుణులు', labelEn: 'Elite Physicians', value: '12', unit: 'VERIFIED', icon: <Users size={20} />, color: 'text-hospital-primary' },
+    { label: 'సిస్టమ్ సమయము', labelEn: 'System Integrity', value: '99.9', unit: '% UPTIME', icon: <ShieldCheck size={20} />, color: 'text-emerald-500' },
+    { label: 'విజయవంతమైన సేవలు', labelEn: 'Life Preservations', value: '4500', unit: 'SUCCESSES', icon: <Heart size={20} />, color: 'text-rose-500' }
   ];
 
   return (
@@ -27,21 +27,21 @@ const ClinicalPulseDashboard = () => {
                 <Activity size={28} />
               </div>
               <div className="space-y-2">
-                <h3 className="text-2xl font-black text-hospital-dark uppercase tracking-tighter leading-none">Clinical Intel Core // v4.0</h3>
+                <h3 className="font-['Noto_Sans_Telugu'] text-2xl font-black text-hospital-dark uppercase tracking-tighter leading-none">క్లినికల్ ఇంటెల్ కోర్ <span className="text-[12px] opacity-40 ml-1 font-['Plus_Jakarta_Sans']">Clinical Intel Core</span></h3>
                 <div className="flex items-center gap-3">
                    <div className="w-1.5 h-1.5 rounded-full bg-hospital-secondary"></div>
-                   <p className="text-overline">Infrastructure Synchronization Active</p>
+                   <p className="font-['Noto_Sans_Telugu'] text-[10px] font-bold text-hospital-slate/60 uppercase tracking-[0.2em] italic">ఇన్ఫ్రాస్ట్రక్చర్ సమకాలీకరణ <span className="text-[8px] opacity-40 ml-1 uppercase">Infrastructure Sync</span></p>
                 </div>
               </div>
             </div>
             
             <div className="flex flex-wrap justify-center gap-5">
-              <div className="glass-panel px-6 py-3 border-white/80 rounded-full text-[10px] font-black uppercase tracking-[0.3em] text-hospital-primary flex items-center gap-3 shadow-clinical">
+               <div className="glass-panel px-6 py-3 border-white/80 rounded-full text-[10px] font-black uppercase tracking-[0.3em] text-hospital-primary flex items-center gap-3 shadow-clinical">
                 <div className="w-2 h-2 bg-green-500 rounded-full animate-ping"></div>
-                Suryapet Main: Active
+                <span className="font-['Noto_Sans_Telugu'] uppercase tracking-widest">సూర్యాపేట మెయిన్: క్రియాశీలకం <span className="text-[8px] opacity-40 ml-1">Suryapet Active</span></span>
               </div>
-              <div className="glass-panel px-6 py-3 border-white/80 rounded-full text-[10px] font-black uppercase tracking-[0.3em] text-hospital-slate/40 shadow-clinical">
-                <span className="text-hospital-dark">STATUS:</span> OPS_READY
+               <div className="glass-panel px-6 py-3 border-white/80 rounded-full text-[10px] font-black uppercase tracking-[0.3em] text-hospital-slate/40 shadow-clinical">
+                <span className="font-['Noto_Sans_Telugu'] uppercase tracking-widest text-hospital-dark">స్థితి: సిస్టమ్ సిద్ధంగా ఉంది <span className="text-[8px] opacity-40 ml-1 italic font-['Plus_Jakarta_Sans']">STATUS: READY</span></span>
               </div>
             </div>
           </div>
@@ -60,8 +60,9 @@ const ClinicalPulseDashboard = () => {
                   <div className={`p-4 rounded-[1.2rem] bg-white ${m.color} shadow-clinical border border-white/80 group-hover/metric:rotate-12 transition-transform`}>
                     {m.icon}
                   </div>
-                  <span className="text-overline text-hospital-slate/40 group-hover/metric:text-hospital-dark transition-colors">
-                    {m.label}
+                   <span className="font-['Noto_Sans_Telugu'] text-[10px] font-black uppercase tracking-[0.2em] text-hospital-slate/40 group-hover/metric:text-hospital-dark transition-colors text-left flex flex-col">
+                    <span>{m.label}</span>
+                    <span className="text-[7px] opacity-40 uppercase tracking-widest leading-none mt-1">{m.labelEn}</span>
                   </span>
                 </div>
                 <div className="flex flex-col group-hover/metric:translate-x-4 transition-all duration-700 origin-left">

@@ -1,122 +1,99 @@
 import React, { useState, useEffect } from 'react';
-import { Home, Calendar, Users, FlaskConical, ShoppingBag, Activity, ChevronRight, Menu, X, HeartPulse, Sparkles, Orbit, Plus, Droplets, Scissors, Pill, Syringe, Zap, ShieldCheck } from 'lucide-react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Home, Calendar, Users, FlaskConical, ShoppingBag, Activity, Menu, X } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Navbar = () => {
     const location = useLocation();
-    const navigate = useNavigate();
     const [scrolled, setScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     useEffect(() => {
-        const handleScroll = () => setScrolled(window.scrollY > 20);
+        const handleScroll = () => setScrolled(window.scrollY > 10);
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
     const navItems = [
-        { name: 'Home', link: '/', telugu: 'హోమ్', icon: <Home size={18} /> },
-        { name: 'Book', link: '/book', telugu: 'బుకింగ్', icon: <Calendar size={18} /> },
-        { name: 'Doctors', link: '/doctors', telugu: 'వైద్యులు', icon: <Users size={18} /> },
-        { name: 'Diagnosis', link: '/diagnosis', telugu: 'పరీక్షలు', icon: <FlaskConical size={18} /> },
-        { name: 'Pharmacy', link: '/medical-shop', telugu: 'మందులు', icon: <ShoppingBag size={18} /> },
-        { name: 'AI Health', link: '/ai-health', telugu: 'AI హెల్త్', icon: <Activity size={18} /> }
+        { telugu: 'హోమ్', english: 'Home', link: '/', icon: <Home size={14} /> },
+        { telugu: 'బుకింగ్', english: 'Book', link: '/book', icon: <Calendar size={14} /> },
+        { telugu: 'వైద్యులు', english: 'Doctors', link: '/doctors', icon: <Users size={14} /> },
+        { telugu: 'పరీక్షలు', english: 'Diagnosis', link: '/diagnosis', icon: <FlaskConical size={14} /> },
+        { telugu: 'ఫార్మసీ', english: 'Pharmacy', link: '/medical-shop', icon: <ShoppingBag size={14} /> },
+        { telugu: 'AI ఆరోగ్యం', english: 'AI Health', link: '/ai-health', icon: <Activity size={14} /> }
     ];
 
     return (
-        <nav className={`fixed top-0 left-0 right-0 z-[500] transition-all duration-700 ${scrolled ? 'py-4' : 'py-8'}`}>
-            <div className="container mx-auto px-6 max-w-7xl">
-                <div className={`relative glass-panel px-8 py-3.5 flex items-center justify-between border border-white/40 shadow-premium transition-all duration-700 ${scrolled ? 'scale-95' : 'scale-100'}`}>
+        <nav className={`fixed top-0 left-0 right-0 z-[500] transition-all duration-500 ${scrolled ? 'py-3' : 'py-6'}`}>
+            <div className="container mx-auto px-4 max-w-5xl">
+                <div className={`glass-panel px-6 py-2 flex items-center justify-between transition-all duration-500 ${scrolled ? 'rounded-2xl shadow-md' : 'rounded-3xl shadow-none border-transparent bg-transparent'}`}>
                     
-                    {/* Logo Section */}
-                    <Link to="/" className="flex items-center gap-4 group">
-                        <div className="relative">
-                            <div className="w-12 h-12 bg-hospital-dark p-2.5 rounded-2xl group-hover:rotate-[15deg] transition-all duration-500 shadow-2xl relative z-10 overflow-hidden">
-                                 <img src="/logo.png" alt="Sri Kamala" className="w-full h-full object-contain relative z-10 brightness-200" />
-                                 <div className="absolute inset-0 bg-gradient-to-br from-hospital-primary/20 to-transparent"></div>
-                            </div>
-                            <div className="absolute -inset-1 bg-hospital-primary/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full"></div>
+                    {/* Logo */}
+                    <Link to="/" className="flex items-center gap-3 group">
+                        <div className="w-8 h-8 bg-hospital-dark p-1.5 rounded-lg group-hover:rotate-6 transition-transform">
+                             <img src="/logo.png" alt="Logo" className="w-full h-full object-contain brightness-200" />
                         </div>
                         <div className="flex flex-col">
-                            <h1 className="text-xl font-black text-hospital-dark leading-none font-outfit uppercase tracking-tighter group-hover:text-hospital-primary transition-colors">
-                                Sri Kamala <span className="text-hospital-primary italic">Hospital</span>
-                            </h1>
-                            <div className="flex items-center gap-2 mt-1">
-                                <span className="w-2 h-2 rounded-full bg-hospital-secondary animate-pulse"></span>
-                                <p className="text-[8px] font-black uppercase tracking-[0.4em] text-hospital-slate/50">Integrated Hub</p>
-                            </div>
+                            <span className="text-sm font-black text-hospital-dark uppercase tracking-tighter leading-none group-hover:text-hospital-primary transition-colors font-['Noto_Sans_Telugu']">
+                                శ్రీ కమల <span className="text-[9px] font-black uppercase text-hospital-dark/40 ml-1">Sri Kamala</span>
+                            </span>
+                            <span className="text-[9px] font-bold text-hospital-primary leading-none mt-1 font-['Noto_Sans_Telugu']">హాస్పిటల్ <span className="text-[7px] font-bold uppercase tracking-[0.2em] text-hospital-primary/40 ml-1">Hospital</span></span>
                         </div>
                     </Link>
 
-                    {/* Navigation Items (Desktop) */}
-                    <div className="hidden lg:flex items-center gap-1.5 p-1.5 bg-hospital-surface/50 rounded-full border border-black/5">
+                    {/* Desktop Nav */}
+                    <div className="hidden lg:flex items-center gap-1">
                         {navItems.map((item) => {
                             const isActive = location.pathname === item.link;
                             return (
                                 <Link 
-                                    key={item.name} 
+                                    key={item.english} 
                                     to={item.link} 
-                                    className="relative group"
+                                    className={`px-3 py-1.5 rounded-lg transition-all duration-300 flex items-center gap-2 ${isActive ? 'bg-hospital-dark text-white' : 'text-hospital-slate hover:text-hospital-dark hover:bg-black/5'}`}
                                 >
-                                    <div className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-500 flex items-center gap-2 ${isActive ? 'bg-white text-hospital-primary shadow-clinical' : 'text-hospital-slate hover:text-hospital-dark hover:bg-white/50'}`}>
-                                        <span className="font-outfit text-[11px] uppercase tracking-widest">{item.name}</span>
-                                        {isActive && <div className="w-1.5 h-1.5 rounded-full bg-hospital-primary shadow-glow"></div>}
-                                    </div>
-                                    {isActive && (
-                                        <motion.div 
-                                            layoutId="nav-bg"
-                                            className="absolute inset-0 bg-white rounded-full -z-10 shadow-clinical"
-                                        />
-                                    )}
+                                    <span className="font-['Noto_Sans_Telugu'] text-[11px] font-bold">{item.telugu} <span className="text-[8px] font-black uppercase tracking-widest opacity-40 ml-1">{item.english}</span></span>
                                 </Link>
                             )
                         })}
                     </div>
- 
-                    {/* Actions */}
-                    <div className="flex items-center gap-4">
-                        <Link to="/book" className="btn-clinical hidden md:flex h-12 px-8">
-                            <span>Get Appointment</span>
+
+                    {/* Right Side */}
+                    <div className="flex items-center gap-3">
+                        <Link to="/book" className="hidden md:block px-4 py-2 bg-hospital-primary text-white rounded-lg hover:bg-hospital-dark transition-all shadow-clinical group">
+                            <span className="font-['Noto_Sans_Telugu'] text-[11px] font-bold">ఇప్పుడే బుక్ చేయండి <span className="text-[8px] font-black uppercase tracking-widest opacity-40 ml-1 group-hover:opacity-100">Book Now</span></span>
                         </Link>
                         
                         <button 
                             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                            className="lg:hidden w-12 h-12 rounded-2xl bg-hospital-dark text-white flex items-center justify-center hover:scale-105 transition-all shadow-xl"
+                            className="lg:hidden p-2 text-hospital-dark hover:bg-black/5 rounded-lg transition-all"
                         >
-                            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+                            {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
                         </button>
                     </div>
-
                 </div>
             </div>
 
-            {/* Mobile Navigation Overlay */}
+            {/* Mobile Nav */}
             <AnimatePresence>
                 {mobileMenuOpen && (
                     <motion.div 
-                        initial={{ opacity: 0, scale: 0.95, y: -20 }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.95, y: -20 }}
-                        className="lg:hidden absolute top-[100%] left-6 right-6 mt-4 p-8 glass-panel z-[400]"
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="lg:hidden absolute top-[100%] left-4 right-4 mt-2 p-4 glass-panel border border-black/5"
                     >
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-2 gap-2">
                             {navItems.map((item) => (
                                 <Link 
-                                    key={item.name} 
+                                    key={item.english} 
                                     to={item.link} 
                                     onClick={() => setMobileMenuOpen(false)}
-                                    className="flex flex-col items-center p-6 bg-hospital-surface/50 border border-black/5 rounded-[2rem] hover:border-hospital-primary transition-all group"
+                                    className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl transition-all border border-transparent hover:border-hospital-primary/20"
                                 >
-                                    <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-hospital-primary mb-4 shadow-clinical">{item.icon}</div>
-                                    <span className="font-outfit text-[10px] font-black uppercase tracking-widest text-hospital-dark">{item.name}</span>
+                                    <div className="text-hospital-primary">{item.icon}</div>
+                                    <span className="font-['Noto_Sans_Telugu'] text-[11px] font-bold text-hospital-dark">{item.telugu} <span className="text-[8px] font-black uppercase tracking-widest opacity-40 ml-1">{item.english}</span></span>
                                 </Link>
                             ))}
-                        </div>
-                        <div className="mt-8 pt-6 border-t border-black/5">
-                            <a href="tel:+919948076665" className="btn-clinical w-full">
-                                <span>Emergency Hub</span>
-                            </a>
                         </div>
                     </motion.div>
                 )}
