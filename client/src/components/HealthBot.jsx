@@ -37,8 +37,8 @@ const HealthBot = () => {
             const welcome = {
                 id: 'welcome',
                 text: language === 'te' 
-                    ? "శ్రీ కమల హాస్పిటల్ క్లినికల్ AI కోర్ కు స్వాగతం. నేను డాక్టర్ కమల. మీకు ఎలా సహాయపడగలను?" 
-                    : "Welcome to Sri Kamala Hospital Clinical AI Core. I am Dr. Kamala. How can I assist you today?",
+                    ? "శ్రీ కమల హాస్పిటల్ క్లినికల్ AI కోర్ కు స్వాగతం. నేను డాక్టర్ కిరణ్ AI. మీకు ఎలా సహాయపడగలను?" 
+                    : "Welcome to Sri Kamala Hospital Clinical AI Core. I am Dr. Kiran AI. How can I assist you today?",
                 sender: 'bot',
                 time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
             };
@@ -90,7 +90,7 @@ const HealthBot = () => {
         
         doc.setTextColor(0, 204, 204, 0.5);
         doc.setFontSize(8);
-        doc.text("Powered by Kamala AI Core v5.0", 105, 250, { align: 'center' });
+        doc.text("Powered by Kiran AI Core v5.0", 105, 250, { align: 'center' });
         
         doc.save(`Receipt_${data.name}.pdf`);
     };
@@ -159,7 +159,7 @@ const HealthBot = () => {
                 return;
             }
 
-            const prompt = `You are Dr. Kamala, AI focal point for Sri Kamala Hospital. 
+            const prompt = `You are Dr. Kiran, AI focal point for Sri Kamala Hospital. 
                 Respond in ${language === 'te' ? 'Telugu' : 'English'}. Concise info (1-2 sentences). 
                 User: "${text}"`;
             
@@ -187,8 +187,8 @@ const HealthBot = () => {
                   <div className="relative group">
                     <motion.button initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}
                         onClick={() => setIsOpen(true)}
-                        className="w-12 h-12 bg-white text-hospital-primary rounded-2xl shadow-xl flex items-center justify-center border border-black/5 hover:scale-105 transition-all">
-                        <Activity size={20} className="relative z-10" />
+                        className="w-12 h-12 bg-white text-hospital-primary rounded-full shadow-xl flex items-center justify-center border border-black/5 hover:scale-105 transition-all">
+                        <Bot size={28} className="relative z-10" />
                     </motion.button>
                     
                     {/* Tiny Dismiss Button */}
@@ -200,7 +200,7 @@ const HealthBot = () => {
                     </button>
 
                     <div className="absolute right-14 top-1/2 -translate-y-1/2 px-3 py-1.5 bg-white border border-black/5 rounded-lg shadow-lg hidden md:block pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity">
-                        <p className="text-[7px] font-black uppercase tracking-[0.4em] whitespace-nowrap text-slate-400 italic">Kamala AI Dispatch</p>
+                        <p className="text-[7px] font-black uppercase tracking-[0.4em] whitespace-nowrap text-slate-400 italic">Kiran AI Dispatch</p>
                     </div>
                   </div>
                 )}
@@ -212,7 +212,7 @@ const HealthBot = () => {
                         initial={{ opacity: 0, scale: 0.9, y: 30 }} 
                         animate={{ opacity: 1, scale: 1, y: 0 }} 
                         exit={{ opacity: 0, scale: 0.9, y: 30 }}
-                        className="w-[85vw] md:w-[280px] h-[60vh] md:h-[420px] bg-white rounded-[28px] shadow-4xl flex flex-col overflow-hidden border border-black/5 backdrop-blur-3xl relative">
+                        className="w-[85vw] md:w-[260px] h-[60vh] md:h-[380px] bg-white rounded-[24px] shadow-4xl flex flex-col overflow-hidden border border-black/5 backdrop-blur-3xl relative">
                         
                         {/* Transparent Logo Background Decor */}
                         <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none select-none">
@@ -226,7 +226,7 @@ const HealthBot = () => {
                                      <img src="/logo.png" className="w-full h-full object-contain relative z-10" />
                                 </div>
                                 <div className="text-left">
-                                    <h3 className="text-[10px] font-black tracking-widest uppercase italic leading-none whitespace-nowrap">KAMALA CORE <span className="text-hospital-primary font-serif">v5.0</span></h3>
+                                    <h3 className="text-[10px] font-black tracking-widest uppercase italic leading-none whitespace-nowrap">KIRAN CORE <span className="text-hospital-primary font-serif">v5.0</span></h3>
                                     <div className="flex items-center gap-2 mt-1.5">
                                         <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse shadow-neon-mint"></div>
                                         <span className="text-[6px] uppercase font-black tracking-[0.3em] text-slate-300">Surveillance: Active</span>
@@ -284,7 +284,7 @@ const HealthBot = () => {
                         <div className="p-4 bg-slate-50 border-t border-black/5 space-y-2 relative z-10 text-left">
                             <form onSubmit={(e) => { e.preventDefault(); handleSend(); }} className="flex items-center gap-2">
                                 <div className="flex-1 relative group">
-                                    <input type="text" placeholder={bookingState.active ? "Fill indexing..." : "Query Kamala..."} value={input} onChange={(e) => setInput(e.target.value)}
+                                    <input type="text" placeholder={bookingState.active ? "Fill indexing..." : "Query Kiran..."} value={input} onChange={(e) => setInput(e.target.value)}
                                         className="w-full bg-white border border-black/5 focus:border-hospital-primary px-4 py-3 rounded-2xl outline-none text-[11px] font-bold transition-all text-slate-900 placeholder:text-slate-200 shadow-inner italic" />
                                     <button type="submit" className={`absolute right-3 top-1/2 -translate-y-1/2 text-hospital-primary hover:scale-110 active:scale-90 transition-all ${!input.trim() ? 'opacity-20 pointer-events-none' : 'opacity-100'}`}>
                                         <Send size={16} strokeWidth={2.5} />
