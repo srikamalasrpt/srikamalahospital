@@ -104,7 +104,7 @@ const OPBoard = () => {
                                 </div>
                             </div>
 
-                            <a href="tel:+919154404051" className="btn-clinical w-full h-24 group rounded-[3rem] bg-hospital-dark text-white hover:bg-hospital-secondary shadow-premium">
+                            <a href="tel:+9109948076665" className="btn-clinical w-full h-24 group rounded-[3rem] bg-hospital-dark text-white hover:bg-hospital-secondary shadow-premium">
                                 <span className="font-['Noto_Sans_Telugu'] text-2xl tracking-tight">ఫోన్ చేయండి</span>
                                 <div className="w-14 h-14 bg-white/10 rounded-[1.2rem] flex items-center justify-center group-hover:rotate-12 group-hover:bg-white group-hover:text-hospital-secondary transition-all">
                                     <Phone size={24} />
