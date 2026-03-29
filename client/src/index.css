@@ -28,7 +28,7 @@
   h4 { @apply text-xl font-outfit tracking-tight; }
 
   section {
-    @apply relative py-12 md:py-20;
+    @apply relative py-8 md:py-12;
   }
 }
 
@@ -66,16 +66,16 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 60vw;
-    height: 60vw;
+    width: 50vw;
+    height: 50vw;
     background-image: url('/logo.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    opacity: 0.03;
-    z-index: 0;
+    opacity: 0.02;
+    z-index: -1;
     pointer-events: none;
-    filter: grayscale(1);
+    filter: brightness(0.9);
   }
 
   .grainy {

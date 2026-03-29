@@ -52,11 +52,11 @@ const QuickActionGrid = () => {
     ];
 
     return (
-        <section className="py-32 px-6 bg-hospital-surface relative overflow-hidden grainy">
+        <section className="py-10 px-6 bg-hospital-surface relative overflow-hidden grainy">
             
             <div className="container mx-auto max-w-7xl relative z-10">
                 
-                <div className="flex flex-col items-center text-center mb-24">
+                <div className="flex flex-col items-center text-center mb-6">
                     <motion.div 
                         initial={{ opacity: 0, scale: 0 }}
                         whileInView={{ opacity: 1, scale: 1 }}

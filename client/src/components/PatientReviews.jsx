@@ -15,11 +15,11 @@ const PatientReviews = () => {
    ];
 
    return (
-      <section className="py-32 px-6 bg-hospital-surface relative overflow-hidden grainy">
+      <section className="py-16 px-6 bg-hospital-surface relative overflow-hidden grainy">
 
          <div className="container mx-auto max-w-7xl relative z-10">
 
-            <div className="flex flex-col lg:flex-row gap-16 items-end mb-24 justify-between">
+            <div className="flex flex-col lg:flex-row gap-16 items-end mb-12 justify-between">
                <div className="max-w-2xl text-left">
                    <div className="flex items-center gap-6 mb-10">
                       <div className="w-16 h-16 rounded-[2rem] bg-white border border-white/80 flex items-center justify-center text-hospital-secondary shadow-premium"><Orbit size={32} className="animate-spin-slow opacity-40" /></div>

@@ -11,17 +11,17 @@ const ClinicalPulseDashboard = () => {
   ];
 
   return (
-    <section className="py-20 px-6 md:px-12 relative z-20">
+    <section className="py-10 px-6 md:px-12 relative z-20">
       <div className="container mx-auto max-w-7xl">
         <motion.div 
           initial={{ y: 50, opacity: 0, scale: 0.98 }}
           whileInView={{ y: 0, opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-          className="premium-card bg-white/40 border-white/80 p-8 md:p-16 relative overflow-hidden group shadow-premium"
+          className="premium-card bg-white/40 border-white/80 p-8 md:p-12 relative overflow-hidden group shadow-premium"
         >
           {/* Dashboard Header */}
-          <div className="flex flex-col md:flex-row justify-between items-center mb-16 gap-10">
+          <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-10">
             <div className="flex items-center gap-8">
               <div className="w-16 h-16 bg-hospital-dark text-white rounded-[1.5rem] flex items-center justify-center shadow-premium animate-pulse-soft">
                 <Activity size={28} />

@@ -21,10 +21,10 @@ const Doctors = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <section id="doctors" className="py-24 bg-white relative overflow-hidden grainy font-['Plus_Jakarta_Sans']">
+    <section id="doctors" className="py-12 bg-white relative overflow-hidden grainy font-['Plus_Jakarta_Sans']">
       <div className="container mx-auto max-w-6xl relative z-10 px-6">
         
-        <div className="flex flex-col md:flex-row items-end justify-between mb-16 gap-8">
+        <div className="flex flex-col md:flex-row items-end justify-between mb-10 gap-8">
           <div className="max-w-xl text-left">
             <div className="flex items-center gap-3 mb-6">
               <span className="w-8 h-[2px] bg-hospital-secondary"></span>

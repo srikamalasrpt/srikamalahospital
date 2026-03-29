@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 const OPBoard = () => {
     return (
-        <section className="py-32 px-6 bg-white relative overflow-hidden grainy">
+        <section className="py-16 px-6 bg-white relative overflow-hidden grainy">
 
             {/* Background Decor */}
             <div className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-hospital-primary/5 rounded-full blur-[140px] pointer-events-none animate-pulse-soft"></div>
@@ -12,7 +12,7 @@ const OPBoard = () => {
 
             <div className="container mx-auto max-w-7xl relative z-10">
 
-                <div className="flex flex-col items-center mb-24">
+                <div className="flex flex-col items-center mb-12">
                     <div className="flex items-center gap-6 mb-10">
                         <div className="w-16 h-px bg-hospital-secondary/30"></div>
                         <h4 className="text-overline">Registry Bulletin // క్లినికల్ బోర్డు</h4>

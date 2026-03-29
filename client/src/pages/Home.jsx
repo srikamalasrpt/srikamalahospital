@@ -57,7 +57,7 @@ function Home() {
           <QuickActionGrid />
         </section>
 
-        <section id="dashboard" className="relative py-32">
+        <section id="dashboard" className="relative py-4">
           <ClinicalPulseDashboard />
         </section>
 
@@ -73,17 +73,17 @@ function Home() {
           </motion.div>
         )}
 
-        <section id="doctors" className="relative py-32">
+        <section id="doctors" className="relative py-4">
           <Doctors />
         </section>
 
-        <section id="registry" className="relative py-32">
+        <section id="registry" className="relative py-4">
           <div className="container mx-auto max-w-7xl px-6">
             <OPBoard />
           </div>
         </section>
 
-        <section id="reviews" className="relative py-32">
+        <section id="reviews" className="relative py-4">
           <PatientReviews />
         </section>
 
