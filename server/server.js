@@ -8,7 +8,22 @@ const jwt = require('jsonwebtoken');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const path = require('path');
-const rateLimit = require('express-rate-limit');
+const rateLimit = (() => {
+    // Inline lightweight rate limiter — no external package needed
+    return ({ windowMs, max, message }) => {
+        const hits = new Map();
+        return (req, res, next) => {
+            const ip = req.ip || req.connection?.remoteAddress || 'unknown';
+            const now = Date.now();
+            const entry = hits.get(ip) || { count: 0, start: now };
+            if (now - entry.start > windowMs) { entry.count = 0; entry.start = now; }
+            entry.count++;
+            hits.set(ip, entry);
+            if (entry.count > max) return res.status(429).json(message);
+            next();
+        };
+    };
+})();
 require("dotenv").config({ path: path.join(__dirname, '.env') });
 
 const app = express();
