@@ -31,7 +31,11 @@ const BookingForm = () => {
     try {
       const response = await bookAppointment(formData);
       if (response.data.success) {
-         window.location.href = `/receipt?token=${response.data.token}&status=offline`;
+        // Save to localStorage so receipt can see it if DB fetch fails
+        if (response.data.appointment) {
+          localStorage.setItem(`appointment_${response.data.token}`, JSON.stringify(response.data.appointment));
+        }
+        window.location.href = `/receipt?token=${response.data.token}&status=offline`;
       }
     } catch (err) {
       console.error(err);
