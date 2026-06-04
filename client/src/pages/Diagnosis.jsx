@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FlaskRound as Flask, Search, Heart, Plus, Microscope, Orbit, ArrowRight, Sparkles, Info, X, Scissors, Syringe, Droplets } from 'lucide-react';
+import { FlaskConical as Flask, Search, Heart, Plus, Microscope, Orbit, ArrowRight, Sparkles, Info, X, Scissors, Syringe, Droplets } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { fetchLabTests } from '../utils/api';
 import DiagnosticBookingModal from '../components/DiagnosticBookingModal';
@@ -326,9 +326,9 @@ CRITICAL RULE: You MUST format your precise response as:
       />
 
        {/* Local Decorations */}
-       <div className="absolute top-1/4 left-[5%] opacity-[0.02] text-slate-900 rotate-12 pointer-events-none"><Scissors size={180} /></div>
-       <div className="absolute bottom-1/4 right-[5%] opacity-[0.02] text-hospital-secondary -rotate-12 pointer-events-none"><Droplets size={160} /></div>
-       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 opacity-[0.01] text-slate-900 pointer-events-none"><Plus size={400} /></div>
+       <div className="absolute top-1/4 left-[5%] opacity-[0.02] text-slate-900 rotate-12 pointer-events-none medical-icon-float"><Scissors size={180} /></div>
+       <div className="absolute bottom-1/4 right-[5%] opacity-[0.02] text-hospital-secondary -rotate-12 pointer-events-none medical-icon-float"><Droplets size={160} /></div>
+       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 opacity-[0.01] text-slate-900 pointer-events-none medical-icon-float"><Plus size={400} /></div>
 
     </div>
   );

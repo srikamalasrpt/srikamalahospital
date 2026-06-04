@@ -8,5 +8,24 @@
       "source": "/(.*)",
       "destination": "/index.html"
     }
+  ],
+  "redirects": [
+    {
+      "source": "/contact.html",
+      "destination": "/info/contact",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "srikamalahospital.store" }],
+      "destination": "https://srikamalahospital.online/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.srikamalahospital.store" }],
+      "destination": "https://srikamalahospital.online/:path*",
+      "permanent": true
+    }
   ]
 }

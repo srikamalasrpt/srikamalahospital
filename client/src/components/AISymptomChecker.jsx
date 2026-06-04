@@ -1,8 +1,10 @@
 import React, { useState, useRef } from 'react';
 import { Sparkles, Send, Brain, ShieldAlert, Activity, ChevronRight, RefreshCw, Upload, Image as ImageIcon, X, Plus, Scissors, Syringe, Droplets, Pill } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 const AISymptomChecker = () => {
+    const navigate = useNavigate();
     const [symptoms, setSymptoms] = useState('');
     const [imagePreview, setImagePreview] = useState(null);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -19,6 +21,11 @@ const AISymptomChecker = () => {
         if (value === null || value === undefined) return '-';
         if (typeof value === 'object') return value.te || value.en || '-';
         return String(value);
+    };
+    const getDepartmentLabel = (department) => {
+        if (!department) return null;
+        if (typeof department === 'object') return department.te || department.en;
+        return String(department);
     };
 
     const joinItems = (value) => {
@@ -218,8 +225,12 @@ const AISymptomChecker = () => {
 
                                     <div className="relative z-10 w-full space-y-10">
                                         <div className="flex flex-wrap items-center gap-4">
-                                            <span className="px-6 py-2 bg-white/5 border border-white/10 text-white text-[10px] font-black uppercase tracking-[0.4em] rounded-full italic">{result.condition ? 'Visual AI Insight Node' : 'Clinical Diagnostic Insight'}</span>
-                                            {result.department && <span className="px-6 py-2 bg-hospital-primary text-black font-black text-[12px] font-['Noto_Sans_Telugu'] rounded-full shadow-neon-primary italic">ప్రాధాన్య విభాగం: {result.department.te}</span>}
+                                            <span className="px-6 py-2 bg-hospital-dark text-white text-[10px] font-black uppercase tracking-[0.4em] rounded-full italic">{result.condition ? 'Visual AI Insight' : 'Clinical Diagnostic Insight'}</span>
+                                            {getDepartmentLabel(result.department) && (
+                                                <span className="px-6 py-2 bg-hospital-primary text-hospital-dark font-black text-[12px] font-['Noto_Sans_Telugu'] rounded-full italic">
+                                                    ప్రాధాన్య విభాగం: {getDepartmentLabel(result.department)}
+                                                </span>
+                                            )}
                                         </div>
 
                                         {result.condition ? (
@@ -274,7 +285,12 @@ const AISymptomChecker = () => {
                                         )}
 
                                         <div className="flex pt-4 text-left">
-                                            <button onClick={() => window.scrollTo({ top: document.getElementById('booking').offsetTop, behavior: 'smooth' })}
+                                            <button onClick={() => {
+                                                const dept = getDepartmentLabel(result.department) || '';
+                                                const reason = symptoms.trim() || getBilingualText(result.condition);
+                                                const q = new URLSearchParams({ reason, ...(dept ? { department: dept } : {}) });
+                                                navigate(`/book?${q.toString()}`);
+                                            }}
                                                 className="animated-button w-full bg-[#0f172a] text-white p-8 rounded-[35px] font-black text-xs uppercase tracking-[0.5em] flex items-center justify-center gap-5 hover:bg-hospital-primary transition-all active:scale-95 group/btn shadow-xl relative overflow-hidden text-left">
                                                 <span className="relative z-10 flex items-center gap-3 italic text-left">
                                                     <span className="font-['Noto_Sans_Telugu'] text-2xl font-black tracking-tighter mr-2 underline underline-offset-4 text-left">డాక్టర్‌ని సంప్రదించండి</span>
@@ -292,8 +308,8 @@ const AISymptomChecker = () => {
             </div>
 
             {/* Background floating clinical icons */}
-            <div className="absolute top-[20%] left-[-10%] opacity-[0.03] text-slate-900 pointer-events-none scale-150 rotate-12"><Scissors size={300} strokeWidth={1} /></div>
-            <div className="absolute bottom-[20%] right-[-10%] opacity-[0.03] text-hospital-secondary pointer-events-none scale-150 -rotate-12"><Syringe size={300} strokeWidth={1} /></div>
+            <div className="absolute top-[20%] left-[-10%] opacity-[0.03] text-slate-900 pointer-events-none scale-150 rotate-12 medical-icon-float"><Scissors size={300} strokeWidth={1} /></div>
+            <div className="absolute bottom-[20%] right-[-10%] opacity-[0.03] text-hospital-secondary pointer-events-none scale-150 -rotate-12 medical-icon-float"><Syringe size={300} strokeWidth={1} /></div>
 
         </section>
     );

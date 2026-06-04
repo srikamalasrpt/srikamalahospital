@@ -10,7 +10,7 @@ const BookingPage = () => {
                 <div className="absolute bottom-[25%] left-[15%] w-[400px] h-[400px] bg-hospital-secondary/10 rounded-full blur-[120px] animate-pulse-soft" style={{ animationDelay: '3s' }}></div>
             </div>
 
-            <div className="relative z-10">
+            <div id="booking" className="relative z-10">
                 <BookingForm />
             </div>
         </div>

@@ -99,6 +99,37 @@
   animation: slow-morph 15s ease-in-out infinite;
 }
 
+@keyframes pulse-soft {
+  0%, 100% { opacity: 0.2; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(1.05); }
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 4s ease-in-out infinite;
+}
+
+.medical-icon-float {
+  @apply transition-all duration-1000 hover:scale-110 hover:opacity-[0.05] hover:rotate-12;
+}
+
+@keyframes scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(1000%); }
+}
+
+.scanner-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--hospital-primary), transparent);
+  box-shadow: 0 0 15px var(--hospital-primary);
+  animation: scan 3s linear infinite;
+  z-index: 20;
+  opacity: 0.5;
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: #f8fafc; }

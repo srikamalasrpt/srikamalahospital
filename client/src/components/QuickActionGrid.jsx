@@ -44,7 +44,7 @@ const QuickActionGrid = () => {
             descriptionTelugu: 'అత్యవసర సంరక్షణ కోసం తక్షణ ట్రామా రెస్పాన్స్.', 
             descriptionEnglish: 'Immediate Level-1 trauma response for urgent care.', 
             icon: <Phone size={32} />, 
-            link: 'tel:+919154404051', 
+            link: 'tel:+919948076665', 
             color: 'from-red-600/20 to-red-800/5', 
             iconColor: 'text-red-600',
             accent: 'bg-red-600'

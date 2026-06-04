@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Home, Calendar, Users, FlaskConical, ShoppingBag, Activity, Menu, X } from 'lucide-react';
+import { Home, Calendar, Users, FlaskConical, ShoppingBag, Activity, Menu, X, Star } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -20,19 +20,20 @@ const Navbar = () => {
         { telugu: 'వైద్యులు', english: 'Doctors', link: '/doctors', icon: <Users size={14} /> },
         { telugu: 'పరీక్షలు', english: 'Diagnosis', link: '/diagnosis', icon: <FlaskConical size={14} /> },
         { telugu: 'ఫార్మసీ', english: 'Pharmacy', link: '/medical-shop', icon: <ShoppingBag size={14} /> },
-        { telugu: 'AI ఆరోగ్యం', english: 'AI Health', link: '/ai-health', icon: <Activity size={14} /> }
+        { telugu: 'AI ఆరోగ్యం', english: 'AI Health', link: '/ai-health', icon: <Activity size={14} /> },
+        { telugu: 'సమీక్షలు', english: 'Reviews', link: '/reviews', icon: <Star size={14} /> }
     ];
 
     return (
         <nav className={`fixed top-4 left-0 right-0 z-[500] transition-all duration-700 ${scrolled ? 'translate-y-[-10px]' : 'translate-y-0'}`}>
             <div className="container mx-auto px-4 max-w-6xl">
                 <div className={`glass-panel px-4 py-2 flex items-center justify-between transition-all duration-700 overflow-hidden ${scrolled ? 'rounded-[1.5rem] shadow-premium border-white/40 bg-white/60' : 'rounded-[2.5rem] shadow-none border-transparent bg-transparent'}`}>
-                    
+
                     {/* Unique Logo Section */}
                     <Link to="/" className="flex items-center gap-3 group relative py-1 px-2 rounded-2xl hover:bg-black/5 transition-all">
                         <div className="relative w-8 h-8 bg-hospital-dark p-1.5 rounded-lg group-hover:rotate-[15deg] transition-all duration-500 shadow-lg">
-                             <img src="/logo.png" alt="Logo" className="w-full h-full object-contain brightness-200" />
-                             <div className="absolute inset-0 bg-hospital-primary opacity-0 group-hover:opacity-20 transition-opacity rounded-lg"></div>
+                            <img src="/logo.png" alt="Logo" className="w-full h-full object-contain brightness-200" />
+                            <div className="absolute inset-0 bg-hospital-primary opacity-0 group-hover:opacity-20 transition-opacity rounded-lg"></div>
                         </div>
                         <div className="flex flex-col">
                             <span className="text-[11px] font-black text-hospital-dark uppercase tracking-tighter leading-none group-hover:text-hospital-secondary transition-colors font-['Noto_Sans_Telugu']">
@@ -49,9 +50,9 @@ const Navbar = () => {
                         {navItems.map((item) => {
                             const isActive = location.pathname === item.link;
                             return (
-                                <Link 
-                                    key={item.english} 
-                                    to={item.link} 
+                                <Link
+                                    key={item.english}
+                                    to={item.link}
                                     className={`px-4 py-2 rounded-xl transition-all duration-500 flex items-center gap-2 relative overflow-hidden group/nav ${isActive ? 'bg-white text-hospital-dark shadow-sm' : 'text-hospital-slate hover:text-hospital-dark'}`}
                                 >
                                     <div className={`transition-transform duration-500 ${isActive ? 'scale-110' : 'group-hover/nav:scale-110 opacity-40 group-hover/nav:opacity-100'} text-hospital-secondary`}>
@@ -76,8 +77,8 @@ const Navbar = () => {
                                 <span className="text-[6px] font-black uppercase tracking-widest opacity-40">Book Now</span>
                             </span>
                         </Link>
-                        
-                        <button 
+
+                        <button
                             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                             className="lg:hidden w-12 h-12 flex items-center justify-center bg-white/40 border border-black/5 rounded-2xl text-hospital-dark hover:bg-white shadow-sm transition-all"
                         >
@@ -90,7 +91,7 @@ const Navbar = () => {
             {/* Mobile Nav */}
             <AnimatePresence>
                 {mobileMenuOpen && (
-                    <motion.div 
+                    <motion.div
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
@@ -98,9 +99,9 @@ const Navbar = () => {
                     >
                         <div className="grid grid-cols-2 gap-2">
                             {navItems.map((item) => (
-                                <Link 
-                                    key={item.english} 
-                                    to={item.link} 
+                                <Link
+                                    key={item.english}
+                                    to={item.link}
                                     onClick={() => setMobileMenuOpen(false)}
                                     className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl transition-all border border-transparent hover:border-hospital-primary/20"
                                 >

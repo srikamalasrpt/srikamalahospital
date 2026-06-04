@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ShieldCheck, FileText, HelpCircle, Phone, Home, ArrowLeft, Activity, Zap, Sparkles, Scissors, Syringe } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { SITE_URL, SITE_DOMAIN, SITE_EMAIL } from '../config/site';
 
 const PAGE_DATA = {
   about: {
@@ -43,6 +44,10 @@ const PAGE_DATA = {
       {
         heading: 'Working Hours',
         content: 'Open 24 Hours',
+      },
+      {
+        heading: 'Official Website',
+        content: `${SITE_URL} | Email: ${SITE_EMAIL}`,
       },
     ],
   },

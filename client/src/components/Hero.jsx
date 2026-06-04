@@ -79,7 +79,8 @@ const Hero = () => {
                         transition={{ delay: 0.3, duration: 1 }}
                         className="relative"
                     >
-                        <div className="aspect-[4/5] rounded-[3rem] overflow-hidden shadow-premium border-4 border-white">
+                        <div className="aspect-[4/5] rounded-[3rem] overflow-hidden shadow-premium border-4 border-white relative">
+                            <div className="scanner-line"></div>
                             <img
                                 src="/logo.png"
                                 alt="Hospital"

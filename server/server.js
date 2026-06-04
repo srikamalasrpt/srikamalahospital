@@ -29,6 +29,9 @@ require("dotenv").config({ path: path.join(__dirname, '.env') });
 const app = express();
 const PORT = process.env.PORT || 10000;
 
+const SITE_DOMAIN = (process.env.SITE_DOMAIN || 'srikamalahospital.online').replace(/^https?:\/\//, '').replace(/\/$/, '');
+const SITE_URL = (process.env.SITE_URL || process.env.VERCEL_FRONTEND_URL || `https://${SITE_DOMAIN}`).replace(/\/$/, '');
+
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
@@ -59,8 +62,22 @@ const aiLimiter = rateLimit({
     message: { success: false, message: "AI limit reached. Call +91 99480 76665." },
 });
 
-// CORS
-app.use(cors({ origin: true, credentials: true }));
+// CORS — official frontend domains + local dev
+const allowedOrigins = [
+    SITE_URL,
+    `https://www.${SITE_DOMAIN}`,
+    'http://localhost:5173',
+    'http://127.0.0.1:5173',
+    process.env.VERCEL_FRONTEND_URL
+].filter(Boolean).map((o) => String(o).replace(/\/$/, ''));
+
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin.replace(/\/$/, ''))) return callback(null, true);
+        return callback(null, true); // keep permissive for preview deploys; tighten in production if needed
+    },
+    credentials: true
+}));
 
 // Security & Utility Middleware
 app.use(helmet({
@@ -122,10 +139,15 @@ app.use('/api/ai/', aiLimiter);
 // Global Config Store
 let siteConfig = {
     showCoreServices: true,
+    showHealthAwareness: true,
+    allowOnlinePayment: true,
     hospitalPhone: '99480 76665',
     diagnosticsPhone: '9866895634',
     opTimings: 'Open 24 Hours',
-    hospitalAddress: 'Opp. Tirumala Grand Restaurant, M.G. Road, Suryapet'
+    hospitalAddress: 'Opp. Tirumala Grand Restaurant, M.G. Road, Suryapet',
+    websiteUrl: SITE_URL,
+    websiteDomain: SITE_DOMAIN,
+    contactEmail: `info@${SITE_DOMAIN}`
 };
 
 const patientClinicalRecords = {};
@@ -314,7 +336,7 @@ app.post('/api/ai/chat', async (req, res) => {
     try {
         const { query } = req.body;
         const msg = [
-            { role: "system", content: "You are Dr. Kiran, the conversational AI for Sri Kamala Hospital in Suryapet. You output concise, empathetic, and professional responses. Max 3 sentences." },
+            { role: "system", content: `You are Dr. Kiran, the conversational AI for Sri Kamala Hospital in Suryapet. Official website: ${SITE_URL}. You output concise, empathetic, and professional responses. Max 3 sentences.` },
             { role: "user", content: query }
         ];
         const responseText = await getChatAI(msg, ['meta/llama-3.1-70b-instruct', 'meta/llama3-70b-instruct', 'meta/llama-3.2-3b-instruct']);

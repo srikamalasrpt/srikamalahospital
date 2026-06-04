@@ -3,8 +3,11 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import { CheckCircle2, Download, ArrowLeft, ShieldCheck, Activity } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { getAppointmentByToken } from '../utils/api';
+import { SITE_DOMAIN } from '../config/site';
+import useSiteConfig from '../hooks/useSiteConfig';
 
 const Receipt = () => {
+   const { config } = useSiteConfig();
    const [searchParams] = useSearchParams();
    const navigate = useNavigate();
    const token = searchParams.get('token');
@@ -162,13 +165,14 @@ const Receipt = () => {
                      </p>
                   </div>
                   <div className="flex flex-col items-center gap-3">
-                     <div className="w-20 h-20 bg-slate-50 rounded-2xl border border-black/5 flex items-center justify-center grayscale relative">
-                        <img src="/logo.png" className="w-12 h-12 object-contain opacity-20" />
-                        <div className="absolute inset-0 flex items-center justify-center">
-                            <ShieldCheck size={32} className="text-hospital-dark/10" />
-                        </div>
-                     </div>
-                     <p className="text-[8px] font-black uppercase tracking-[0.4em] text-hospital-slate/40">Secure Hospital QR</p>
+                     {appointment?.token && (
+                        <img
+                           src={`https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(appointment.token)}`}
+                           alt="Appointment token QR"
+                           className="w-24 h-24 rounded-xl border border-black/10 bg-white p-1"
+                        />
+                     )}
+                     <p className="text-[8px] font-black uppercase tracking-[0.4em] text-hospital-slate/40">Scan at Reception</p>
                   </div>
                </div>
             </div>
@@ -177,9 +181,11 @@ const Receipt = () => {
                <p className="text-[8px] font-bold text-white/40 uppercase tracking-[0.5em] flex items-center justify-center gap-4">
                    <span>MG Road, Suryapet</span>
                    <span className="w-1 h-1 bg-white/20 rounded-full"></span>
-                   <span>+91 99480 76665</span>
+                   <span>{config.hospitalPhone}</span>
                    <span className="w-1 h-1 bg-white/20 rounded-full"></span>
                    <span>Sri Kamala Medical Group</span>
+                   <span className="w-1 h-1 bg-white/20 rounded-full"></span>
+                   <span>{SITE_DOMAIN}</span>
                </p>
             </div>
          </motion.div>

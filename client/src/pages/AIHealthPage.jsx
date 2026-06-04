@@ -10,7 +10,7 @@ import AISymptomChecker from '../components/AISymptomChecker';
 import { chatWithAI, analyzeVisionImage, analyzeOCR } from '../utils/api';
 
 const AIHealthPage = () => {
-    const [activeTab, setActiveTab] = useState('ocr');
+    const [activeTab, setActiveTab] = useState('symptoms');
     const [ocrResult, setOcrResult] = useState(null);
     const [isOcrLoading, setIsOcrLoading] = useState(false);
     const [dietInput, setDietInput] = useState('');
@@ -126,6 +126,7 @@ const AIHealthPage = () => {
     };
 
     const tabs = [
+        { id: 'symptoms', icon: Stethoscope, labelTe: 'లక్షణాలు', labelEn: 'Symptoms' },
         { id: 'ocr', icon: Scan, labelTe: 'రిపోర్టులు', labelEn: 'Reports' },
         { id: 'bmi', icon: Activity, labelTe: 'బయోమెట్రిక్స్', labelEn: 'Biometrics' },
         { id: 'cardio', icon: Heart, labelTe: 'కార్డియాక్', labelEn: 'Cardiac' },
@@ -193,6 +194,11 @@ const AIHealthPage = () => {
 
                     <div className="p-10 lg:p-24 pt-32 h-full">
                         <AnimatePresence mode="wait">
+                            {activeTab === 'symptoms' && (
+                                <motion.div key="symptoms" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
+                                    <AISymptomChecker />
+                                </motion.div>
+                            )}
                             {activeTab === 'ocr' && (
                                 <motion.div key="ocr" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.02 }} className="grid grid-cols-1 lg:grid-cols-2 gap-20">
                                     <div className="space-y-10 text-left">
@@ -563,9 +569,9 @@ const AIHealthPage = () => {
             </div>
 
             {/* Ambient Background Elements */}
-            <div className="absolute top-[30%] left-[-15%] opacity-[0.02] text-slate-900 rotate-45 pointer-events-none scale-150"><Scissors size={400} strokeWidth={1} /></div>
-            <div className="absolute bottom-[30%] right-[-15%] opacity-[0.02] text-hospital-secondary -rotate-45 pointer-events-none scale-150"><Syringe size={400} strokeWidth={1} /></div>
-            <div className="absolute top-[10%] left-1/2 -translate-x-1/2 opacity-[0.01] text-slate-900 pointer-events-none"><Dna size={800} strokeWidth={0.5} /></div>
+            <div className="absolute top-[30%] left-[-15%] opacity-[0.02] text-slate-900 rotate-45 pointer-events-none scale-150 medical-icon-float"><Scissors size={400} strokeWidth={1} /></div>
+            <div className="absolute bottom-[30%] right-[-15%] opacity-[0.02] text-hospital-secondary -rotate-45 pointer-events-none scale-150 medical-icon-float"><Syringe size={400} strokeWidth={1} /></div>
+            <div className="absolute top-[10%] left-1/2 -translate-x-1/2 opacity-[0.01] text-slate-900 pointer-events-none medical-icon-float"><Dna size={800} strokeWidth={0.5} /></div>
 
         </div>
     );

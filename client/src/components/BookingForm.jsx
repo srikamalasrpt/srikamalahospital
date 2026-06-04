@@ -1,20 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Calendar, User, Phone, Activity, Clock, ShieldCheck, Heart, Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { bookAppointment, getConfig } from '../utils/api';
 
 const BookingForm = () => {
+  const [searchParams] = useSearchParams();
+  const [allowOnlinePayment, setAllowOnlinePayment] = useState(true);
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
     age: '',
     gender: 'Male',
     department: 'General Medicine',
-    appointmentDate: '',
+    appointmentDate: new Date().toISOString().slice(0, 10),
     reason: '',
     paymentMethod: 'Offline'
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    const reason = searchParams.get('reason');
+    const department = searchParams.get('department');
+    if (reason || department) {
+      setFormData((prev) => ({
+        ...prev,
+        ...(reason ? { reason } : {}),
+        ...(department ? { department } : {}),
+      }));
+    }
+    getConfig().then((resp) => {
+      if (resp.data?.success) setAllowOnlinePayment(resp.data.config.allowOnlinePayment !== false);
+    }).catch(() => {});
+  }, [searchParams]);
 
   const departments = [
     { en: 'General Medicine', te: 'జనరల్ మెడిసిన్' },

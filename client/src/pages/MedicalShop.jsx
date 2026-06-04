@@ -13,44 +13,44 @@ const MedicalShop = () => {
   const [activeInfo, setActiveInfo] = useState(null);
 
   const fallbackProducts = [
-    { 
-      name: 'Paracetamol 650mg', 
-      category: 'Analgesics', 
+    {
+      name: 'Paracetamol 650mg',
+      category: 'Analgesics',
       price: 25,
       img: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=400',
       description: 'Used for fever and mild to moderate pain relief. Safe for most adults when taken as directed.'
     },
-    { 
-      name: 'Amoxicillin 500mg', 
-      category: 'Antibiotics', 
+    {
+      name: 'Amoxicillin 500mg',
+      category: 'Antibiotics',
       price: 120,
       img: 'https://images.unsplash.com/photo-1471864190281-ad5fe9bb072c?auto=format&fit=crop&q=80&w=400',
       description: 'Broad-spectrum antibiotic for bacterial infections. Requires a valid doctor prescription.'
     },
-    { 
-      name: 'Cetirizine 10mg', 
-      category: 'Allergy', 
+    {
+      name: 'Cetirizine 10mg',
+      category: 'Allergy',
       price: 45,
       img: 'https://images.unsplash.com/photo-1631549916768-4119b255f946?auto=format&fit=crop&q=80&w=400',
       description: 'Non-drowsy antihistamine for hay fever, allergies, and cold symptoms.'
     },
-    { 
-      name: 'Pantoprazole 40mg', 
-      category: 'Gastritis', 
+    {
+      name: 'Pantoprazole 40mg',
+      category: 'Gastritis',
       price: 90,
       img: 'https://images.unsplash.com/photo-1550572017-ed2302ca3f8c?auto=format&fit=crop&q=80&w=400',
       description: 'Reduces stomach acid. Used for GERD, acidity, and heart burn. Take 30 mins before food.'
     },
-    { 
-      name: 'ORS Sachet (Orange)', 
-      category: 'Wellness', 
+    {
+      name: 'ORS Sachet (Orange)',
+      category: 'Wellness',
       price: 15,
       img: 'https://images.unsplash.com/photo-1512069772995-ec65ed45afd6?auto=format&fit=crop&q=80&w=400',
       description: 'World Health Organization formula for rehydration during fever or dehydration.'
     },
-    { 
-      name: 'Multivitamin Complex', 
-      category: 'Supplements', 
+    {
+      name: 'Multivitamin Complex',
+      category: 'Supplements',
       price: 180,
       img: 'https://images.unsplash.com/photo-1626202341506-89772589363a?auto=format&fit=crop&q=80&w=400',
       description: 'Essential vitamins and minerals for daily health and immunity support.'
@@ -101,7 +101,7 @@ CRITICAL RULE: You MUST format your response as:
 
   return (
     <div className="min-h-screen bg-white pt-32 pb-20 px-6 relative overflow-hidden text-left">
-      
+
       {/* Background Decor Matrices */}
       <div className="fixed inset-0 z-0 pointer-events-none opacity-20 overflow-hidden bg-slate-50/50">
         <div className="absolute top-[10%] right-[15%] w-[600px] h-[600px] bg-hospital-secondary/5 rounded-full blur-[140px] animate-pulse-soft"></div>
@@ -147,9 +147,9 @@ CRITICAL RULE: You MUST format your response as:
                   <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-6 p-6 bg-slate-50 rounded-3xl border border-black/5 relative z-10 font-serif text-left">
                     {aiInsight.includes('|||') ? (
                       <>
-                         <p className="text-[14px] font-bold leading-relaxed text-slate-900 font-['Noto_Sans_Telugu'] mb-3 italic text-left">"{aiInsight.split('|||')[0].trim()}"</p>
-                         <div className="h-px bg-black/5 mb-3 w-1/3 text-left"></div>
-                         <p className="text-[10px] font-black uppercase tracking-widest text-hospital-secondary opacity-90 italic leading-snug text-left">{aiInsight.split('|||')[1].trim()}</p>
+                        <p className="text-[14px] font-bold leading-relaxed text-slate-900 font-['Noto_Sans_Telugu'] mb-3 italic text-left">"{aiInsight.split('|||')[0].trim()}"</p>
+                        <div className="h-px bg-black/5 mb-3 w-1/3 text-left"></div>
+                        <p className="text-[10px] font-black uppercase tracking-widest text-hospital-secondary opacity-90 italic leading-snug text-left">{aiInsight.split('|||')[1].trim()}</p>
                       </>
                     ) : (
                       <p className="text-[14px] font-bold leading-relaxed text-slate-900 font-['Noto_Sans_Telugu'] italic text-left">"{aiInsight}"</p>
@@ -158,7 +158,7 @@ CRITICAL RULE: You MUST format your response as:
                 )}
               </AnimatePresence>
             </div>
-            
+
             <div className="relative group w-full text-left">
               <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-hospital-secondary transition-all z-10 text-left" size={24} />
               <input type="text" placeholder="మందుల వివరాల కొరకు వెతకండి (e.g. Paracetamol)..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
@@ -194,7 +194,7 @@ CRITICAL RULE: You MUST format your response as:
                     </div>
                   </div>
 
-                  <button 
+                  <button
                     onClick={() => setActiveInfo(product)}
                     className="animated-button group/btn w-full flex flex-col items-center justify-center gap-1 py-4 bg-[#0f172a] text-white rounded-[22px] hover:bg-hospital-secondary hover:text-white transition-all shadow-lg border-none relative overflow-hidden text-left">
                     <span className="font-['Noto_Sans_Telugu'] text-[11px] font-bold tracking-normal text-left flex items-center gap-2 relative z-10"><Info size={14} /> మరింత సమాచారం</span>
@@ -203,9 +203,9 @@ CRITICAL RULE: You MUST format your response as:
 
                   <AnimatePresence>
                     {activeInfo && activeInfo.name === product.name && (
-                      <motion.div 
-                        initial={{ opacity: 0 }} 
-                        animate={{ opacity: 1 }} 
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         className="absolute inset-0 z-30 bg-white/95 p-10 flex flex-col justify-center text-center backdrop-blur-xl border border-black/5 rounded-[40px] text-left"
                       >
@@ -229,10 +229,10 @@ CRITICAL RULE: You MUST format your response as:
         <p className="text-[9px] uppercase font-bold text-slate-300 tracking-[0.4em] mt-6 italic text-left">Secure Institutional Apothecary Compliance v3.0</p>
       </div>
 
-       {/* Local Background Decor */}
-       <div className="absolute top-1/2 right-[-5%] opacity-[0.02] text-slate-900 rotate-12 pointer-events-none text-left"><Scissors size={180} /></div>
-       <div className="absolute bottom-0 left-[-5%] opacity-[0.02] text-hospital-secondary -rotate-12 pointer-events-none text-left"><Droplets size={160} /></div>
-       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 opacity-[0.01] text-slate-900 pointer-events-none text-left"><Plus size={400} /></div>
+      {/* Local Background Decor */}
+      <div className="absolute top-1/2 right-[-5%] opacity-[0.02] text-slate-900 rotate-12 pointer-events-none medical-icon-float"><Scissors size={180} /></div>
+      <div className="absolute bottom-0 left-[-5%] opacity-[0.02] text-hospital-secondary -rotate-12 pointer-events-none medical-icon-float"><Droplets size={160} /></div>
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 opacity-[0.01] text-slate-900 pointer-events-none medical-icon-float"><Plus size={400} /></div>
 
     </div>
   );

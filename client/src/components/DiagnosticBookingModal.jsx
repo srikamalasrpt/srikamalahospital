@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Calendar, User, Phone, Send, CheckCircle2, FlaskRound as Flask, CreditCard } from 'lucide-react';
+import { X, Calendar, User, Phone, Send, CheckCircle2, FlaskConical as Flask, CreditCard } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { bookAppointment, getConfig } from '../utils/api';
 

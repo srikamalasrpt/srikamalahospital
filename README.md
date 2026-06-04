@@ -1,5 +1,7 @@
 # Sri Kamala Hospital - Professional Healthcare Platform
 
+**Official website:** [https://srikamalahospital.online](https://srikamalahospital.online)
+
 A modern, full-stack hospital management and public information website built with **React**, **Tailwind CSS**, and **Node.js**.
 
 ## Features
